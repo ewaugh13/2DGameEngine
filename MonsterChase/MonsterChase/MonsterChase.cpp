@@ -12,12 +12,18 @@ typedef struct Character
 }
 Character;
 
+const int GRID_SIZE = 100;
+// number of turns that go by before we generate a new monster
+const int TURN_AMOUNT_GENERATE_MONSTER = 9;
+
 void getPlayerInput(char * input);
 void setCharacterLocation(Character * character);
-void gamePlayLoop(Character * player, Character * monsters, int numMonsters);
+void gamePlayLoop(Character * player, Character * monsters, int& numMonsters);
+void monsterAI(Character * monsters, int& numMonsters);
 
 int main()
 {
+	// get the number of monsters to create
 	std::cout << "How many monsters do you want to start with: ";
 	char * numMonstersInput = (char *)calloc(1, sizeof(char));
 
@@ -44,14 +50,17 @@ int main()
 	player->name = playerName;
 	player->x, player->y = 0;
 
-	std::cout << "end";
+	// while loop for game loop until user input to quit
+	gamePlayLoop(player, monsters, numMonsters);
 
+	// free everything we allocated
 	free(numMonstersInput);
 	free(monsters);
 	free(player);
 	free(playerName);
 }
 
+// read player input 1 char at a time until enter a cariage return is read
 void getPlayerInput(char * input)
 {
 	char charelement;
@@ -74,43 +83,64 @@ void setCharacterLocation(Character * character)
 	int randXNegative = rand() % 2;
 	int randYNegative = rand() % 2;
 
-	character->x = rand() % 100;
-	character->y = rand() % 100;
+	character->x = rand() % GRID_SIZE;
+	character->y = rand() % GRID_SIZE;
 	if (randXNegative) { character->x *= -1; }
 	if (randYNegative) { character->y *= -1; }
 }
 
-void gamePlayLoop(Character * player, Character * monsters, int numMonsters)
+// does the main gameplay loop
+void gamePlayLoop(Character * player, Character * monsters, int& numMonsters)
 {
-	player;
-	monsters;
 	bool playing = true;
+	int currentTurnCounter = 0;
 	while (playing)
 	{
-		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
+		if (currentTurnCounter > TURN_AMOUNT_GENERATE_MONSTER)
+		{
+			currentTurnCounter = 0;
+			numMonsters++;
+			//TODO: create monster
+		}
+
 		// print monster locations
 		for (int i = 0; i < numMonsters; i++)
 		{
-
+			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, monsters[i].x, monsters[i].y);
 		}
 		// print player location
+		printf("Player %s at [%02d,%02d]\n", player->name, player->x, player->y);
 
+		// print instructions for player
+		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
 
-		// TODO: need to print all the locations of the monsters
-		// TODO: need to print the location of the player
+		monsterAI(monsters, numMonsters);
+
 		switch (_getch())
 		{
 			case 'A':
 			case 'a':
+				player->x--;
+				if (player->x < -GRID_SIZE)
+					player->x = -GRID_SIZE;
 				break;
 			case 'D':
 			case 'd':
+				player->x++;
+				if (player->x > GRID_SIZE)
+					player->x = GRID_SIZE;
 				break;
 			case 'W':
 			case 'w':
+				player->y++;
+				if (player->y > GRID_SIZE)
+					player->y = GRID_SIZE;
 				break;
 			case 'S':
 			case 's':
+				player->y--;
+				if (player->y < -GRID_SIZE)
+					player->y = -GRID_SIZE;
 				break;
 			case 'Q':
 			case 'q':
@@ -119,5 +149,49 @@ void gamePlayLoop(Character * player, Character * monsters, int numMonsters)
 			default:
 				continue;
 		}
+
+		// destroy monster if its on the same space as a player
+		for (int i = 0; i < numMonsters; i++)
+		{
+			if (player->x == monsters[i].x && player->y == monsters[i].y)
+			{
+				// TODO: destroy monster
+			}
+		}
+		currentTurnCounter++;
+	}
+}
+
+void monsterAI(Character * monsters, int& numMonsters)
+{
+	// move the monsters in a random direction 0 being up, 1 being right, 2 being down and 3 being left
+	for (int i = 0; i < numMonsters; i++)
+	{
+		int direction = rand() % 4;
+		switch (direction)
+		{
+			case 0: // up
+				monsters[i].y++;
+				break;
+			case 1: // right
+				monsters[i].x++;
+				break;
+			case 2: // down
+				monsters[i].y--;
+				break;
+			case 3: // left
+				monsters[i].x--;
+				break;
+			default:
+				monsters[i].x++;
+		}
+		if (monsters[i].x > GRID_SIZE)
+			monsters[i].x = GRID_SIZE;
+		else if (monsters[i].x < -GRID_SIZE)
+			monsters[i].x = -GRID_SIZE;
+		else if (monsters[i].y > GRID_SIZE)
+			monsters[i].y = GRID_SIZE;
+		else if (monsters[i].y < -GRID_SIZE)
+			monsters[i].y = -GRID_SIZE;
 	}
 }
