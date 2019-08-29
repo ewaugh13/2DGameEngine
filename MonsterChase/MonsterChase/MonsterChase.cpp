@@ -175,7 +175,7 @@ void gamePlayLoop(Character * player, Character * &monsters, int& numMonsters)
 					// copy over the monsters that are in memory before and after the destroyed one
 					if (i > 0)
 					{
-						memcpy((void*)monstersTemp, (void*)monsters, sizeof(Character) * i - 1);
+						memcpy((void*)monstersTemp, (void*)monsters, sizeof(Character) * (i));
 					}
 					memcpy(&monstersTemp[i], &monsters[i + 1], sizeof(Character) * (newNumMonsters - i));
 
