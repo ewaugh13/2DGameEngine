@@ -162,18 +162,30 @@ void gamePlayLoop(Character * player, Character * &monsters, int& numMonsters)
 		}
 
 		// destroy monster if its on the same space as a player
+		int newNumMonsters = numMonsters;
 		for (int i = 0; i < numMonsters; i++)
 		{
 			if (player->x == monsters[i].x && player->y == monsters[i].y)
 			{
-				numMonsters--;
-				Character * monstersTemp = (Character *)calloc(numMonsters, sizeof(Character));
+				newNumMonsters--;
+				if (newNumMonsters > 0)
+				{
+					Character * monstersTemp = (Character *)calloc(newNumMonsters, sizeof(Character));
 
-				// copy over the monsters that are in memory before and after the destroyed one
-				memcpy((void*)monstersTemp, (void*)monsters, sizeof(Character) * i - 1);
-				memcpy(&monstersTemp[i], &monsters[i + 1], sizeof(Character) * (numMonsters - i));
-				free(monsters);
-				monsters = monstersTemp;
+					// copy over the monsters that are in memory before and after the destroyed one
+					if (i > 0)
+					{
+						memcpy((void*)monstersTemp, (void*)monsters, sizeof(Character) * i - 1);
+					}
+					memcpy(&monstersTemp[i], &monsters[i + 1], sizeof(Character) * (newNumMonsters - i));
+
+					// free destroyed monster name and original monster data
+					free(monsters[i].name);
+					free(monsters);
+					monsters = monstersTemp;
+					numMonsters = newNumMonsters;
+					i--;
+				}
 			}
 		}
 		currentTurnCounter++;
