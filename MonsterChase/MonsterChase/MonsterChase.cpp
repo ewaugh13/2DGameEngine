@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
-#include <conio.h>
+#include <Engine.h>
 
 typedef struct Character
 {
@@ -63,34 +63,34 @@ int main()
 	free(playerName);
 }
 
-// read player input 1 char at a time until enter a cariage return is read
-void getPlayerInput(char * &input)
-{
-	char charElement;
-	int i = 0;
-	while ((charElement = (char)_getche()) != '\r')
-	{
-		input[i] = charElement;
-		// i + 2 to store new element and possible end delimiter
-		input = (char *)realloc((void *)input, (i + 2) * sizeof(char));
+//// read player input 1 char at a time until enter a cariage return is read
+//void getPlayerInput(char * &input)
+//{
+//	char charElement;
+//	int i = 0;
+//	while ((charElement = (char)_getche()) != '\r')
+//	{
+//		input[i] = charElement;
+//		// i + 2 to store new element and possible end delimiter
+//		input = (char *)realloc((void *)input, (i + 2) * sizeof(char));
+//
+//		i++;
+//		input[i] = '\0';
+//	}
+//	std::cout << std::endl;
+//}
 
-		i++;
-		input[i] = '\0';
-	}
-	std::cout << std::endl;
-}
-
-// sets a character's x and y location from a range of -100 to 100
-void setCharacterLocation(Character * character)
-{
-	int randXNegative = rand() % 2;
-	int randYNegative = rand() % 2;
-
-	character->x = rand() % GRID_SIZE;
-	character->y = rand() % GRID_SIZE;
-	if (randXNegative) { character->x *= -1; }
-	if (randYNegative) { character->y *= -1; }
-}
+//// sets a character's x and y location from a range of -100 to 100
+//void setCharacterLocation(Character * character)
+//{
+//	int randXNegative = rand() % 2;
+//	int randYNegative = rand() % 2;
+//
+//	character->x = rand() % GRID_SIZE;
+//	character->y = rand() % GRID_SIZE;
+//	if (randXNegative) { character->x *= -1; }
+//	if (randYNegative) { character->y *= -1; }
+//}
 
 // does the main gameplay loop
 void gamePlayLoop(Character * player, Character * &monsters, int& numMonsters)
