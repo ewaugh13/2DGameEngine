@@ -44,6 +44,11 @@ void * Engine::reinitalizeMemory(void * memoryAddress, int sizeOfAllocation)
 	return realloc(memoryAddress, sizeOfAllocation);
 }
 
+void Engine::copyMemory(void * to, void * from, int sizeToCopy)
+{
+	memcpy(to, from, sizeToCopy);
+}
+
 void Engine::freeMemory(void * memoryAddress)
 {
 	free(memoryAddress);

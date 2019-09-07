@@ -8,7 +8,8 @@ public:
 
 	void getPlayerInput(char * &input);
 	void * initalizeMemory(int amouunt, int sizeOfAllocation);
-	void freeMemory(void * memoryAddress);
 	void * reinitalizeMemory(void * memoryAddress, int sizeOfAllocation);
+	void copyMemory(void * to, void * from, int sizeToCopy);
+	void freeMemory(void * memoryAddress);
 };
 

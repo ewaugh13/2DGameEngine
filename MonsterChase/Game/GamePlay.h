@@ -1,11 +1,11 @@
 #pragma once
+#include "Engine.h"
+#include "Point2D.h"
 
 typedef struct Character
 {
 	char * name;
-	//TODO needs to be point 2d
-	int x;
-	int y;
+	Point2D position;
 }
 Character;
 
@@ -21,7 +21,7 @@ public:
 	GamePlay(int gridSize, int turnAmountGenerateMonsters);
 	~GamePlay();
 
-	void gamePlayLoop(Character * player, Character * &monsters, int& numMonsters);
+	void gamePlayLoop(Engine * engine, Character * player, Character * &monsters, int& numMonsters);
 	void setCharacterLocation(Character * character);
 };
 

@@ -27,7 +27,6 @@ int main()
 	for (int i = 0; i < numMonsters; i++)
 	{
 		std::cout << "What would you like to name Monster " << i << ": ";
-		monsters[i].name;
 		engine->getPlayerInput(monsters[i].name);
 
 		gameplay->setCharacterLocation(&monsters[i]);
@@ -40,7 +39,7 @@ int main()
 	player->name = playerName;
 
 	// while loop for game loop until user input to quit
-	gameplay->gamePlayLoop(player, monsters, numMonsters);
+	gameplay->gamePlayLoop(engine, player, monsters, numMonsters);
 
 	// free everything we allocated
 	engine->freeMemory(numMonstersInput);
