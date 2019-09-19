@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="1">
-    <builddir>StaticAnalysis-cppcheck-build-dir</builddir>
+    <builddir>MonsterChaseCheck-cppcheck-build-dir</builddir>
     <platform>Unspecified</platform>
     <importproject>MonsterChase.sln</importproject>
     <analyze-all-vs-configs>false</analyze-all-vs-configs>
