@@ -15,7 +15,7 @@ private:
 	int gridSize;
 	int turnAmountGenerateMonsters;
 
-	void monsterAI(Character * monsters, int& numMonsters);
+	void monsterAI(Character * monsters, const int& numMonsters);
 
 public:
 	GamePlay(int gridSize, int turnAmountGenerateMonsters);

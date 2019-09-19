@@ -133,7 +133,7 @@ void GamePlay::setCharacterLocation(Character * character)
 }
 
 // monster AI to move the monsters in a random direction
-void GamePlay::monsterAI(Character * monsters, int& numMonsters)
+void GamePlay::monsterAI(Character * monsters, const int& numMonsters)
 {
 	// move the monsters in a random direction 0 being up, 1 being right, 2 being down and 3 being left
 	for (int i = 0; i < numMonsters; i++)
