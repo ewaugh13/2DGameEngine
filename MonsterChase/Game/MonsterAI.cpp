@@ -38,13 +38,13 @@ void MonsterAI::monsterMovement(Character * monsters, const int& numMonsters, co
 				monsters[i].position.incrementXValue();
 		}
 		// check to see if the monster went out of bounds
-		if (monsters[i].position.xValue() > gridSize)
-			monsters[i].position.setXValue(gridSize);
-		else if (monsters[i].position.xValue() < -gridSize)
-			monsters[i].position.setXValue(-gridSize);
-		else if (monsters[i].position.yValue() > gridSize)
-			monsters[i].position.setYValue(gridSize);
-		else if (monsters[i].position.yValue() < -gridSize)
-			monsters[i].position.setYValue(-gridSize);
+		if (monsters[i].position.X() > gridSize)
+			monsters[i].position.X(gridSize);
+		else if (monsters[i].position.X() < -gridSize)
+			monsters[i].position.X(-gridSize);
+		else if (monsters[i].position.Y() > gridSize)
+			monsters[i].position.Y(gridSize);
+		else if (monsters[i].position.Y() < -gridSize)
+			monsters[i].position.Y(-gridSize);
 	}
 }

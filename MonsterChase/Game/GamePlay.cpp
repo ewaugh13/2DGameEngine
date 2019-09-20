@@ -43,10 +43,10 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 		// print monster locations
 		for (int i = 0; i < numMonsters; i++)
 		{
-			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, monsters[i].position.xValue(), monsters[i].position.yValue());
+			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, monsters[i].position.X(), monsters[i].position.Y());
 		}
 		// print player location
-		printf("Player %s at [%02d,%02d]\n", player->name, player->position.xValue(), player->position.yValue());
+		printf("Player %s at [%02d,%02d]\n", player->name, player->position.X(), player->position.Y());
 
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
@@ -58,26 +58,26 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 			case 'A':
 			case 'a':
 				player->position.decrementXValue();
-				if (player->position.xValue() < -this->gridSize)
-					player->position.setXValue(-this->gridSize);
+				if (player->position.X() < -this->gridSize)
+					player->position.X(-this->gridSize);
 				break;
 			case 'D':
 			case 'd':
 				player->position.incrementXValue();
-				if (player->position.xValue() > this->gridSize)
-					player->position.setXValue(this->gridSize);
+				if (player->position.X() > this->gridSize)
+					player->position.X(this->gridSize);
 				break;
 			case 'W':
 			case 'w':
 				player->position.incrementYValue();
-				if (player->position.yValue() > this->gridSize)
-					player->position.setYValue(this->gridSize);
+				if (player->position.Y() > this->gridSize)
+					player->position.Y(this->gridSize);
 				break;
 			case 'S':
 			case 's':
 				player->position.decrementYValue();
-				if (player->position.yValue() < -this->gridSize)
-					player->position.setYValue(-this->gridSize);
+				if (player->position.Y() < -this->gridSize)
+					player->position.Y(-this->gridSize);
 				break;
 			case 'Q':
 			case 'q':

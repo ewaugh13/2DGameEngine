@@ -2,10 +2,10 @@
 #include <math.h>
 
 
-Point2D::Point2D(int x, int y)
+Point2D::Point2D(int i_x, int i_y)
 {
-	this->x = x;
-	this->y = y;
+	this->m_x = i_x;
+	this->m_y = i_y;
 }
 
 
@@ -13,194 +13,165 @@ Point2D::~Point2D()
 {
 }
 
-
-int Point2D::xValue()
-{
-	return this->x;
-}
-
-int Point2D::yValue()
-{
-	return this->y;
-}
-
-void Point2D::setXValue(int x)
-{
-	this->x = x;
-}
-
-void Point2D::setYValue(int y)
-{
-	this->y = y;
-}
-
 void Point2D::incrementXValue()
 {
-	this->x++;
+	this->m_x++;
 }
 
 void Point2D::decrementXValue()
 {
-	this->x--;
+	this->m_x--;
 }
 
 void Point2D::incrementYValue()
 {
-	this->y++;
+	this->m_y++;
 }
 
 void Point2D::decrementYValue()
 {
-	this->y--;
+	this->m_y--;
 }
 
-
-Point2D Point2D::operator+(const Point2D &point)
-{
-	Point2D newPoint = Point2D(0, 0);
-	newPoint.x = this->x + point.x;
-	newPoint.y = this->y + point.y;
-	return newPoint;
-}
-
-Point2D Point2D::operator-(const Point2D &point)
-{
-	Point2D newPoint = Point2D(0, 0);
-	newPoint.x = this->x - point.x;
-	newPoint.y = this->y - point.y;
-	return newPoint;
-}
+// class operator overloads
 
 Point2D Point2D::operator-()
 {
-	Point2D newPoint = Point2D(-this->x, -this->y);
-	return newPoint;
-}
-
-Point2D Point2D::operator*(const Point2D &point)
-{
-	Point2D newPoint = Point2D(0, 0);
-	newPoint.x = this->x * point.x;
-	newPoint.y = this->y * point.y;
+	Point2D newPoint = Point2D(-this->m_x, -this->m_y);
 	return newPoint;
 }
 
 Point2D Point2D::operator*(int scalar)
 {
-	Point2D newPoint = Point2D(this->x * scalar, this->y * scalar);
-	return newPoint;
-}
-
-Point2D Point2D::operator/(const Point2D &point)
-{
-	Point2D newPoint = Point2D(0, 0);
-	newPoint.x = this->x / point.x;
-	newPoint.y = this->y / point.y;
+	Point2D newPoint = Point2D(this->m_x * scalar, this->m_y * scalar);
 	return newPoint;
 }
 
 Point2D Point2D::operator/(int scalar)
 {
-	Point2D newPoint = Point2D(this->x / scalar, this->y / scalar);
+	Point2D newPoint = Point2D(this->m_x / scalar, this->m_y / scalar);
 	return newPoint;
 }
 
 void Point2D::operator++()
 {
-	++this->x, ++this->y;
+	++this->m_x, ++this->m_y;
 }
 
 void Point2D::operator++(int)
 {
-	this->x++, this->y++;
+	this->m_x++, this->m_y++;
 }
 
 void Point2D::operator--()
 {
-	--this->x, --this->y;
+	--this->m_x, --this->m_y;
 }
 
 void Point2D::operator--(int)
 {
-	this->x--, this->y--;
-}
-
-bool Point2D::operator==(const Point2D & point)
-{
-	return this->x == point.x && this->y == point.y;
-}
-
-bool Point2D::operator!=(const Point2D & point)
-{
-	return this->x != point.x || this->y != point.y;
-}
-
-bool Point2D::operator>(const Point2D & point)
-{
-	double currentSize = sqrt(pow(this->x, 2) + pow(this->y, 2));
-	double pointSize = sqrt(pow(point.x, 2) + pow(point.y, 2));
-	return currentSize > pointSize;
-}
-
-bool Point2D::operator<(const Point2D & point)
-{
-	double currentSize = sqrt(pow(this->x, 2) + pow(this->y, 2));
-	double pointSize = sqrt(pow(point.x, 2) + pow(point.y, 2));
-	return currentSize < pointSize;
-}
-
-bool Point2D::operator>=(const Point2D & point)
-{
-	double currentSize = sqrt(pow(this->x, 2) + pow(this->y, 2));
-	double pointSize = sqrt(pow(point.x, 2) + pow(point.y, 2));
-	return currentSize >= pointSize;
-}
-
-bool Point2D::operator<=(const Point2D & point)
-{
-	double currentSize = sqrt(pow(this->x, 2) + pow(this->y, 2));
-	double pointSize = sqrt(pow(point.x, 2) + pow(point.y, 2));
-	return currentSize <= pointSize;
+	this->m_x--, this->m_y--;
 }
 
 Point2D& Point2D::operator+=(const Point2D &point)
 {
-	this->x += point.x;
-	this->y += point.y;
+	this->m_x += point.m_x;
+	this->m_y += point.m_y;
 	return *this;
 }
 
-Point2D & Point2D::operator-=(const Point2D & point)
+Point2D& Point2D::operator-=(const Point2D &point)
 {
-	this->x -= point.x;
-	this->y -= point.y;
+	this->m_x -= point.m_x;
+	this->m_y -= point.m_y;
 	return *this;
 }
 
-Point2D & Point2D::operator*=(const Point2D & point)
+Point2D& Point2D::operator*=(const Point2D &point)
 {
-	this->x *= point.x;
-	this->y *= point.y;
+	this->m_x *= point.m_x;
+	this->m_y *= point.m_y;
 	return *this;
 }
 
-Point2D & Point2D::operator*=(int scalar)
+Point2D& Point2D::operator*=(int scalar)
 {
-	this->x *= scalar;
-	this->y *= scalar;
+	this->m_x *= scalar;
+	this->m_y *= scalar;
 	return *this;
 }
 
-Point2D & Point2D::operator/=(const Point2D & point)
+Point2D& Point2D::operator/=(const Point2D &point)
 {
-	this->x /= point.x;
-	this->y /= point.y;
+	this->m_x /= point.m_x;
+	this->m_y /= point.m_y;
 	return *this;
 }
 
-Point2D & Point2D::operator/=(int scalar)
+Point2D& Point2D::operator/=(int scalar)
 {
-	this->x /= scalar;
-	this->y /= scalar;
+	this->m_x /= scalar;
+	this->m_y /= scalar;
 	return *this;
+}
+
+
+// non class operator overloads
+
+Point2D operator+(Point2D &leftPoint, Point2D &rightPoint)
+{
+	return Point2D(leftPoint.X() + rightPoint.X(), leftPoint.Y() + rightPoint.Y());
+}
+
+Point2D operator-(Point2D &leftPoint, Point2D &rightPoint)
+{
+	return Point2D(leftPoint.X() - rightPoint.X(), leftPoint.Y() - rightPoint.Y());
+}
+
+Point2D operator*(Point2D &leftPoint, Point2D &rightPoint)
+{
+	return Point2D(leftPoint.X() * rightPoint.X(), leftPoint.Y() * rightPoint.Y());
+}
+
+Point2D operator/(Point2D &leftPoint, Point2D &rightPoint)
+{
+	return Point2D(leftPoint.X() / rightPoint.X(), leftPoint.Y() / rightPoint.Y());
+}
+
+bool operator==(Point2D &leftPoint, Point2D &rightPoint)
+{
+	return leftPoint.X() == rightPoint.X() && leftPoint.Y() == rightPoint.Y();
+}
+
+bool operator!=(Point2D &leftPoint, Point2D &rightPoint)
+{
+	return leftPoint.X() != rightPoint.X() || leftPoint.Y() != rightPoint.Y();
+}
+
+bool operator>(Point2D &leftPoint, Point2D &rightPoint)
+{
+	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
+	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	return currentSize > pointSize;
+}
+
+bool operator<(Point2D &leftPoint, Point2D &rightPoint)
+{
+	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
+	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	return currentSize < pointSize;
+}
+
+bool operator>=(Point2D &leftPoint, Point2D &rightPoint)
+{
+	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
+	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	return currentSize >= pointSize;
+}
+
+bool operator<=(Point2D &leftPoint, Point2D &rightPoint)
+{
+	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
+	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	return currentSize <= pointSize;
 }
