@@ -43,10 +43,10 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 		// print monster locations
 		for (int i = 0; i < numMonsters; i++)
 		{
-			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, monsters[i].position.X(), monsters[i].position.Y());
+			printf("Monster %s at [%02f,%02f]\n", monsters[i].name, monsters[i].position.X(), monsters[i].position.Y());
 		}
 		// print player location
-		printf("Player %s at [%02d,%02d]\n", player->name, player->position.X(), player->position.Y());
+		printf("Player %s at [%02f,%02f]\n", player->name, player->position.X(), player->position.Y());
 
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
@@ -59,25 +59,25 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 			case 'a':
 				player->position.decrementXValue();
 				if (player->position.X() < -this->gridSize)
-					player->position.X(-this->gridSize);
+					player->position.X((float)-this->gridSize);
 				break;
 			case 'D':
 			case 'd':
 				player->position.incrementXValue();
 				if (player->position.X() > this->gridSize)
-					player->position.X(this->gridSize);
+					player->position.X((float)this->gridSize);
 				break;
 			case 'W':
 			case 'w':
 				player->position.incrementYValue();
 				if (player->position.Y() > this->gridSize)
-					player->position.Y(this->gridSize);
+					player->position.Y((float)this->gridSize);
 				break;
 			case 'S':
 			case 's':
 				player->position.decrementYValue();
 				if (player->position.Y() < -this->gridSize)
-					player->position.Y(-this->gridSize);
+					player->position.Y((float)-this->gridSize);
 				break;
 			case 'Q':
 			case 'q':
@@ -130,5 +130,5 @@ void GamePlay::setCharacterLocation(Character * character)
 	if (randXNegative) { x *= -1; }
 	if (randYNegative) { y *= -1; }
 
-	character->position = Point2D(x, y);
+	character->position = Point2D((float)x, (float)y);
 }

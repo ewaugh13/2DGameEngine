@@ -1,8 +1,7 @@
 #include "Point2D.h"
-#include <math.h>
 
 
-Point2D::Point2D(int i_x, int i_y)
+Point2D::Point2D(float i_x, float i_y)
 {
 	this->m_x = i_x;
 	this->m_y = i_y;
@@ -41,13 +40,13 @@ Point2D Point2D::operator-()
 	return newPoint;
 }
 
-Point2D Point2D::operator*(int scalar)
+Point2D Point2D::operator*(float scalar)
 {
 	Point2D newPoint = Point2D(this->m_x * scalar, this->m_y * scalar);
 	return newPoint;
 }
 
-Point2D Point2D::operator/(int scalar)
+Point2D Point2D::operator/(float scalar)
 {
 	Point2D newPoint = Point2D(this->m_x / scalar, this->m_y / scalar);
 	return newPoint;
@@ -94,7 +93,7 @@ Point2D& Point2D::operator*=(const Point2D &point)
 	return *this;
 }
 
-Point2D& Point2D::operator*=(int scalar)
+Point2D& Point2D::operator*=(float scalar)
 {
 	this->m_x *= scalar;
 	this->m_y *= scalar;
@@ -108,16 +107,16 @@ Point2D& Point2D::operator/=(const Point2D &point)
 	return *this;
 }
 
-Point2D& Point2D::operator/=(int scalar)
+Point2D& Point2D::operator/=(float scalar)
 {
 	this->m_x /= scalar;
 	this->m_y /= scalar;
 	return *this;
 }
 
-
 // non class operator overloads
 
+// arithmetic operators
 Point2D operator+(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return Point2D(leftPoint.X() + rightPoint.X(), leftPoint.Y() + rightPoint.Y());
@@ -138,6 +137,7 @@ Point2D operator/(const Point2D &leftPoint, const Point2D &rightPoint)
 	return Point2D(leftPoint.X() / rightPoint.X(), leftPoint.Y() / rightPoint.Y());
 }
 
+// comparision operators
 bool operator==(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return leftPoint.X() == rightPoint.X() && leftPoint.Y() == rightPoint.Y();

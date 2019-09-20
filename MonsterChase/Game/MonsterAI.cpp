@@ -39,12 +39,12 @@ void MonsterAI::monsterMovement(Character * monsters, const int& numMonsters, co
 		}
 		// check to see if the monster went out of bounds
 		if (monsters[i].position.X() > gridSize)
-			monsters[i].position.X(gridSize);
+			monsters[i].position.X((float)gridSize);
 		else if (monsters[i].position.X() < -gridSize)
-			monsters[i].position.X(-gridSize);
+			monsters[i].position.X((float)-gridSize);
 		else if (monsters[i].position.Y() > gridSize)
-			monsters[i].position.Y(gridSize);
+			monsters[i].position.Y((float)gridSize);
 		else if (monsters[i].position.Y() < -gridSize)
-			monsters[i].position.Y(-gridSize);
+			monsters[i].position.Y((float)-gridSize);
 	}
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<analyzerinfo checksum="2993265353">
+<analyzerinfo checksum="989795600">
   <FileInfo check="CheckUnusedFunctions">
     <functiondecl functionName="monsterMovement" lineNumber="17"/>
     <functioncall functionName="MonsterAI"/>
@@ -10,6 +10,7 @@
     <functioncall functionName="decrementYValue"/>
     <functioncall functionName="default"/>
     <functioncall functionName="direction"/>
+    <functioncall functionName="float"/>
     <functioncall functionName="for"/>
     <functioncall functionName="gridSize"/>
     <functioncall functionName="i"/>

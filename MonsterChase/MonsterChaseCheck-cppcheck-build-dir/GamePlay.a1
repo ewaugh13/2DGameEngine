@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<analyzerinfo checksum="1441784243">
+<analyzerinfo checksum="534995781">
   <FileInfo check="Null pointer">
-    <unsafe-usage my-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.h:15:7" my-argnr="1" my-argname="character" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.cpp" linenr="133" value="0"/>
+    <unsafe-usage my-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.h:13:7" my-argnr="1" my-argname="character" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.cpp" linenr="133" value="0"/>
   </FileInfo>
   <FileInfo check="CheckUnusedFunctions">
     <functiondecl functionName="gamePlayLoop" lineNumber="21"/>
@@ -21,6 +21,7 @@
     <functioncall functionName="decrementYValue"/>
     <functioncall functionName="default"/>
     <functioncall functionName="false"/>
+    <functioncall functionName="float"/>
     <functioncall functionName="for"/>
     <functioncall functionName="freeMemory"/>
     <functioncall functionName="gridSize"/>

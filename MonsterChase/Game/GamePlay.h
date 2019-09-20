@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Engine.h"
-#include "Point2D.h"
-#include "Character.h"
 #include "MonsterAI.h"
 
 class GamePlay
@@ -12,7 +10,7 @@ public:
 	~GamePlay();
 
 	void gamePlayLoop(Engine * engine, Character * player, Character * &monsters, int& numMonsters);
-	void setCharacterLocation(Character * character);\
+	void setCharacterLocation(Character * character);
 
 private:
 	int gridSize;
