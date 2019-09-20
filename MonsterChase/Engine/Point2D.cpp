@@ -13,6 +13,48 @@ Point2D::~Point2D()
 {
 }
 
+
+int Point2D::xValue()
+{
+	return this->x;
+}
+
+int Point2D::yValue()
+{
+	return this->y;
+}
+
+void Point2D::setXValue(int x)
+{
+	this->x = x;
+}
+
+void Point2D::setYValue(int y)
+{
+	this->y = y;
+}
+
+void Point2D::incrementXValue()
+{
+	this->x++;
+}
+
+void Point2D::decrementXValue()
+{
+	this->x--;
+}
+
+void Point2D::incrementYValue()
+{
+	this->y++;
+}
+
+void Point2D::decrementYValue()
+{
+	this->y--;
+}
+
+
 Point2D Point2D::operator+(const Point2D &point)
 {
 	Point2D newPoint = Point2D(0, 0);

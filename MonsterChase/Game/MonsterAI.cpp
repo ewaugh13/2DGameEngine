@@ -23,28 +23,28 @@ void MonsterAI::monsterMovement(Character * monsters, const int& numMonsters, co
 		switch (direction)
 		{
 			case 0: // up
-				monsters[i].position.y++;
+				monsters[i].position.incrementYValue();
 				break;
 			case 1: // right
-				monsters[i].position.x++;
+				monsters[i].position.incrementXValue();
 				break;
 			case 2: // down
-				monsters[i].position.y--;
+				monsters[i].position.decrementYValue();
 				break;
 			case 3: // left
-				monsters[i].position.x--;
+				monsters[i].position.decrementXValue();
 				break;
 			default:
-				monsters[i].position.x++;
+				monsters[i].position.incrementXValue();
 		}
 		// check to see if the monster went out of bounds
-		if (monsters[i].position.x > gridSize)
-			monsters[i].position.x = gridSize;
-		else if (monsters[i].position.x < -gridSize)
-			monsters[i].position.x = -gridSize;
-		else if (monsters[i].position.y > gridSize)
-			monsters[i].position.y = gridSize;
-		else if (monsters[i].position.y < -gridSize)
-			monsters[i].position.y = -gridSize;
+		if (monsters[i].position.xValue() > gridSize)
+			monsters[i].position.setXValue(gridSize);
+		else if (monsters[i].position.xValue() < -gridSize)
+			monsters[i].position.setXValue(-gridSize);
+		else if (monsters[i].position.yValue() > gridSize)
+			monsters[i].position.setYValue(gridSize);
+		else if (monsters[i].position.yValue() < -gridSize)
+			monsters[i].position.setYValue(-gridSize);
 	}
 }

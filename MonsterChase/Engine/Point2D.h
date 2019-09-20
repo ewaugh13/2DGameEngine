@@ -2,10 +2,22 @@
 class Point2D
 {
 public:
-	int x, y;
-
 	Point2D(int x, int y);
 	~Point2D();
+
+	// Getters for private variables
+	int xValue();
+	int yValue();
+
+	// Setters for private variables
+	void setXValue(int x);
+	void setYValue(int y);
+
+	// incrementers and decrementers for x and y
+	void incrementXValue();
+	void decrementXValue();
+	void incrementYValue();
+	void decrementYValue();
 
 	// operator overloads
 
@@ -60,5 +72,8 @@ public:
 	Point2D& operator/=(const Point2D &point);
 	// divide current point by scalar
 	Point2D& operator/=(int scalar);
+
+private:
+	int x, y;
 };
 
