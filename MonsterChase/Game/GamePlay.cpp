@@ -43,10 +43,10 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 		// print monster locations
 		for (int i = 0; i < numMonsters; i++)
 		{
-			printf("Monster %s at [%02f,%02f]\n", monsters[i].name, monsters[i].position.X(), monsters[i].position.Y());
+			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, (int)monsters[i].position.X(), (int)monsters[i].position.Y());
 		}
 		// print player location
-		printf("Player %s at [%02f,%02f]\n", player->name, player->position.X(), player->position.Y());
+		printf("Player %s at [%02d,%02d]\n", player->name, (int)player->position.X(), (int)player->position.Y());
 
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
