@@ -2,3 +2,12 @@
 1568936210220
 [19.09.2019]
 1568936216006
+[19.09.2019]
+1568950984250
+cppcheck-error:0
+cppcheck-warning:0
+cppcheck-style:19
+cppcheck-performance:0
+cppcheck-portability:0
+[19.09.2019]
+1568951116004

@@ -118,58 +118,58 @@ Point2D& Point2D::operator/=(int scalar)
 
 // non class operator overloads
 
-Point2D operator+(Point2D &leftPoint, Point2D &rightPoint)
+Point2D operator+(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return Point2D(leftPoint.X() + rightPoint.X(), leftPoint.Y() + rightPoint.Y());
 }
 
-Point2D operator-(Point2D &leftPoint, Point2D &rightPoint)
+Point2D operator-(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return Point2D(leftPoint.X() - rightPoint.X(), leftPoint.Y() - rightPoint.Y());
 }
 
-Point2D operator*(Point2D &leftPoint, Point2D &rightPoint)
+Point2D operator*(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return Point2D(leftPoint.X() * rightPoint.X(), leftPoint.Y() * rightPoint.Y());
 }
 
-Point2D operator/(Point2D &leftPoint, Point2D &rightPoint)
+Point2D operator/(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return Point2D(leftPoint.X() / rightPoint.X(), leftPoint.Y() / rightPoint.Y());
 }
 
-bool operator==(Point2D &leftPoint, Point2D &rightPoint)
+bool operator==(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return leftPoint.X() == rightPoint.X() && leftPoint.Y() == rightPoint.Y();
 }
 
-bool operator!=(Point2D &leftPoint, Point2D &rightPoint)
+bool operator!=(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	return leftPoint.X() != rightPoint.X() || leftPoint.Y() != rightPoint.Y();
 }
 
-bool operator>(Point2D &leftPoint, Point2D &rightPoint)
+bool operator>(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
 	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
 	return currentSize > pointSize;
 }
 
-bool operator<(Point2D &leftPoint, Point2D &rightPoint)
+bool operator<(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
 	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
 	return currentSize < pointSize;
 }
 
-bool operator>=(Point2D &leftPoint, Point2D &rightPoint)
+bool operator>=(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
 	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
 	return currentSize >= pointSize;
 }
 
-bool operator<=(Point2D &leftPoint, Point2D &rightPoint)
+bool operator<=(const Point2D &leftPoint, const Point2D &rightPoint)
 {
 	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
 	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));

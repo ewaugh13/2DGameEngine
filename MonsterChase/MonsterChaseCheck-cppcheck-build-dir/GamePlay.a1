@@ -1,31 +1,38 @@
 <?xml version="1.0"?>
-<analyzerinfo checksum="2351303090">
+<analyzerinfo checksum="1441784243">
   <FileInfo check="Null pointer">
-    <unsafe-usage my-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.h:25:7" my-argnr="1" my-argname="character" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.cpp" linenr="132" value="0"/>
+    <unsafe-usage my-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.h:15:7" my-argnr="1" my-argname="character" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.cpp" linenr="133" value="0"/>
   </FileInfo>
   <FileInfo check="CheckUnusedFunctions">
-    <functiondecl functionName="gamePlayLoop" lineNumber="20"/>
-    <functiondecl functionName="setCharacterLocation" lineNumber="122"/>
-    <functiondecl functionName="monsterAI" lineNumber="136"/>
+    <functiondecl functionName="gamePlayLoop" lineNumber="21"/>
+    <functiondecl functionName="setCharacterLocation" lineNumber="123"/>
     <functioncall functionName="GamePlay"/>
+    <functioncall functionName="MonsterAI"/>
     <functioncall functionName="Point2D"/>
+    <functioncall functionName="X"/>
+    <functioncall functionName="Y"/>
     <functioncall functionName="_getch"/>
     <functioncall functionName="break"/>
     <functioncall functionName="char"/>
     <functioncall functionName="continue"/>
     <functioncall functionName="copyMemory"/>
     <functioncall functionName="currentTurnCounter"/>
+    <functioncall functionName="decrementXValue"/>
+    <functioncall functionName="decrementYValue"/>
     <functioncall functionName="default"/>
-    <functioncall functionName="direction"/>
     <functioncall functionName="false"/>
     <functioncall functionName="for"/>
     <functioncall functionName="freeMemory"/>
     <functioncall functionName="gridSize"/>
     <functioncall functionName="i"/>
+    <functioncall functionName="i_x"/>
+    <functioncall functionName="i_y"/>
     <functioncall functionName="if"/>
+    <functioncall functionName="incrementXValue"/>
+    <functioncall functionName="incrementYValue"/>
     <functioncall functionName="initalizeMemory"/>
     <functioncall functionName="int"/>
-    <functioncall functionName="monsterAI"/>
+    <functioncall functionName="monsterMovement"/>
     <functioncall functionName="monsters"/>
     <functioncall functionName="monstersTemp"/>
     <functioncall functionName="name"/>

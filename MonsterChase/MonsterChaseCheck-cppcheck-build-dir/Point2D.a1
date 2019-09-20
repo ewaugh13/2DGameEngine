@@ -1,14 +1,20 @@
 <?xml version="1.0"?>
-<analyzerinfo checksum="1005095652">
-  <FileInfo check="ctu">
-<function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="1" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="18" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="2" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="18" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="1" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="26" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="2" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="26" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="1" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="40" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="2" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="40" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="1" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="54" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/><function-call call-id="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.h:7:2" call-funcname="Point2D" call-argnr="2" filename="C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp" linenr="54" call-argexpr="0" call-argvaluetype="0" call-argvalue="0"/>  </FileInfo>
+<analyzerinfo checksum="2682172857">
   <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="incrementXValue" lineNumber="16"/>
+    <functiondecl functionName="decrementXValue" lineNumber="21"/>
+    <functiondecl functionName="incrementYValue" lineNumber="26"/>
+    <functiondecl functionName="decrementYValue" lineNumber="31"/>
     <functioncall functionName="Point2D"/>
+    <functioncall functionName="X"/>
+    <functioncall functionName="Y"/>
+    <functioncall functionName="i_x"/>
+    <functioncall functionName="i_y"/>
     <functioncall functionName="int"/>
+    <functioncall functionName="m_x"/>
+    <functioncall functionName="m_y"/>
     <functioncall functionName="pow"/>
     <functioncall functionName="scalar"/>
     <functioncall functionName="sqrt"/>
-    <functioncall functionName="x"/>
-    <functioncall functionName="y"/>
   </FileInfo>
 </analyzerinfo>

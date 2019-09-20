@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<analyzerinfo checksum="1562438383">
+<analyzerinfo checksum="3489125670">
   <FileInfo check="CheckUnusedFunctions">
-    <functiondecl functionName="main" lineNumber="12"/>
+    <functiondecl functionName="main" lineNumber="14"/>
     <functioncall functionName="Engine"/>
     <functioncall functionName="GRID_SIZE"/>
     <functioncall functionName="GamePlay"/>
-    <functioncall functionName="Point2D"/>
     <functioncall functionName="TURN_AMOUNT_GENERATE_MONSTER"/>
+    <functioncall functionName="_CrtDumpMemoryLeaks"/>
     <functioncall functionName="atoi"/>
     <functioncall functionName="engine"/>
     <functioncall functionName="for"/>
@@ -14,6 +14,8 @@
     <functioncall functionName="gamePlayLoop"/>
     <functioncall functionName="getPlayerInput"/>
     <functioncall functionName="i"/>
+    <functioncall functionName="i_x"/>
+    <functioncall functionName="i_y"/>
     <functioncall functionName="initalizeMemory"/>
     <functioncall functionName="int"/>
     <functioncall functionName="monsters"/>
