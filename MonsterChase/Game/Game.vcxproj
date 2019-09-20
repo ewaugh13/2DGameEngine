@@ -19,10 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Character.h" />
     <ClInclude Include="GamePlay.h" />
+    <ClInclude Include="MonsterAI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GamePlay.cpp" />
+    <ClCompile Include="MonsterAI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
