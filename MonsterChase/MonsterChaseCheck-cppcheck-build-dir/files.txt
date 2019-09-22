@@ -1,5 +1,0 @@
-MonsterChase.a1:Debug|Win32:C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/MonsterChase/MonsterChase.cpp
-GamePlay.a1:Debug|Win32:C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/GamePlay.cpp
-MonsterAI.a1:Debug|Win32:C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Game/MonsterAI.cpp
-Engine.a1:Debug|Win32:C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Engine.cpp
-Point2D.a1:Debug|Win32:C:/Users/u0947296/source/repos/EAE 6300/u0947296/MonsterChase/Engine/Point2D.cpp
