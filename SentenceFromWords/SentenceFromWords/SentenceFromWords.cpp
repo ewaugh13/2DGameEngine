@@ -15,13 +15,6 @@ int main()
 {
 	printf("Enter words to be combined into a sentence (press enter for each word):\n");
 	char ** strings = GetUserStrings();
-	/* = {
-	"This",
-	"is",
-	"a",
-	"test",
-	NULL
-	};*/
 
 	if (strings[0] == NULL)
 	{
@@ -139,6 +132,7 @@ char ** GetUserStrings()
 				input[j] = '\0';
 			}
 
+			// add the new word to the list of strings
 			returnStrings[i] = input;
 			i++;
 
