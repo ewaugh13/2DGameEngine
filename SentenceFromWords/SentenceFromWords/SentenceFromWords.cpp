@@ -53,15 +53,6 @@ char * MakeSentence(char * strings[])
 	int i = 0;
 	while (strings[i] != NULL)
 	{
-		// TODO modify how i'm doing this
-		// add space inbetween each string
-		//if (i != 0)
-		//{
-		//	sizeTotalString++;
-		//	returnSentence = (char*)realloc((void*)returnSentence, sizeTotalString);
-		//	returnSentence[sizeTotalString - 1] = ' ';
-		//}
-
 		char * currentString = (char *)strings[i];
 
 		// determine the size of the current string
@@ -85,12 +76,13 @@ char * MakeSentence(char * strings[])
 
 		char * tempReturnSentence = (char*)malloc(sizeTotalString * sizeof(char));
 
-		// copy over contents
+		// copy over contents to temp from the current
 		for (int k = 0; k < previousSize; k++)
 		{
 			tempReturnSentence[k] = returnSentence[k];
 		}
 
+		// free the previous sentence memory and set the current to the temp
 		free(returnSentence);
 		returnSentence = tempReturnSentence;
 
