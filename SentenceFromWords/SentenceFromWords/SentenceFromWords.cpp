@@ -46,19 +46,21 @@ int main()
 char * MakeSentence(char * strings[])
 {
 	// start out with 2 chars for the period and the end delimiter
-	int sizeTotalString = 0;
-	char * returnSentence = (char *)calloc(sizeTotalString, sizeof(char));
+	int sizeForEnd = 2;
+	int sizeTotalString = sizeForEnd;
+	char * returnSentence = (char *)malloc(sizeTotalString * sizeof(char));
 
 	int i = 0;
 	while (strings[i] != NULL)
 	{
+		// TODO modify how i'm doing this
 		// add space inbetween each string
-		if (i != 0)
-		{
-			sizeTotalString++;
-			returnSentence = (char*)realloc((void*)returnSentence, sizeTotalString);
-			returnSentence[sizeTotalString - 1] = ' ';
-		}
+		//if (i != 0)
+		//{
+		//	sizeTotalString++;
+		//	returnSentence = (char*)realloc((void*)returnSentence, sizeTotalString);
+		//	returnSentence[sizeTotalString - 1] = ' ';
+		//}
 
 		char * currentString = (char *)strings[i];
 
@@ -70,15 +72,39 @@ char * MakeSentence(char * strings[])
 			sizeCurrString++;
 			j++;
 		}
+
+		// get the size we need to copy and increment total size
+		int previousSize = sizeTotalString - sizeForEnd;
 		sizeTotalString += sizeCurrString;
 
-		returnSentence = (char*)realloc((void*)returnSentence, sizeTotalString);
+		// if not first word we need to add memory for a space
+		if (i != 0)
+		{
+			sizeTotalString++;
+		}
+
+		char * tempReturnSentence = (char*)malloc(sizeTotalString * sizeof(char));
+
+		// copy over contents
+		for (int k = 0; k < previousSize; k++)
+		{
+			tempReturnSentence[k] = returnSentence[k];
+		}
+
+		free(returnSentence);
+		returnSentence = tempReturnSentence;
+
+		// set a space if we aren't inserting the first word
+		if (i != 0)
+		{
+			returnSentence[previousSize] = ' ';
+		}
 
 		// start the index at the begging of copying over the current string
 		for (int k = 0; k < sizeCurrString; k++)
 		{
 			// start the index at the begging of copying over the current string
-			int indexToSet = sizeTotalString - sizeCurrString + k;
+			int indexToSet = sizeTotalString - sizeCurrString + k - sizeForEnd;
 			returnSentence[indexToSet] = currentString[k];
 		}
 
@@ -86,8 +112,8 @@ char * MakeSentence(char * strings[])
 	}
 
 	// plus 2 for period and end delimiter
-	sizeTotalString += 2;
-	returnSentence = (char*)realloc((void*)returnSentence, sizeTotalString);
+	//sizeTotalString += 2;
+	//returnSentence = (char*)realloc((void*)returnSentence, sizeTotalString);
 	returnSentence[sizeTotalString - 2] = '.';
 	returnSentence[sizeTotalString - 1] = '\0';
 
@@ -98,7 +124,7 @@ char ** GetUserStrings()
 {
 	// start with one for NULL at the end
 	int numberOfStrings = 1;
-	char ** returnStrings = (char **)calloc(numberOfStrings, sizeof(char*));
+	char ** returnStrings = (char **)malloc(numberOfStrings * sizeof(char*));
 
 	bool readingInput = true;
 
