@@ -14,12 +14,19 @@ const unsigned int GUARD_BAND = 4;
 // alignment must be a power of 2
 const unsigned int DEFAULT_ALIGNMENT = 4;
 
-#define BYTE_OVERHEAD GUARD_BAND + sizeof(BlockDescriptor)
+// the overhead of having a description pointer and guard band
+#define BYTE_OVERHEAD GUARD_BAND + sizeof(BlockDescriptor*)
+
 // adds alignment - 1 to bytes requested and then and's 
 // the that against alignment - 1 to get the rounded up value to alignment
 // example bytes = 7 ALIGNMENT = 4 0111 + 0011 = 1011 & 1100 = 1000 (8)
 #define BYTE_ALIGN(bytes, alignment) (bytes + (alignment - 1) & ~(alignment - 1))
-#define DESCRIPTOR_POINTER(dp) ((char *)(dp) - sizeof(BlockDescriptor))
+
+// gets the pointer to the block descriptor of the current block
+#define DESCRIPTOR_POINTER(p) ((char *)(p) - sizeof(BlockDescriptor*))
+
+// the minumum size needed for a block
+#define MIN_SIZE_BLOCK (BYTE_OVERHEAD + DEFAULT_ALIGNMENT)
 
 class HeapManager
 {
@@ -61,6 +68,8 @@ public:
 	// a debugging helper function to show us all the outstanding blocks.
 
 private:
-	BlockDescriptor m_pFreeDescriptors;
-	BlockDescriptor m_pAllocatedDescriptors;
+	BlockDescriptor * m_freeMemoryDescriptors;
+
+	BlockDescriptor * m_freeMemoryList;
+	BlockDescriptor * m_allocatedMemoryList;
 };
