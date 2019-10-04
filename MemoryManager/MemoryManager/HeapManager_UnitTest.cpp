@@ -33,7 +33,7 @@ bool HeapManager_UnitTest()
 	HeapManager * pHeapManager = CreateHeapManager(pHeapMemory, sizeHeap, numDescriptors);
 	assert(pHeapManager);
 
-	if( pHeapManager == nullptr )
+	if (pHeapManager == nullptr)
 		return false;
 
 #ifdef TEST_SINGLE_LARGE_ALLOCATION
@@ -47,7 +47,7 @@ bool HeapManager_UnitTest()
 		size_t largestBeforeAlloc = GetLargestFreeBlock(pHeapManager);
 		void * pPtr = alloc(pHeapManager, largestBeforeAlloc - HeapManager::s_MinumumToLeave);
 
-		if( pPtr )
+		if (pPtr)
 		{
 #if defined(SUPPORTS_SHOWFREEBLOCKS) || defined(SUPPORTS_SHOWOUTSTANDINGALLOCATIONS)
 			printf("After large allocation:\n");
@@ -97,7 +97,7 @@ bool HeapManager_UnitTest()
 	{
 		const size_t		maxTestAllocationSize = 1024;
 
-		size_t			sizeAlloc = 42; // 1 + (rand() & (maxTestAllocationSize - 1));
+		size_t			sizeAlloc = 1 + (rand() & (maxTestAllocationSize - 1));
 
 #ifdef SUPPORTS_ALIGNMENT
 		// pick an alignment
@@ -105,7 +105,7 @@ bool HeapManager_UnitTest()
 
 		const unsigned int	index = rand() % (sizeof(alignments) / sizeof(alignments[0]));
 
-		const unsigned int	alignment = 64;// alignments[index];
+		const unsigned int	alignment = alignments[index];
 
 		void * pPtr = alloc(pHeapManager, sizeAlloc, alignment);
 
@@ -116,7 +116,7 @@ bool HeapManager_UnitTest()
 #endif // SUPPORT_ALIGNMENT
 
 		// if allocation failed see if garbage collecting will create a large enough block
-		if( pPtr == nullptr )
+		if (pPtr == nullptr)
 		{
 			Collect(pHeapManager);
 
@@ -127,7 +127,7 @@ bool HeapManager_UnitTest()
 #endif // SUPPORT_ALIGNMENT
 
 			// if not we're done. go on to cleanup phase of test
-			if( pPtr == nullptr )
+			if (pPtr == nullptr)
 				break;
 		}
 
@@ -135,32 +135,32 @@ bool HeapManager_UnitTest()
 		numAllocs++;
 
 		// randomly free and/or garbage collect during allocation phase
-		//TODO uncomment
-		//const unsigned int freeAboutEvery = 10;
-		//const unsigned int garbageCollectAboutEvery = 40;
 
-		//if( !AllocatedAddresses.empty() && ((rand() % freeAboutEvery) == 0) )
-		//{
-		//	void * pPtr = AllocatedAddresses.back();
-		//	AllocatedAddresses.pop_back();
+		const unsigned int freeAboutEvery = 10;
+		const unsigned int garbageCollectAboutEvery = 40;
 
-		//	bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
-		//	assert(success);
+		if (!AllocatedAddresses.empty() && ((rand() % freeAboutEvery) == 0))
+		{
+			void * pPtr = AllocatedAddresses.back();
+			AllocatedAddresses.pop_back();
 
-		//	success = free(pHeapManager, pPtr);
-		//	assert(success);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
+			assert(success);
 
-		//	numFrees++;
-		//}
+			success = free(pHeapManager, pPtr);
+			assert(success);
 
-		//if( (rand() % garbageCollectAboutEvery) == 0 )
-		//{
-		//	Collect(pHeapManager);
+			numFrees++;
+		}
 
-		//	numCollects++;
-		//}
+		if ((rand() % garbageCollectAboutEvery) == 0)
+		{
+			Collect(pHeapManager);
 
-	} while( 1 );
+			numCollects++;
+		}
+
+	} while (1);
 
 #if defined(SUPPORTS_SHOWFREEBLOCKS) || defined(SUPPORTS_SHOWOUTSTANDINGALLOCATIONS)
 	printf("After exhausting allocations:\n");
@@ -174,13 +174,13 @@ bool HeapManager_UnitTest()
 #endif
 
 	// now free those blocks in a random order
-	if( !AllocatedAddresses.empty() )
+	if (!AllocatedAddresses.empty())
 	{
 		// randomize the addresses
 		std::random_shuffle(AllocatedAddresses.begin(), AllocatedAddresses.end());
 
 		// return them back to the heap manager
-		while( !AllocatedAddresses.empty() )
+		while (!AllocatedAddresses.empty())
 		{
 			void * pPtr = AllocatedAddresses.back();
 			AllocatedAddresses.pop_back();
@@ -224,7 +224,7 @@ bool HeapManager_UnitTest()
 		void * pPtr = alloc(pHeapManager, sizeHeap / 2);
 		assert(pPtr);
 
-		if( pPtr )
+		if (pPtr)
 		{
 			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
 			assert(success);

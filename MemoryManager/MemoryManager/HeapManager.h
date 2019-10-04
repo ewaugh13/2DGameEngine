@@ -1,14 +1,8 @@
 #pragma once
 
-// this is a sample of what your HeapManager class interface should look like.
+#include "BlockDescriptorUtil.h"
 
-typedef struct BlockDescriptor
-{
-	void * m_pBlockBase;
-	size_t m_sizeBlock;
-	BlockDescriptor * m_pNext;
-	BlockDescriptor * m_pPrevious;
-} BlockDescriptor;
+// this is a sample of what your HeapManager class interface should look like.
 
 const unsigned int GUARD_BAND = 4;
 // alignment must be a power of 2
@@ -27,6 +21,21 @@ const unsigned int DEFAULT_ALIGNMENT = 4;
 
 // the minumum size needed for a block
 #define MIN_SIZE_BLOCK (BYTE_OVERHEAD + DEFAULT_ALIGNMENT)
+
+// the block descriptor size
+#define BLOCK_DESCRIPTOR_SIZE sizeof(BlockDescriptor)
+
+// gets the previous BlockDescriptor from the block descriptor list
+#define PREVIOUS_BLOCK_DESCRIPTOR(pbd) (BlockDescriptor*)((char*)pbd - BLOCK_DESCRIPTOR_SIZE)
+
+// gets the next BlockDescriptor from the block descriptor list
+#define NEXT_BLOCK_DESCRIPTOR(pbd) (BlockDescriptor*)((char*)pbd + BLOCK_DESCRIPTOR_SIZE)
+
+// adds the amount to the addres to get new address
+#define ADD_AMOUNT_TO_ADDRESS(addr, size) (void*)((char*)addr + size);
+
+// the allocated memory space start address
+#define ALLOCATION_MEMORY_ADDRESS(bb) (void*)((char*)bb + sizeof(BlockDescriptor*))
 
 class HeapManager
 {
@@ -72,4 +81,7 @@ private:
 
 	BlockDescriptor * m_freeMemoryList;
 	BlockDescriptor * m_allocatedMemoryList;
+
+	void * startOfMemoryPool;
+	void * endOfMemoryPool;
 };

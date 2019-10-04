@@ -4,29 +4,44 @@
 
 HeapManager::HeapManager(void * i_pStartMemory, size_t i_givenHeapMemorySize, unsigned int i_givenNumDescriptors)
 {
-	size_t sizeOfBlockDescriptorsList = i_givenNumDescriptors * sizeof(BlockDescriptor);
-	// TODO use helper
-	this->m_freeMemoryDescriptors = (BlockDescriptor*)((char*)i_pStartMemory + (i_givenHeapMemorySize - sizeOfBlockDescriptorsList));
-	this->m_freeMemoryDescriptors->m_pBlockBase = i_pStartMemory;
-	this->m_freeMemoryDescriptors->m_sizeBlock = i_givenHeapMemorySize - sizeOfBlockDescriptorsList;
-	
+	this->startOfMemoryPool = i_pStartMemory;
+	// include the space for the block descriptors
+	this->endOfMemoryPool = ADD_AMOUNT_TO_ADDRESS(i_pStartMemory, i_givenHeapMemorySize);
+
+	size_t sizeOfBlockDescriptorsList = i_givenNumDescriptors * BLOCK_DESCRIPTOR_SIZE;
+
+	this->m_freeMemoryList = (BlockDescriptor*)ADD_AMOUNT_TO_ADDRESS(i_pStartMemory, (i_givenHeapMemorySize - sizeOfBlockDescriptorsList));
+	this->m_freeMemoryList->m_pBlockBase = i_pStartMemory;
+	this->m_freeMemoryList->m_sizeBlock = i_givenHeapMemorySize - sizeOfBlockDescriptorsList;
+
+	this->m_allocatedMemoryList = nullptr;
+
+	this->m_freeMemoryDescriptors = NEXT_BLOCK_DESCRIPTOR(m_freeMemoryList);
+	// if block base and size are 0 then its an empty one ready to be used
+	this->m_freeMemoryDescriptors->m_pBlockBase = nullptr;
+	this->m_freeMemoryDescriptors->m_sizeBlock = 0;
+
 	BlockDescriptor * current = this->m_freeMemoryDescriptors;
 	for (unsigned int i = 0; i < i_givenNumDescriptors; i++)
 	{
-		// if block base and size are 0 then its an empty one ready to be used
-		current->m_pNext = current + (sizeof(BlockDescriptor));
-		current = current->m_pNext;
+		// sets up previous for all but first one
+		if (i != 0)
+		{
+			current->m_pPrevious = PREVIOUS_BLOCK_DESCRIPTOR(current);
+		}
+		// sets up next link for all but last one
+		if (i < i_givenNumDescriptors - 1)
+		{
+			current->m_pNext = NEXT_BLOCK_DESCRIPTOR(current);
+			current = current->m_pNext;
+		}
 	}
-
-	// TODO
-	this->m_freeMemoryList = this->m_freeMemoryDescriptors;
-
-	this->m_allocatedMemoryList = nullptr;
 }
 
 HeapManager::~HeapManager()
 {
-	this->m_freeMemoryDescriptors = {};
+	// TODO maybe?
+	this->m_freeMemoryDescriptors = nullptr;
 	this->m_freeMemoryList = nullptr;
 	this->m_allocatedMemoryList = nullptr;
 }
@@ -50,7 +65,10 @@ void * HeapManager::_alloc(size_t i_bytes)
 void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 {
 	// we need to have a pool of memory to use to allocate
-	assert(this->m_freeMemoryList->m_pBlockBase != nullptr);
+	if (this->m_freeMemoryList->m_pBlockBase == nullptr)
+	{
+		return nullptr;
+	}
 
 	size_t actualBytesRequested = BYTE_ALIGN(i_bytes + BYTE_OVERHEAD, i_alignment);
 
@@ -64,93 +82,93 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 	while (currentBlock->m_sizeBlock < actualBytesRequested + sizeForAligned)
 	{
 		// fail if there are no more available blocks
-		assert(currentBlock->m_pNext != nullptr);
+		if (currentBlock->m_pNext == nullptr)
+		{
+			return nullptr;
+		}
 
+		//TODO helper to call for size for aligned
 		currentBlock = currentBlock->m_pNext;
+		sizeForAligned = BYTE_ALIGN((size_t)currentBlock->m_pBlockBase + sizeof(BlockDescriptor*), i_alignment) - (size_t)currentBlock->m_pBlockBase
+			- sizeof(BlockDescriptor*);
 	}
 
-	// get allocated block
-	// TODO helper method to get next block and check if we have run out of blocks
-	BlockDescriptor * allocatedBlock = this->m_freeMemoryDescriptors->m_pNext;
+	// get free descriptor for allocated block
+	if (this->m_freeMemoryDescriptors == nullptr)
+	{
+		return nullptr;
+	}
+	BlockDescriptor * allocatedBlock = this->m_freeMemoryDescriptors;
 
-	this->m_freeMemoryDescriptors->m_pNext = this->m_freeMemoryDescriptors->m_pNext->m_pNext;
+	// remove element from free memory descriptor list
+	this->m_freeMemoryDescriptors = BlockDescriptorUtil::removeTopElement(this->m_freeMemoryDescriptors);
 
 	// align the block base again and then subtract for the start of the block descriptor
-	allocatedBlock->m_pBlockBase = (void*)(BYTE_ALIGN((size_t)currentBlock->m_pBlockBase + sizeof(BlockDescriptor), i_alignment) - sizeof(BlockDescriptor));
+	allocatedBlock->m_pBlockBase = ADD_AMOUNT_TO_ADDRESS(currentBlock->m_pBlockBase, sizeForAligned);
 	allocatedBlock->m_sizeBlock = actualBytesRequested;
 
-	// TODO helper to add element to beginning
-	// set first element of allocated descriptions previous to most recent allocation
-	// and set most recent allocation's next to the first element
-	if (this->m_allocatedMemoryList != nullptr)
-	{
-		this->m_allocatedMemoryList->m_pPrevious = allocatedBlock;
-		allocatedBlock->m_pNext = this->m_allocatedMemoryList;
-	}
+	// set the new head of allocated memory list to the allocated block
+	this->m_allocatedMemoryList = BlockDescriptorUtil::addNewTopElement(this->m_allocatedMemoryList, allocatedBlock);
 
-	// sets most recent allocated to beginning of linked list
-	this->m_allocatedMemoryList = allocatedBlock;
 
-	// save the begin start position for later if needed
+	// save the beginning start position of current for later if needed
 	void * beginningOfCurrent = currentBlock->m_pBlockBase;
 
 	// check to see if space after in current block remaining space could fit anything
 	if (currentBlock->m_sizeBlock - actualBytesRequested - sizeForAligned >= MIN_SIZE_BLOCK)
 	{
 		currentBlock->m_sizeBlock -= (actualBytesRequested + sizeForAligned);
-		currentBlock->m_pBlockBase = (char*)(currentBlock->m_pBlockBase) + actualBytesRequested + sizeForAligned;
+		currentBlock->m_pBlockBase = ADD_AMOUNT_TO_ADDRESS(currentBlock->m_pBlockBase, actualBytesRequested + sizeForAligned);
 	}
 	// TODO add helper to remove link
-	// remove current block from our free list
+	// remove current block from our free memory list
 	else
 	{
 		if (currentBlock->m_pPrevious != nullptr)
 		{
 			currentBlock->m_pPrevious->m_pNext = currentBlock->m_pNext;
 		}
-		else if (currentBlock->m_pNext != nullptr)
+		if (currentBlock->m_pNext != nullptr)
 		{
 			currentBlock->m_pNext->m_pPrevious = currentBlock->m_pPrevious;
 		}
+
+		// clear current block descriptor and add back to free block descriptor list
+		currentBlock->m_pBlockBase = nullptr;
+		currentBlock->m_sizeBlock = 0;
+		currentBlock->m_pPrevious = nullptr;
+		currentBlock->m_pNext = nullptr;
+
+		this->m_freeMemoryDescriptors = BlockDescriptorUtil::addNewTopElement(this->m_freeMemoryDescriptors, currentBlock);
 	}
 
 	// if space before newly allocated block (in the current free block) is large enough add it to free list
 	size_t leftOverSpace = (size_t)allocatedBlock->m_pBlockBase - (size_t)beginningOfCurrent;
 	if (leftOverSpace >= MIN_SIZE_BLOCK)
 	{
-		BlockDescriptor * emptyBlockSpaceBefore = this->m_freeMemoryDescriptors->m_pNext;
+		// get new block descriptor and then remove from free descriptors 
+		BlockDescriptor * emptyBlockSpaceBefore = this->m_freeMemoryDescriptors;
 
-		this->m_freeMemoryDescriptors->m_pNext = this->m_freeMemoryDescriptors->m_pNext->m_pNext;
+		// remove element from free memory descriptor list
+		this->m_freeMemoryDescriptors = BlockDescriptorUtil::removeTopElement(this->m_freeMemoryDescriptors);
 
 		emptyBlockSpaceBefore->m_pBlockBase = beginningOfCurrent;
 		emptyBlockSpaceBefore->m_sizeBlock = leftOverSpace;
 
-		// TODO helper to put element on front of linked list
-		if (this->m_freeMemoryList->m_pBlockBase != nullptr)
+		if (this->m_freeMemoryList != nullptr)
 		{
-			//BlockDescriptor * previousFirstElement = new BlockDescriptor(m_pFreeDescriptors);
-
-			//this->m_pFreeDescriptors = emptyBlockSpaceBefore;
-
-			//this->m_pFreeDescriptors.m_pNext = previousFirstElement;
-			//previousFirstElement->m_pPrevious = &this->m_pFreeDescriptors;
-
-
-			BlockDescriptor * previousFirstElement = (BlockDescriptor*)(&m_freeMemoryList);
-
-			this->m_freeMemoryList = emptyBlockSpaceBefore;
-
-			this->m_freeMemoryList->m_pNext = previousFirstElement;
-			previousFirstElement->m_pPrevious = this->m_freeMemoryList;
+			// set the new head of free memory list to the empty space
+			this->m_freeMemoryList = BlockDescriptorUtil::addNewTopElement(this->m_freeMemoryList, emptyBlockSpaceBefore);
 		}
 		else
 		{
+			// initalize free memory list with this element
 			this->m_freeMemoryList = emptyBlockSpaceBefore;
 		}
 	}
 
-	//TODO helper that takes in void* and increment and returns void*
-	return (void*)((char*)allocatedBlock->m_pBlockBase + sizeof(BlockDescriptor));
+	// returns the memory space for the allocation
+	return ALLOCATION_MEMORY_ADDRESS(allocatedBlock->m_pBlockBase);
 }
 
 void HeapManager::_free(void * i_ptr)
@@ -163,24 +181,31 @@ void HeapManager::collect()
 
 size_t HeapManager::getLargestFreeBlock() const
 {
+	// iterate across all free memory and find largest
 	return size_t();
 }
 
 size_t HeapManager::getTotalFreeMemory() const
 {
+	// iterate across all free memroy and add it up
 	return size_t();
 }
 
 bool HeapManager::Contains(void * i_ptr) const
 {
+	// see if ptr is somewhere inbetween start and end
 	return false;
 }
 
 bool HeapManager::IsAllocated(void * i_ptr) const
 {
+	// iterate over allocated and search for ptr
+	// base + pointer size to get address
 	return false;
 }
 
 void HeapManager::ShowFreeBlocks() const
 {
 }
+
+// TODO do I need a show outstanding free blocks?

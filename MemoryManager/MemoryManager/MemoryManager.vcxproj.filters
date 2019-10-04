@@ -35,5 +35,8 @@
     <ClInclude Include="HeapManagerProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BlockDescriptorUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
