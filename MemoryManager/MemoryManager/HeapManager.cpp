@@ -1,5 +1,6 @@
 #include "HeapManager.h"
 
+#include <stdio.h>
 #include <assert.h>
 
 HeapManager::HeapManager(void * i_pStartMemory, size_t i_givenHeapMemorySize, unsigned int i_givenNumDescriptors)
@@ -161,7 +162,7 @@ void HeapManager::collect()
 }
 
 size_t HeapManager::getLargestFreeBlock() const
-{	
+{
 	BlockDescriptor * currentBlock = this->m_freeMemoryList;
 	size_t largestFreeMemory = 0;
 
@@ -226,6 +227,34 @@ bool HeapManager::IsAllocated(void * i_ptr) const
 
 void HeapManager::ShowFreeBlocks() const
 {
+	BlockDescriptor * currentBlock = this->m_freeMemoryList;
+
+	printf("The free memory");
+
+	// iterate across all free memory and print out the address and size
+	while (currentBlock != nullptr)
+	{
+		assert(currentBlock->m_sizeBlock > 0);
+		printf("-->[%p,%zu%s", ALLOCATION_MEMORY_ADDRESS(currentBlock->m_pBlockBase), currentBlock->m_sizeBlock, "]");
+		currentBlock = currentBlock->m_pNext;
+	}
+	printf("\n");
+}
+
+void HeapManager::ShowOutstandingAllocations() const
+{
+	BlockDescriptor * currentBlock = this->m_allocatedMemoryList;
+
+	printf("The allocated memory");
+
+	// iterate across all allocated memory and print out the address and size
+	while (currentBlock != nullptr)
+	{
+		assert(currentBlock->m_sizeBlock > 0);
+		printf("-->[%p,%zu%s", ALLOCATION_MEMORY_ADDRESS(currentBlock->m_pBlockBase), currentBlock->m_sizeBlock, "]");
+		currentBlock = currentBlock->m_pNext;
+	}
+	printf("\n");
 }
 
 // TODO do I need a show outstanding allocated blocks?

@@ -75,6 +75,7 @@ public:
 	// a debugging helper function to show us all the free blocks.
 	void ShowFreeBlocks() const;
 	// a debugging helper function to show us all the outstanding blocks.
+	void ShowOutstandingAllocations() const;
 
 private:
 	BlockDescriptor * m_freeMemoryDescriptors;
