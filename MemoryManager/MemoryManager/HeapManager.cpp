@@ -257,8 +257,6 @@ void HeapManager::ShowOutstandingAllocations() const
 	printf("\n");
 }
 
-// TODO do I need a show outstanding allocated blocks?
-
 size_t getSizeForAligned(BlockDescriptor * block, size_t alignment)
 {
 	return BYTE_ALIGN((size_t)block->m_pBlockBase + sizeof(BlockDescriptor*), alignment) - (size_t)block->m_pBlockBase
