@@ -21,6 +21,7 @@ HeapManager::HeapManager(void * i_pStartMemory, size_t i_givenHeapMemorySize, un
 	this->m_freeMemoryDescriptors->m_pBlockBase = nullptr;
 	this->m_freeMemoryDescriptors->m_sizeBlock = 0;
 
+	// italize free memory descriptors
 	BlockDescriptor * current = this->m_freeMemoryDescriptors;
 	for (unsigned int i = 0; i < i_givenNumDescriptors; i++)
 	{
@@ -40,10 +41,12 @@ HeapManager::HeapManager(void * i_pStartMemory, size_t i_givenHeapMemorySize, un
 
 HeapManager::~HeapManager()
 {
-	// TODO maybe?
 	this->m_freeMemoryDescriptors = nullptr;
 	this->m_freeMemoryList = nullptr;
 	this->m_allocatedMemoryList = nullptr;
+
+	this->startOfMemoryPool = nullptr;
+	this->endOfMemoryPool = nullptr;
 }
 
 HeapManager * HeapManager::create(void * i_pHeapMemory, size_t i_HeapMemorySize, unsigned int i_numDescriptors)
@@ -64,20 +67,19 @@ void * HeapManager::_alloc(size_t i_bytes)
 
 void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 {
-	// we need to have a pool of memory to use to allocate
-	if (this->m_freeMemoryList->m_pBlockBase == nullptr)
+	// if we have no free memory or empty block descriptors return nullptr
+	if (this->m_freeMemoryList->m_pBlockBase == nullptr || this->m_freeMemoryDescriptors == nullptr)
 	{
 		return nullptr;
 	}
 
-	size_t actualBytesRequested = BYTE_ALIGN(i_bytes + BYTE_OVERHEAD, i_alignment);
+	size_t actualBytesRequested = BYTE_ALIGN(i_bytes + BYTE_OVERHEAD, DEFAULT_ALIGNMENT);
 
 	BlockDescriptor * currentBlock = this->m_freeMemoryList;
 
 	// aligns where the memory would go considering we have a block descriptor pointer in front
 	// it then figures out the amount we would need for this alignment and subtracts the block descriptor pointer
-	size_t sizeForAligned = BYTE_ALIGN((size_t)currentBlock->m_pBlockBase + sizeof(BlockDescriptor*), i_alignment) - (size_t)currentBlock->m_pBlockBase
-		- sizeof(BlockDescriptor*);
+	size_t sizeForAligned = getSizeForAligned(currentBlock, i_alignment);
 
 	while (currentBlock->m_sizeBlock < actualBytesRequested + sizeForAligned)
 	{
@@ -87,17 +89,11 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 			return nullptr;
 		}
 
-		//TODO helper to call for size for aligned
 		currentBlock = currentBlock->m_pNext;
-		sizeForAligned = BYTE_ALIGN((size_t)currentBlock->m_pBlockBase + sizeof(BlockDescriptor*), i_alignment) - (size_t)currentBlock->m_pBlockBase
-			- sizeof(BlockDescriptor*);
+		sizeForAligned = getSizeForAligned(currentBlock, i_alignment);
 	}
 
 	// get free descriptor for allocated block
-	if (this->m_freeMemoryDescriptors == nullptr)
-	{
-		return nullptr;
-	}
 	BlockDescriptor * allocatedBlock = this->m_freeMemoryDescriptors;
 
 	// remove element from free memory descriptor list
@@ -120,31 +116,16 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 		currentBlock->m_sizeBlock -= (actualBytesRequested + sizeForAligned);
 		currentBlock->m_pBlockBase = ADD_AMOUNT_TO_ADDRESS(currentBlock->m_pBlockBase, actualBytesRequested + sizeForAligned);
 	}
-	// TODO add helper to remove link
-	// remove current block from our free memory list
+	// remove current block from our free memory list and add descriptor back to free memory descriptor 
 	else
 	{
-		if (currentBlock->m_pPrevious != nullptr)
-		{
-			currentBlock->m_pPrevious->m_pNext = currentBlock->m_pNext;
-		}
-		if (currentBlock->m_pNext != nullptr)
-		{
-			currentBlock->m_pNext->m_pPrevious = currentBlock->m_pPrevious;
-		}
-
-		// clear current block descriptor and add back to free block descriptor list
-		currentBlock->m_pBlockBase = nullptr;
-		currentBlock->m_sizeBlock = 0;
-		currentBlock->m_pPrevious = nullptr;
-		currentBlock->m_pNext = nullptr;
+		BlockDescriptorUtil::removeNode(currentBlock, this->m_freeMemoryList);
 
 		this->m_freeMemoryDescriptors = BlockDescriptorUtil::addNewTopElement(this->m_freeMemoryDescriptors, currentBlock);
 	}
 
 	// if space before newly allocated block (in the current free block) is large enough add it to free list
-	size_t leftOverSpace = (size_t)allocatedBlock->m_pBlockBase - (size_t)beginningOfCurrent;
-	if (leftOverSpace >= MIN_SIZE_BLOCK)
+	if (sizeForAligned >= MIN_SIZE_BLOCK)
 	{
 		// get new block descriptor and then remove from free descriptors 
 		BlockDescriptor * emptyBlockSpaceBefore = this->m_freeMemoryDescriptors;
@@ -153,7 +134,7 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 		this->m_freeMemoryDescriptors = BlockDescriptorUtil::removeTopElement(this->m_freeMemoryDescriptors);
 
 		emptyBlockSpaceBefore->m_pBlockBase = beginningOfCurrent;
-		emptyBlockSpaceBefore->m_sizeBlock = leftOverSpace;
+		emptyBlockSpaceBefore->m_sizeBlock = sizeForAligned;
 
 		if (this->m_freeMemoryList != nullptr)
 		{
@@ -180,27 +161,66 @@ void HeapManager::collect()
 }
 
 size_t HeapManager::getLargestFreeBlock() const
-{
+{	
+	BlockDescriptor * currentBlock = this->m_freeMemoryList;
+	size_t largestFreeMemory = 0;
+
 	// iterate across all free memory and find largest
-	return size_t();
+	while (currentBlock != nullptr)
+	{
+		assert(currentBlock->m_sizeBlock > 0);
+		if (currentBlock->m_sizeBlock > largestFreeMemory)
+		{
+			largestFreeMemory = currentBlock->m_sizeBlock;
+		}
+		currentBlock = currentBlock->m_pNext;
+	}
+
+	return largestFreeMemory;
 }
 
 size_t HeapManager::getTotalFreeMemory() const
 {
+	BlockDescriptor * currentBlock = this->m_freeMemoryList;
+	size_t totalFreeMemory = 0;
+
 	// iterate across all free memroy and add it up
-	return size_t();
+	while (currentBlock != nullptr)
+	{
+		assert(currentBlock->m_sizeBlock > 0);
+		totalFreeMemory += currentBlock->m_sizeBlock;
+		currentBlock = currentBlock->m_pNext;
+	}
+
+	return totalFreeMemory;
 }
 
 bool HeapManager::Contains(void * i_ptr) const
 {
 	// see if ptr is somewhere inbetween start and end
+	if (this->startOfMemoryPool <= i_ptr && this->endOfMemoryPool >= i_ptr)
+	{
+		return true;
+	}
+
 	return false;
 }
 
 bool HeapManager::IsAllocated(void * i_ptr) const
 {
+	BlockDescriptor * currentBlock = this->m_allocatedMemoryList;
+
 	// iterate over allocated and search for ptr
-	// base + pointer size to get address
+	while (currentBlock != nullptr)
+	{
+		if (ALLOCATION_MEMORY_ADDRESS(currentBlock->m_pBlockBase) == i_ptr)
+		{
+			return true;
+		}
+
+		currentBlock = currentBlock->m_pNext;
+	}
+
 	return false;
 }
 
@@ -208,4 +228,10 @@ void HeapManager::ShowFreeBlocks() const
 {
 }
 
-// TODO do I need a show outstanding free blocks?
+// TODO do I need a show outstanding allocated blocks?
+
+size_t getSizeForAligned(BlockDescriptor * block, size_t alignment)
+{
+	return BYTE_ALIGN((size_t)block->m_pBlockBase + sizeof(BlockDescriptor*), alignment) - (size_t)block->m_pBlockBase
+		- sizeof(BlockDescriptor*);
+}

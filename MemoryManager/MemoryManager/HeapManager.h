@@ -85,3 +85,6 @@ private:
 	void * startOfMemoryPool;
 	void * endOfMemoryPool;
 };
+
+// gets the size needed to have the correct alignment before the start memory address
+size_t getSizeForAligned(BlockDescriptor * block, size_t alignment);

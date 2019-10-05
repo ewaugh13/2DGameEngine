@@ -108,6 +108,11 @@ bool HeapManager_UnitTest()
 		const unsigned int	alignment = alignments[index];
 
 		void * pPtr = alloc(pHeapManager, sizeAlloc, alignment);
+		if (pPtr != nullptr)
+		{
+			assert(Contains(pHeapManager, pPtr));
+			assert(IsAllocated(pHeapManager, pPtr));
+		}
 
 		// check that the returned address has the requested alignment
 		assert((reinterpret_cast<uintptr_t>(pPtr) & (alignment - 1)) == 0);
@@ -139,26 +144,27 @@ bool HeapManager_UnitTest()
 		const unsigned int freeAboutEvery = 10;
 		const unsigned int garbageCollectAboutEvery = 40;
 
-		if (!AllocatedAddresses.empty() && ((rand() % freeAboutEvery) == 0))
-		{
-			void * pPtr = AllocatedAddresses.back();
-			AllocatedAddresses.pop_back();
+		// TODO uncomment
+		//if (!AllocatedAddresses.empty() && ((rand() % freeAboutEvery) == 0))
+		//{
+		//	void * pPtr = AllocatedAddresses.back();
+		//	AllocatedAddresses.pop_back();
 
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
-			assert(success);
+		//	bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
+		//	assert(success);
 
-			success = free(pHeapManager, pPtr);
-			assert(success);
+		//	success = free(pHeapManager, pPtr);
+		//	assert(success);
 
-			numFrees++;
-		}
+		//	numFrees++;
+		//}
 
-		if ((rand() % garbageCollectAboutEvery) == 0)
-		{
-			Collect(pHeapManager);
+		//if ((rand() % garbageCollectAboutEvery) == 0)
+		//{
+		//	Collect(pHeapManager);
 
-			numCollects++;
-		}
+		//	numCollects++;
+		//}
 
 	} while (1);
 
