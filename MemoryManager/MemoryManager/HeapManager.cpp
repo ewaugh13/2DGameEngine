@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <assert.h>
 
-void ShowFreeBlockBases(BlockDescriptor * freeMemoryList);
-
 HeapManager::HeapManager(void * i_pStartMemory, size_t i_givenHeapMemorySize, unsigned int i_givenNumDescriptors)
 {
 	this->startOfMemoryPool = i_pStartMemory;
