@@ -37,6 +37,12 @@ const unsigned int DEFAULT_ALIGNMENT = 4;
 // the allocated memory space start address
 #define ALLOCATION_MEMORY_ADDRESS(bb) ((void*)((char*)bb + sizeof(BlockDescriptor*)))
 
+// finds the difference between the 2 block bases
+#define DIFFERENCE_BLOCK_BASES(b1, b2) (int)((int)b1 - (int)b2)
+
+// returns the absolute value
+#define ABS(n) ((n<0)? (-n):(n))
+
 class HeapManager
 {
 

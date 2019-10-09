@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+void ShowFreeBlockBases(BlockDescriptor * freeMemoryList);
+
 HeapManager::HeapManager(void * i_pStartMemory, size_t i_givenHeapMemorySize, unsigned int i_givenNumDescriptors)
 {
 	this->startOfMemoryPool = i_pStartMemory;
@@ -185,6 +187,14 @@ void HeapManager::_free(void * i_ptr)
 void HeapManager::collect()
 {
 	// iterate over all free to try and coallese
+	BlockDescriptor * currentBlock = this->m_freeMemoryList;
+
+	while (currentBlock != nullptr)
+	{
+		this->coalese(currentBlock);
+
+		currentBlock = currentBlock->m_pNext;
+	}
 }
 
 size_t HeapManager::getLargestFreeBlock() const
@@ -308,7 +318,8 @@ void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
 		BlockDescriptorUtil::removeNode(nextBlock, this->m_freeMemoryList);
 
 		// add the next blocks size to get the size of the new coalesed free block
-		currentFreeBlock->m_sizeBlock += nextBlock->m_sizeBlock;
+		size_t difference = ABS(DIFFERENCE_BLOCK_BASES(currentFreeBlock->m_pBlockBase, nextBlock->m_pBlockBase));
+		currentFreeBlock->m_sizeBlock = difference + nextBlock->m_sizeBlock;
 
 		// clear current block descriptor and add back to free block descriptor list
 		this->addFreeMemoryDescriptor(nextBlock);
@@ -328,7 +339,10 @@ BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * searchBlo
 	// iterate across the memory list searching for the provided block
 	while (currentBlock != nullptr)
 	{
-		if (currentBlock->m_pBlockBase == searchBlockBase)
+		int difference = ABS(DIFFERENCE_BLOCK_BASES(currentBlock->m_pBlockBase, searchBlockBase));
+		// if the difference is less than the min size block than these block 
+		// are basically next to each other with some extra space inbetween
+		if (difference < MIN_SIZE_BLOCK)
 		{
 			return currentBlock;
 		}

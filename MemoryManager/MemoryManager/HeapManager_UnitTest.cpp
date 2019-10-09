@@ -125,7 +125,7 @@ bool HeapManager_UnitTest()
 		// if allocation failed see if garbage collecting will create a large enough block
 		if (pPtr == nullptr)
 		{
-			Collect(pHeapManager);
+			//Collect(pHeapManager);
 
 #ifdef SUPPORTS_ALIGNMENT
 			pPtr = alloc(pHeapManager, sizeAlloc, alignment);
@@ -162,7 +162,7 @@ bool HeapManager_UnitTest()
 
 		if ((rand() % garbageCollectAboutEvery) == 0)
 		{
-			Collect(pHeapManager);
+			//Collect(pHeapManager);
 
 			numCollects++;
 		}
