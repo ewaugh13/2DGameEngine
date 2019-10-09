@@ -35,7 +35,7 @@ const unsigned int DEFAULT_ALIGNMENT = 4;
 #define ADD_AMOUNT_TO_ADDRESS(addr, size) (void*)((char*)addr + size);
 
 // the allocated memory space start address
-#define ALLOCATION_MEMORY_ADDRESS(bb) (void*)((char*)bb + sizeof(BlockDescriptor*))
+#define ALLOCATION_MEMORY_ADDRESS(bb) ((void*)((char*)bb + sizeof(BlockDescriptor*)))
 
 class HeapManager
 {
@@ -85,7 +85,17 @@ private:
 
 	void * startOfMemoryPool;
 	void * endOfMemoryPool;
+
+	// adds the current block descriptor to the free block descriptors list
+	void addFreeMemoryDescriptor(BlockDescriptor * blockDescriptor);
+
+	// recursively coalese's the current free block as long as the next block is also free
+	void coalese(BlockDescriptor * currentFreeBlock);
 };
 
 // gets the size needed to have the correct alignment before the start memory address
 size_t getSizeForAligned(BlockDescriptor * block, size_t alignment);
+
+// sees if the block we are searching for exists in the given memeory list (free or allocated)
+// then returns the block descriptor for that block base
+BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * searchBlockBase);

@@ -122,7 +122,8 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 	{
 		BlockDescriptorUtil::removeNode(currentBlock, this->m_freeMemoryList);
 
-		this->m_freeMemoryDescriptors = BlockDescriptorUtil::addNewTopElement(this->m_freeMemoryDescriptors, currentBlock);
+		// clear current block descriptor and add back to free block descriptor list
+		this->addFreeMemoryDescriptor(currentBlock);
 	}
 
 	// if space before newly allocated block (in the current free block) is large enough add it to free list
@@ -155,10 +156,35 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 
 void HeapManager::_free(void * i_ptr)
 {
+	BlockDescriptor * currentBlock = this->m_allocatedMemoryList;
+
+	// iterate across all allocated memory to find the block we are trying to free
+	while (ALLOCATION_MEMORY_ADDRESS(currentBlock->m_pBlockBase) != i_ptr)
+	{
+		// if we have reached the end of the free memory list and havn't found it return
+		if (currentBlock->m_pNext == nullptr)
+		{
+			// TODO possibly an error here
+			return;
+		}
+		currentBlock = currentBlock->m_pNext;
+	}
+
+	BlockDescriptor * newFreeBlock = currentBlock;
+
+	// remove from allocated list
+	BlockDescriptorUtil::removeNode(newFreeBlock, this->m_allocatedMemoryList);
+
+	// coalese the free blocks following the newly freed block
+	this->coalese(newFreeBlock);
+
+	// add to free list after coalesing
+	this->m_freeMemoryList = BlockDescriptorUtil::addNewTopElement(this->m_freeMemoryList, newFreeBlock);
 }
 
 void HeapManager::collect()
 {
+	// iterate over all free to try and coallese
 }
 
 size_t HeapManager::getLargestFreeBlock() const
@@ -257,8 +283,57 @@ void HeapManager::ShowOutstandingAllocations() const
 	printf("\n");
 }
 
+void HeapManager::addFreeMemoryDescriptor(BlockDescriptor * blockDescriptor)
+{
+	// clear current block descriptor and add back to free block descriptor list
+	blockDescriptor->m_pBlockBase = nullptr;
+	blockDescriptor->m_sizeBlock = 0;
+	blockDescriptor->m_pPrevious = nullptr;
+	blockDescriptor->m_pNext = nullptr;
+
+	this->m_freeMemoryDescriptors = BlockDescriptorUtil::addNewTopElement(this->m_freeMemoryDescriptors, blockDescriptor);
+}
+
+void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
+{
+	void * nextBlockBase = ADD_AMOUNT_TO_ADDRESS(currentFreeBlock->m_pBlockBase, currentFreeBlock->m_sizeBlock);
+
+	// if next block is free as well
+	if (BlockDescriptor * nextBlock = memListContains(this->m_freeMemoryList, nextBlockBase))
+	{
+		// attempt to coalese nextBlock before we do current
+		coalese(nextBlock);
+
+		// remove block we are coalesing from free list
+		BlockDescriptorUtil::removeNode(nextBlock, this->m_freeMemoryList);
+
+		// add the next blocks size to get the size of the new coalesed free block
+		currentFreeBlock->m_sizeBlock += nextBlock->m_sizeBlock;
+
+		// clear current block descriptor and add back to free block descriptor list
+		this->addFreeMemoryDescriptor(nextBlock);
+	}
+}
+
 size_t getSizeForAligned(BlockDescriptor * block, size_t alignment)
 {
 	return BYTE_ALIGN((size_t)block->m_pBlockBase + sizeof(BlockDescriptor*), alignment) - (size_t)block->m_pBlockBase
 		- sizeof(BlockDescriptor*);
+}
+
+BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * searchBlockBase)
+{
+	BlockDescriptor * currentBlock = memoryList;
+
+	// iterate across the memory list searching for the provided block
+	while (currentBlock != nullptr)
+	{
+		if (currentBlock->m_pBlockBase == searchBlockBase)
+		{
+			return currentBlock;
+		}
+		currentBlock = currentBlock->m_pNext;
+	}
+
+	return nullptr;
 }

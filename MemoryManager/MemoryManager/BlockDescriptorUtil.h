@@ -31,6 +31,7 @@ namespace BlockDescriptorUtil
 		if (previousHead != nullptr)
 		{
 			newHead->m_pNext = previousHead;
+			newHead->m_pPrevious = nullptr;
 			previousHead->m_pPrevious = newHead;
 		}
 
@@ -39,7 +40,7 @@ namespace BlockDescriptorUtil
 
 	// removes elements prev and next link and then links its prev and next to each other
 	// if the node removed was the head it sets the head to the next element
-	inline void removeNode(BlockDescriptor * node, BlockDescriptor *& freeMemoryList)
+	inline void removeNode(BlockDescriptor * node, BlockDescriptor *& memoryList)
 	{
 		// set up links for its previous and next
 		if (node->m_pPrevious != nullptr && node->m_pNext != nullptr)
@@ -47,17 +48,21 @@ namespace BlockDescriptorUtil
 			node->m_pPrevious->m_pNext = node->m_pNext;
 			node->m_pNext->m_pPrevious = node->m_pPrevious;
 		}
-		// its the head and we need to set up new head to return
+		// its the head and we need to set up new head
 		else if (node->m_pNext != nullptr)
 		{	
 			node->m_pNext->m_pPrevious = nullptr;
-			freeMemoryList = node->m_pNext;
+			memoryList = node->m_pNext;
 		}
-
-		// clear current block descriptor and add back to free block descriptor list
-		node->m_pBlockBase = nullptr;
-		node->m_sizeBlock = 0;
-		node->m_pPrevious = nullptr;
-		node->m_pNext = nullptr;
+		// if its at the end remove it
+		else if (node->m_pPrevious != nullptr)
+		{
+			node->m_pPrevious->m_pNext = nullptr;
+		}
+		// if its the only element remove it and set list to null
+		else if (node == memoryList)
+		{
+			memoryList = nullptr;
+		}
 	}
 }

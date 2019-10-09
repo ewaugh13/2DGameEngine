@@ -146,27 +146,26 @@ bool HeapManager_UnitTest()
 		const unsigned int freeAboutEvery = 10;
 		const unsigned int garbageCollectAboutEvery = 40;
 
-		// TODO uncomment
-		//if (!AllocatedAddresses.empty() && ((rand() % freeAboutEvery) == 0))
-		//{
-		//	void * pPtr = AllocatedAddresses.back();
-		//	AllocatedAddresses.pop_back();
+		if (!AllocatedAddresses.empty() && ((rand() % freeAboutEvery) == 0))
+		{
+			void * pPtr = AllocatedAddresses.back();
+			AllocatedAddresses.pop_back();
 
-		//	bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
-		//	assert(success);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
+			assert(success);
 
-		//	success = free(pHeapManager, pPtr);
-		//	assert(success);
+			success = free(pHeapManager, pPtr);
+			assert(success);
 
-		//	numFrees++;
-		//}
+			numFrees++;
+		}
 
-		//if ((rand() % garbageCollectAboutEvery) == 0)
-		//{
-		//	Collect(pHeapManager);
+		if ((rand() % garbageCollectAboutEvery) == 0)
+		{
+			Collect(pHeapManager);
 
-		//	numCollects++;
-		//}
+			numCollects++;
+		}
 
 	} while (1);
 
@@ -195,6 +194,12 @@ bool HeapManager_UnitTest()
 
 			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
 			assert(success);
+
+			if (AllocatedAddresses.size() == 0)
+			{
+				int x = 0;
+				x++;
+			}
 
 			success = free(pHeapManager, pPtr);
 			assert(success);
