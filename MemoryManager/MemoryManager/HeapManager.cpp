@@ -84,7 +84,7 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 
 	while (currentBlock->m_sizeBlock < actualBytesRequested + sizeForAligned)
 	{
-		// fail if there are no more available blocks
+		// there are no more available blocks return
 		if (currentBlock->m_pNext == nullptr)
 		{
 			return nullptr;
@@ -164,7 +164,6 @@ void HeapManager::_free(void * i_ptr)
 		// if we have reached the end of the free memory list and havn't found it return
 		if (currentBlock->m_pNext == nullptr)
 		{
-			// TODO possibly an error here
 			return;
 		}
 		currentBlock = currentBlock->m_pNext;
