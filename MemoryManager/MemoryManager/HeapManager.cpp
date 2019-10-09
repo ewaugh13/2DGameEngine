@@ -84,7 +84,7 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 
 	while (currentBlock->m_sizeBlock < actualBytesRequested + sizeForAligned)
 	{
-		// there are no more available blocks return
+		// there are no more available blocks to evaluate return
 		if (currentBlock->m_pNext == nullptr)
 		{
 			return nullptr;
