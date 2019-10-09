@@ -60,7 +60,7 @@ HeapManager * HeapManager::create(void * i_pHeapMemory, size_t i_HeapMemorySize,
 
 void HeapManager::destroy()
 {
-	delete this;
+	this->~HeapManager();
 }
 
 void * HeapManager::_alloc(size_t i_bytes)
