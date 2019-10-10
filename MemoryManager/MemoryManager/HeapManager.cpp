@@ -150,26 +150,16 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 		}
 	}
 
-	// returns the memory space for the allocation
+	// sets the first 4 bytes to store the pointer to the block descriptor
+	(*((BlockDescriptor*)allocatedBlock->m_pBlockBase)).m_pBlockBase = (void*)allocatedBlock;
+
 	return ALLOCATION_MEMORY_ADDRESS(allocatedBlock->m_pBlockBase);
 }
 
 void HeapManager::_free(void * i_ptr)
 {
-	BlockDescriptor * currentBlock = this->m_allocatedMemoryList;
-
-	// iterate across all allocated memory to find the block we are trying to free
-	while (ALLOCATION_MEMORY_ADDRESS(currentBlock->m_pBlockBase) != i_ptr)
-	{
-		// if we have reached the end of the free memory list and havn't found it return
-		if (currentBlock->m_pNext == nullptr)
-		{
-			return;
-		}
-		currentBlock = currentBlock->m_pNext;
-	}
-
-	BlockDescriptor * newFreeBlock = currentBlock;
+	// gets the value of the block descriptor pointer to get the actual block descriptor value to use for freeing
+	BlockDescriptor * newFreeBlock = (BlockDescriptor*)((BlockDescriptor*)DESCRIPTOR_POINTER_MEMORY_ADDRESS(i_ptr))->m_pBlockBase;
 
 	// remove from allocated list
 	BlockDescriptorUtil::removeNode(newFreeBlock, this->m_allocatedMemoryList);

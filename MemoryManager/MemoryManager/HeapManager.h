@@ -37,6 +37,9 @@ const unsigned int DEFAULT_ALIGNMENT = 4;
 // the allocated memory space start address
 #define ALLOCATION_MEMORY_ADDRESS(bb) ((void*)((char*)bb + sizeof(BlockDescriptor*)))
 
+// the block descriptor memory address
+#define DESCRIPTOR_POINTER_MEMORY_ADDRESS(bb) ((void*)((char*)bb - sizeof(BlockDescriptor*)))
+
 // finds the difference between the 2 block bases
 #define DIFFERENCE_BLOCK_BASES(b1, b2) (int)((int)b1 - (int)b2)
 
