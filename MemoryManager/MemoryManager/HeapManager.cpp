@@ -158,6 +158,10 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 
 void HeapManager::_free(void * i_ptr)
 {
+	if (i_ptr == nullptr)
+	{
+		return;
+	}
 	// gets the value of the block descriptor pointer to get the actual block descriptor value to use for freeing
 	BlockDescriptor * newFreeBlock = (BlockDescriptor*)((BlockDescriptor*)DESCRIPTOR_POINTER_MEMORY_ADDRESS(i_ptr))->m_pBlockBase;
 
