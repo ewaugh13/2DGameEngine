@@ -40,7 +40,7 @@ const uint8_t DEFAULT_ALIGNMENT = 4;
 #define DESCRIPTOR_POINTER_MEMORY_ADDRESS(bb) ((void*)((uint8_t*)bb - sizeof(BlockDescriptor*)))
 
 // finds the difference between the 2 block bases
-#define DIFFERENCE_BLOCK_BASES(b1, b2) (ptrdiff_t)((uint8_t*)b1 - (uint8_t)b2)
+#define DIFFERENCE_BLOCK_BASES(b1, b2) (ptrdiff_t)((uint8_t*)b1 - (uint8_t*)b2)
 
 // returns the absolute value
 #define ABS(n) ((n<0)? (-n):(n))
