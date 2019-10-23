@@ -1,12 +1,11 @@
 #pragma once
 
 #include "BlockDescriptorUtil.h"
+#include <cstdint>
 
-// this is a sample of what your HeapManager class interface should look like.
-
-const unsigned int GUARD_BAND = 4;
+const uint8_t GUARD_BAND = 4;
 // alignment must be a power of 2
-const unsigned int DEFAULT_ALIGNMENT = 4;
+const uint8_t DEFAULT_ALIGNMENT = 4;
 
 // the overhead of having a description pointer and guard band
 #define BYTE_OVERHEAD GUARD_BAND + sizeof(BlockDescriptor*)
