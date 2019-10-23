@@ -16,7 +16,7 @@ const uint8_t DEFAULT_ALIGNMENT = 4;
 #define BYTE_ALIGN(bytes, alignment) (bytes + (alignment - 1) & ~(alignment - 1))
 
 // gets the pointer to the block descriptor of the current block
-#define DESCRIPTOR_POINTER(p) ((char *)(p) - sizeof(BlockDescriptor*))
+#define DESCRIPTOR_POINTER(p) ((uint8_t *)(p) - sizeof(BlockDescriptor*))
 
 // the minumum size needed for a block
 #define MIN_SIZE_BLOCK (BYTE_OVERHEAD + DEFAULT_ALIGNMENT)
@@ -25,22 +25,22 @@ const uint8_t DEFAULT_ALIGNMENT = 4;
 #define BLOCK_DESCRIPTOR_SIZE sizeof(BlockDescriptor)
 
 // gets the previous BlockDescriptor from the block descriptor list
-#define PREVIOUS_BLOCK_DESCRIPTOR(pbd) (BlockDescriptor*)((char*)pbd - BLOCK_DESCRIPTOR_SIZE)
+#define PREVIOUS_BLOCK_DESCRIPTOR(pbd) (BlockDescriptor*)((uint8_t*)pbd - BLOCK_DESCRIPTOR_SIZE)
 
 // gets the next BlockDescriptor from the block descriptor list
-#define NEXT_BLOCK_DESCRIPTOR(pbd) (BlockDescriptor*)((char*)pbd + BLOCK_DESCRIPTOR_SIZE)
+#define NEXT_BLOCK_DESCRIPTOR(pbd) (BlockDescriptor*)((uint8_t*)pbd + BLOCK_DESCRIPTOR_SIZE)
 
 // adds the amount to the addres to get new address
-#define ADD_AMOUNT_TO_ADDRESS(addr, size) (void*)((char*)addr + size);
+#define ADD_AMOUNT_TO_ADDRESS(addr, size) (void*)((uint8_t*)addr + size);
 
 // the allocated memory space start address
-#define ALLOCATION_MEMORY_ADDRESS(bb) ((void*)((char*)bb + sizeof(BlockDescriptor*)))
+#define ALLOCATION_MEMORY_ADDRESS(bb) ((void*)((uint8_t*)bb + sizeof(BlockDescriptor*)))
 
 // the block descriptor memory address
-#define DESCRIPTOR_POINTER_MEMORY_ADDRESS(bb) ((void*)((char*)bb - sizeof(BlockDescriptor*)))
+#define DESCRIPTOR_POINTER_MEMORY_ADDRESS(bb) ((void*)((uint8_t*)bb - sizeof(BlockDescriptor*)))
 
 // finds the difference between the 2 block bases
-#define DIFFERENCE_BLOCK_BASES(b1, b2) (int)((int)b1 - (int)b2)
+#define DIFFERENCE_BLOCK_BASES(b1, b2) (ptrdiff_t)((uint8_t*)b1 - (uint8_t)b2)
 
 // returns the absolute value
 #define ABS(n) ((n<0)? (-n):(n))
