@@ -330,7 +330,7 @@ BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * searchBlo
 	// iterate across the memory list searching for the provided block
 	while (currentBlock != nullptr)
 	{
-		int difference = ABS(DIFFERENCE_BLOCK_BASES(currentBlock->m_pBlockBase, searchBlockBase));
+		ptrdiff_t difference = ABS(DIFFERENCE_BLOCK_BASES(currentBlock->m_pBlockBase, searchBlockBase));
 		// if the difference is less than the min size block than these block 
 		// are basically next to each other with some extra space inbetween
 		if (difference < MIN_SIZE_BLOCK)
