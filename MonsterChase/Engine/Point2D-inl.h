@@ -44,19 +44,19 @@ inline Point2D& Point2D::operator=(const Point2D & i_rhs)
 }
 
 #pragma region Arithmetic Operators
-inline Point2D& Point2D::operator-() const
+inline Point2D Point2D::operator-() const
 {
 	Point2D newPoint = Point2D(-this->m_x, -this->m_y);
 	return newPoint;
 }
 
-inline Point2D& Point2D::operator*(float scalar) const
+inline Point2D Point2D::operator*(float scalar) const
 {
 	Point2D newPoint = Point2D(this->m_x * scalar, this->m_y * scalar);
 	return newPoint;
 }
 
-inline Point2D& Point2D::operator/(float scalar) const
+inline Point2D Point2D::operator/(float scalar) const
 {
 	Point2D newPoint = Point2D(this->m_x / scalar, this->m_y / scalar);
 	return newPoint;

@@ -48,11 +48,11 @@ public:
 
 #pragma region Arithmetic Operators
 	// negate the x and y values of the current point
-	Point2D& operator-() const;
+	Point2D operator-() const;
 	// multiply scalar to current point and return new value
-	Point2D& operator*(float scalar) const;
+	Point2D operator*(float scalar) const;
 	// divide current by scalar and return new value
-	Point2D& operator/(float scalar) const;
+	Point2D operator/(float scalar) const;
 	// prefix adition to current
 	void operator++();
 	// postfix adition to current
