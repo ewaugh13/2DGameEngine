@@ -107,3 +107,6 @@ size_t getSizeForAligned(BlockDescriptor * block, size_t alignment);
 // sees if the block we are searching for exists in the given memeory list (free or allocated)
 // then returns the block descriptor for that block base
 BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * searchBlockBase);
+
+
+#include "HeapManager-inl.h"

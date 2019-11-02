@@ -38,5 +38,8 @@
     <ClInclude Include="BlockDescriptorUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeapManager-inl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
