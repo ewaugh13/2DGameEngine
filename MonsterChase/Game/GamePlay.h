@@ -9,7 +9,7 @@ public:
 	GamePlay(int gridSize, int turnAmountGenerateMonsters);
 	~GamePlay();
 
-	void gamePlayLoop(Engine * engine, Character * player, Character * &monsters, int& numMonsters);
+	void gamePlayLoop(Engine * engine, Character * player, Character * &monsters, unsigned int numMonsters);
 	void setCharacterLocation(Character * character);
 
 private:

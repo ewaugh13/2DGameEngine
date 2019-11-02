@@ -21,7 +21,7 @@ void Engine::getPlayerInput(char * &input)
 {
 	input = (char *)this->initalizeMemory(1, sizeof(char));
 	char charElement;
-	int i = 0;
+	size_t i = 0;
 	while ((charElement = (char)_getche()) != '\r')
 	{
 		input[i] = charElement;
@@ -34,17 +34,17 @@ void Engine::getPlayerInput(char * &input)
 	std::cout << std::endl;
 }
 
-void * Engine::initalizeMemory(int amouunt, int sizeOfAllocation)
+void * Engine::initalizeMemory(size_t amouunt, size_t sizeOfAllocation)
 {
 	return calloc(amouunt, sizeOfAllocation);
 }
 
-void * Engine::reinitalizeMemory(void * memoryAddress, int sizeOfAllocation)
+void * Engine::reinitalizeMemory(void * memoryAddress, size_t sizeOfAllocation)
 {
 	return realloc(memoryAddress, sizeOfAllocation);
 }
 
-void Engine::copyMemory(void * to, void * from, int sizeToCopy)
+void Engine::copyMemory(void * to, void * from, size_t sizeToCopy)
 {
 	memcpy(to, from, sizeToCopy);
 }

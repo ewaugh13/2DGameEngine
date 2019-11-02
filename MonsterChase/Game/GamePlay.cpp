@@ -18,7 +18,7 @@ GamePlay::~GamePlay()
 }
 
 // does the main gameplay loop
-void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &monsters, int& numMonsters)
+void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &monsters, unsigned int numMonsters)
 {
 	bool playing = true;
 	int currentTurnCounter = 0;
@@ -41,12 +41,12 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 		}
 
 		// print monster locations
-		for (int i = 0; i < numMonsters; i++)
+		for (unsigned int i = 0; i < numMonsters; i++)
 		{
-			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, (int)monsters[i].position.X(), (int)monsters[i].position.Y());
+			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, static_cast<int>(monsters[i].position.X()), static_cast<int>(monsters[i].position.Y()));
 		}
 		// print player location
-		printf("Player %s at [%02d,%02d]\n", player->name, (int)player->position.X(), (int)player->position.Y());
+		printf("Player %s at [%02d,%02d]\n", player->name, static_cast<int>(player->position.X()), static_cast<int>(player->position.Y()));
 
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
@@ -89,7 +89,7 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 
 		// destroy monster if its on the same space as a player
 		int newNumMonsters = numMonsters;
-		for (int i = 0; i < numMonsters; i++)
+		for (size_t i = 0; i < numMonsters; i++)
 		{
 			if (player->position == monsters[i].position)
 			{
@@ -101,9 +101,11 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 					// copy over the monsters that are in memory before and after the destroyed one
 					if (i > 0)
 					{
-						engine->copyMemory((void*)monstersTemp, (void*)monsters, sizeof(Character) * (i));
+						engine->copyMemory(monstersTemp, monsters, sizeof(Character) * (i));
 					}
-					engine->copyMemory(&monstersTemp[i], &monsters[i + 1], sizeof(Character) * (newNumMonsters - i));
+					engine->copyMemory(&monstersTemp[i],
+						&monsters[i + 1],
+						sizeof(Character) * (static_cast<size_t>(newNumMonsters) - i));
 
 					// free destroyed monster name and original monster data
 					engine->freeMemory(monsters[i].name);
