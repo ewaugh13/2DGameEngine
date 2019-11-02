@@ -188,7 +188,7 @@ void HeapManager::collect()
 	}
 }
 
-size_t HeapManager::getLargestFreeBlock() const
+inline size_t HeapManager::getLargestFreeBlock() const
 {
 	BlockDescriptor * currentBlock = this->m_freeMemoryList;
 	size_t largestFreeMemory = 0;
@@ -207,7 +207,7 @@ size_t HeapManager::getLargestFreeBlock() const
 	return largestFreeMemory;
 }
 
-size_t HeapManager::getTotalFreeMemory() const
+inline size_t HeapManager::getTotalFreeMemory() const
 {
 	BlockDescriptor * currentBlock = this->m_freeMemoryList;
 	size_t totalFreeMemory = 0;
@@ -223,7 +223,7 @@ size_t HeapManager::getTotalFreeMemory() const
 	return totalFreeMemory;
 }
 
-bool HeapManager::Contains(void * i_ptr) const
+inline bool HeapManager::Contains(void * i_ptr) const
 {
 	// see if ptr is somewhere inbetween start and end
 	if (this->startOfMemoryPool <= i_ptr && this->endOfMemoryPool >= i_ptr)
@@ -234,7 +234,7 @@ bool HeapManager::Contains(void * i_ptr) const
 	return false;
 }
 
-bool HeapManager::IsAllocated(void * i_ptr) const
+inline bool HeapManager::IsAllocated(void * i_ptr) const
 {
 	BlockDescriptor * currentBlock = this->m_allocatedMemoryList;
 
@@ -252,7 +252,7 @@ bool HeapManager::IsAllocated(void * i_ptr) const
 	return false;
 }
 
-void HeapManager::ShowFreeBlocks() const
+inline void HeapManager::ShowFreeBlocks() const
 {
 	BlockDescriptor * currentBlock = this->m_freeMemoryList;
 
@@ -268,7 +268,7 @@ void HeapManager::ShowFreeBlocks() const
 	printf("\n");
 }
 
-void HeapManager::ShowOutstandingAllocations() const
+inline void HeapManager::ShowOutstandingAllocations() const
 {
 	BlockDescriptor * currentBlock = this->m_allocatedMemoryList;
 
@@ -284,7 +284,7 @@ void HeapManager::ShowOutstandingAllocations() const
 	printf("\n");
 }
 
-void HeapManager::addFreeMemoryDescriptor(BlockDescriptor * blockDescriptor)
+inline void HeapManager::addFreeMemoryDescriptor(BlockDescriptor * blockDescriptor)
 {
 	// clear current block descriptor and add back to free block descriptor list
 	blockDescriptor->m_pBlockBase = nullptr;
@@ -317,13 +317,13 @@ void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
 	}
 }
 
-size_t getSizeForAligned(BlockDescriptor * block, size_t alignment)
+inline size_t getSizeForAligned(BlockDescriptor * block, size_t alignment)
 {
 	return BYTE_ALIGN((size_t)block->m_pBlockBase + sizeof(BlockDescriptor*), alignment) - (size_t)block->m_pBlockBase
 		- sizeof(BlockDescriptor*);
 }
 
-BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * searchBlockBase)
+inline BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * searchBlockBase)
 {
 	BlockDescriptor * currentBlock = memoryList;
 
