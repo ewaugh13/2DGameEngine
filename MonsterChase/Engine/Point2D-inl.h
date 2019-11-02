@@ -129,7 +129,6 @@ inline Point2D& Point2D::operator/=(float scalar)
 
 #pragma endregion
 
-
 #pragma region Non Class Methods
 
 #pragma region Point2D Math
@@ -173,6 +172,7 @@ inline bool operator==(const Point2D & leftPoint, const Point2D & rightPoint)
 {
 	return leftPoint.X() == rightPoint.X() && leftPoint.Y() == rightPoint.Y();
 }
+
 inline bool operator!=(const Point2D & leftPoint, const Point2D & rightPoint)
 {
 	return leftPoint.X() != rightPoint.X() || leftPoint.Y() != rightPoint.Y();
