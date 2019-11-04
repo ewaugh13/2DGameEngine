@@ -103,9 +103,6 @@ char * MakeSentence(char * strings[])
 		i++;
 	}
 
-	// plus 2 for period and end delimiter
-	//sizeTotalString += 2;
-	//returnSentence = (char*)realloc((void*)returnSentence, sizeTotalString);
 	returnSentence[sizeTotalString - 2] = '.';
 	returnSentence[sizeTotalString - 1] = '\0';
 
