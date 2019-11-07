@@ -1,17 +1,4 @@
-#include "Point2D.h"
 #pragma once
-
-#pragma region Constructor and Destructor
-Point2D::Point2D(const Point2D & i_rhs)
-{
-	this->m_x = i_rhs.m_x;
-	this->m_y = i_rhs.m_y;
-}
-
-Point2D::~Point2D()
-{
-}
-#pragma endregion
 
 #pragma region Incrementers and Decrementers
 inline void Point2D::incrementXValue()
