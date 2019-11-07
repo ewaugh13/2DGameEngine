@@ -21,39 +21,41 @@ int main()
 		std::cout << "How many monsters do you want to start with: ";
 		char * numMonstersInput;
 		engine->getPlayerInput(numMonstersInput);
-		int numMonsters = atoi(numMonstersInput);
+		unsigned int numMonsters = atoi(numMonstersInput);
 
-		Character * monsters = (Character *)engine->initalizeMemory(numMonsters, sizeof(Character));
-		Character * player = (Character *)engine->initalizeMemory(1, sizeof(Character));
+		Actor ** monsters = (Actor **)engine->initalizeMemory(numMonsters, sizeof(Actor *));
 
 		// get each monster name and set a location
-		for (int i = 0; i < numMonsters; i++)
+		for (unsigned int i = 0; i < numMonsters; i++)
 		{
 			std::cout << "What would you like to name Monster " << i << ": ";
-			engine->getPlayerInput(monsters[i].name);
+			char * monsterName;
+			engine->getPlayerInput(monsterName);
 
-			gameplay->setCharacterLocation(&monsters[i]);
+			monsters[i] = new Actor(monsterName, gameplay->getActorLocation());
+			engine->freeMemory(monsterName);
 		}
 
 		// get the player name and set a location
 		std::cout << "What would you like to name the Player" << ": ";
 		char * playerName;
 		engine->getPlayerInput(playerName);
-		player->name = playerName;
+
+		Actor * player = new Actor(playerName, Point2D(0.0f, 0.0f));
+		engine->freeMemory(playerName);
 
 		// while loop for game loop until user input to quit
 		gameplay->gamePlayLoop(engine, player, monsters, numMonsters);
 
 		// free everything we allocated
 		engine->freeMemory(numMonstersInput);
-		for (int i = 0; i < numMonsters; i++)
+		for (unsigned int i = 0; i < numMonsters; i++)
 		{
-			engine->freeMemory(monsters[i].name);
+			delete monsters[i];
 		}
 		engine->freeMemory(monsters);
-		engine->freeMemory(player);
-		engine->freeMemory(playerName);
 
+		delete player;
 		delete engine;
 		delete gameplay;
 	}

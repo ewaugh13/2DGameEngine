@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Character.h"
+#include "Actor.h"
 
 class MonsterAI
 {
@@ -8,6 +8,6 @@ public:
 	MonsterAI();
 	~MonsterAI();
 
-	void monsterMovement(Character * monsters, const int& numMonsters, const int& gridSize);
+	void monsterMovement(Actor ** monsters, const int& numMonsters, const int& gridSize);
 };
 

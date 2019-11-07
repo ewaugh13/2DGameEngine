@@ -19,11 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Character.h" />
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="MonsterAI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="MonsterAI.cpp" />
   </ItemGroup>

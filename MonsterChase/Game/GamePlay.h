@@ -9,8 +9,8 @@ public:
 	GamePlay(int gridSize, int turnAmountGenerateMonsters);
 	~GamePlay();
 
-	void gamePlayLoop(Engine * engine, Character * player, Character * &monsters, unsigned int numMonsters);
-	void setCharacterLocation(Character * character);
+	void gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters, unsigned int &numMonsters);
+	Point2D getActorLocation();
 
 private:
 	int gridSize;

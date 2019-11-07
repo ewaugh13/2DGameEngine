@@ -18,7 +18,7 @@ GamePlay::~GamePlay()
 }
 
 // does the main gameplay loop
-void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &monsters, unsigned int numMonsters)
+void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters, unsigned int &numMonsters)
 {
 	bool playing = true;
 	int currentTurnCounter = 0;
@@ -30,23 +30,24 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 			currentTurnCounter = 0;
 			numMonsters++;
 
-			monsters = (Character *)engine->reinitalizeMemory(monsters, numMonsters * sizeof(Character));
+			monsters = (Actor **)engine->reinitalizeMemory(monsters, numMonsters * sizeof(Actor *));
 
 			// create new monster
-			monsters[numMonsters - 1].name = (char *)engine->initalizeMemory(2, sizeof(char));
-			monsters[numMonsters - 1].name[0] = (char)(rand() % 255);
-			monsters[numMonsters - 1].name[1] = '\0';
+			char * monsterName = (char *)engine->initalizeMemory(2, sizeof(char));
+			monsterName[0] = (char)(rand() % 255);
+			monsterName[1] = '\0';
 
-			this->setCharacterLocation(&monsters[numMonsters - 1]);
+			monsters[numMonsters - 1] = new Actor(monsterName, getActorLocation());
+			engine->freeMemory(monsterName);
 		}
 
 		// print monster locations
 		for (unsigned int i = 0; i < numMonsters; i++)
 		{
-			printf("Monster %s at [%02d,%02d]\n", monsters[i].name, static_cast<int>(monsters[i].position.X()), static_cast<int>(monsters[i].position.Y()));
+			printf("Monster %s at [%02d,%02d]\n", monsters[i]->Name(), static_cast<int>(monsters[i]->Position().X()), static_cast<int>(monsters[i]->Position().Y()));
 		}
 		// print player location
-		printf("Player %s at [%02d,%02d]\n", player->name, static_cast<int>(player->position.X()), static_cast<int>(player->position.Y()));
+		printf("Player %s at [%02d,%02d]\n", player->Name(), static_cast<int>(player->Position().X()), static_cast<int>(player->Position().Y()));
 
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
@@ -57,27 +58,27 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 		{
 			case 'A':
 			case 'a':
-				player->position.decrementXValue();
-				if (player->position.X() < -this->gridSize)
-					player->position.X((float)-this->gridSize);
+				player->Position().decrementXValue();
+				if (player->Position().X() < -this->gridSize)
+					player->Position().X((float)-this->gridSize);
 				break;
 			case 'D':
 			case 'd':
-				player->position.incrementXValue();
-				if (player->position.X() > this->gridSize)
-					player->position.X((float)this->gridSize);
+				player->Position().incrementXValue();
+				if (player->Position().X() > this->gridSize)
+					player->Position().X((float)this->gridSize);
 				break;
 			case 'W':
 			case 'w':
-				player->position.incrementYValue();
-				if (player->position.Y() > this->gridSize)
-					player->position.Y((float)this->gridSize);
+				player->Position().incrementYValue();
+				if (player->Position().Y() > this->gridSize)
+					player->Position().Y((float)this->gridSize);
 				break;
 			case 'S':
 			case 's':
-				player->position.decrementYValue();
-				if (player->position.Y() < -this->gridSize)
-					player->position.Y((float)-this->gridSize);
+				player->Position().decrementYValue();
+				if (player->Position().Y() < -this->gridSize)
+					player->Position().Y((float)-this->gridSize);
 				break;
 			case 'Q':
 			case 'q':
@@ -91,24 +92,24 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 		int newNumMonsters = numMonsters;
 		for (size_t i = 0; i < numMonsters; i++)
 		{
-			if (player->position == monsters[i].position)
+			if (player->Position() == monsters[i]->Position())
 			{
 				newNumMonsters--;
-				if (newNumMonsters > 0)
+				if (numMonsters > 0)
 				{
-					Character * monstersTemp = (Character *)engine->initalizeMemory(newNumMonsters, sizeof(Character));
+					Actor ** monstersTemp = (Actor **)engine->initalizeMemory(newNumMonsters, sizeof(Actor *));
 
 					// copy over the monsters that are in memory before and after the destroyed one
 					if (i > 0)
 					{
-						engine->copyMemory(monstersTemp, monsters, sizeof(Character) * (i));
+						engine->copyMemory(monstersTemp, monsters, sizeof(Actor *) * (i));
 					}
 					engine->copyMemory(&monstersTemp[i],
 						&monsters[i + 1],
-						sizeof(Character) * (static_cast<size_t>(newNumMonsters) - i));
+						sizeof(Actor *) * (static_cast<size_t>(newNumMonsters) - i));
 
 					// free destroyed monster name and original monster data
-					engine->freeMemory(monsters[i].name);
+					delete monsters[i];
 					engine->freeMemory(monsters);
 					monsters = monstersTemp;
 
@@ -122,7 +123,7 @@ void GamePlay::gamePlayLoop(Engine * engine, Character * player, Character * &mo
 }
 
 // sets a character's x and y location from a range of -gridSize to gridSize
-void GamePlay::setCharacterLocation(Character * character)
+Point2D GamePlay::getActorLocation()
 {
 	int randXNegative = rand() % 2;
 	int randYNegative = rand() % 2;
@@ -132,5 +133,5 @@ void GamePlay::setCharacterLocation(Character * character)
 	if (randXNegative) { x *= -1; }
 	if (randYNegative) { y *= -1; }
 
-	character->position = Point2D((float)x, (float)y);
+	return Point2D((float)x, (float)y);
 }
