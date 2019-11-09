@@ -23,10 +23,10 @@ inline void Point2D::decrementYValue()
 #pragma endregion
 
 #pragma region Class Operator Overloads
-inline Point2D& Point2D::operator=(const Point2D & i_rhs)
+inline Point2D& Point2D::operator=(const Point2D & i_OtherPoint)
 {
-	this->m_x = i_rhs.m_x;
-	this->m_y = i_rhs.m_y;
+	this->m_x = i_OtherPoint.m_x;
+	this->m_y = i_OtherPoint.m_y;
 	return *this;
 }
 

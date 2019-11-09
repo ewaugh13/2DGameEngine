@@ -14,7 +14,7 @@ public:
 	}
 
 	// copy constructor
-	Point2D(const Point2D & i_rhs);
+	Point2D(const Point2D & i_OtherPoint);
 
 	// standard destructor
 	~Point2D();

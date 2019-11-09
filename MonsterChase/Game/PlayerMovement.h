@@ -1,17 +1,17 @@
 #pragma once
 
-#include "IActorComponent.h"
+#include "Actor.h"
+
+extern const int GRID_SIZE;
+extern bool PLAYING;
 
 class PlayerMovement : public IActorComponent
 {
 public:
-	PlayerMovement(int i_GridSize) : m_GridSize(i_GridSize)
+	PlayerMovement()
 	{
 	}
 
 	void BeginUpdate(Actor & i_Actor);
-private:
-	int m_GridSize;
-	bool playing;
 };
 

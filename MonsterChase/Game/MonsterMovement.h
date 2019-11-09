@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IActorComponent.h"
+#include "Actor.h"
 
 class MonsterMovement : public IActorComponent
 {

@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <crtdbg.h>
 #include <malloc.h>
+#include <PlayerMovement.h>
 
 #include "Engine.h"
 #include "GamePlay.h"
 
-const int GRID_SIZE = 100;
+extern const int GRID_SIZE = 100;
+extern bool PLAYING = true;
 // number of turns that go by before we generate a new monster
 const int TURN_AMOUNT_GENERATE_MONSTER = 9;
 
@@ -15,7 +17,7 @@ int main()
 {
 	{
 		Engine * engine = new Engine();
-		GamePlay * gameplay = new GamePlay(GRID_SIZE, TURN_AMOUNT_GENERATE_MONSTER);
+		GamePlay * gameplay = new GamePlay(TURN_AMOUNT_GENERATE_MONSTER);
 
 		// get the number of monsters to create
 		std::cout << "How many monsters do you want to start with: ";
@@ -43,6 +45,9 @@ int main()
 
 		Actor * player = new Actor(playerName, Point2D(0.0f, 0.0f));
 		engine->freeMemory(playerName);
+
+		// add player components
+		player->AddComponent(new PlayerMovement());
 
 		// while loop for game loop until user input to quit
 		gameplay->gamePlayLoop(engine, player, monsters, numMonsters);

@@ -5,9 +5,8 @@
 #include <stdio.h>
 
 
-GamePlay::GamePlay(int gridSize, int turnAmountGenerateMonsters)
+GamePlay::GamePlay(int turnAmountGenerateMonsters)
 {
-	this->gridSize = gridSize;
 	this->turnAmountGenerateMonsters = turnAmountGenerateMonsters;
 	this->monsterAIProcessor = MonsterAI();
 }
@@ -20,9 +19,8 @@ GamePlay::~GamePlay()
 // does the main gameplay loop
 void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters, unsigned int &numMonsters)
 {
-	bool playing = true;
 	int currentTurnCounter = 0;
-	while (playing)
+	while (PLAYING)
 	{
 		// create new monster if we reach turn amount
 		if (currentTurnCounter > this->turnAmountGenerateMonsters)
@@ -52,41 +50,45 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
 
-		this->monsterAIProcessor.monsterMovement(monsters, numMonsters, this->gridSize);
+		this->monsterAIProcessor.monsterMovement(monsters, numMonsters, GRID_SIZE);
 
-		switch (_getch())
+		player->BeginUpdate();
+		player->Update();
+		player->EndUpdate();
+
+		/*switch (_getch())
 		{
 			case 'A':
 			case 'a':
 				player->GetPosition().decrementXValue();
-				if (player->GetPosition().GetX() < -this->gridSize)
-					player->GetPosition().SetX((float)-this->gridSize);
+				if (player->GetPosition().GetX() < -GRID_SIZE)
+					player->GetPosition().SetX((float)-GRID_SIZE);
 				break;
 			case 'D':
 			case 'd':
 				player->GetPosition().incrementXValue();
-				if (player->GetPosition().GetX() > this->gridSize)
-					player->GetPosition().SetX((float)this->gridSize);
+				if (player->GetPosition().GetX() > GRID_SIZE)
+					player->GetPosition().SetX((float)GRID_SIZE);
 				break;
 			case 'W':
 			case 'w':
 				player->GetPosition().incrementYValue();
-				if (player->GetPosition().GetY() > this->gridSize)
-					player->GetPosition().SetY((float)this->gridSize);
+				if (player->GetPosition().GetY() > GRID_SIZE)
+					player->GetPosition().SetY((float)GRID_SIZE);
 				break;
 			case 'S':
 			case 's':
 				player->GetPosition().decrementYValue();
-				if (player->GetPosition().GetY() < -this->gridSize)
-					player->GetPosition().SetY((float)-this->gridSize);
+				if (player->GetPosition().GetY() < -GRID_SIZE)
+					player->GetPosition().SetY((float)-GRID_SIZE);
 				break;
 			case 'Q':
 			case 'q':
-				playing = false;
+				PLAYING = false;
 				break;
 			default:
 				continue;
-		}
+		}*/
 
 		// destroy monster if its on the same space as a player
 		int newNumMonsters = numMonsters;
@@ -128,8 +130,8 @@ Point2D GamePlay::getActorLocation()
 	int randXNegative = rand() % 2;
 	int randYNegative = rand() % 2;
 
-	int x = rand() % this->gridSize;
-	int y = rand() % this->gridSize;
+	int x = rand() % GRID_SIZE;
+	int y = rand() % GRID_SIZE;
 	if (randXNegative) { x *= -1; }
 	if (randYNegative) { y *= -1; }
 

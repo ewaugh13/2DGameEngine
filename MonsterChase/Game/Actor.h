@@ -1,7 +1,11 @@
 #pragma once
 
-#include "Point2D.h"
 #include <string.h>
+#include <vector>
+
+#include "Point2D.h"
+
+class IActorComponent;
 
 class Actor
 {
@@ -20,9 +24,33 @@ public:
 	void SetPosition(const Point2D& i_position) { m_position = i_position; }
 #pragma endregion
 
+	// add component
+	void AddComponent(IActorComponent * m_pNewComponent);
+	// get component
+	template<typename ComponentType>
+	IActorComponent * GetComponent();
+
+	// update
+	void BeginUpdate();
+	void Update();
+	void EndUpdate();
 
 private:
 	char * m_name;
 	Point2D m_position;
+	std::vector<IActorComponent *> m_Components;
 };
 
+// interface for components
+class IActorComponent
+{
+public:
+	virtual void BeginUpdate(Actor &)
+	{}
+	virtual void Update(Actor &)
+	{}
+	virtual void EndUpdate(Actor &)
+	{}
+};
+
+#include "Actor-inl.h"
