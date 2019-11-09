@@ -3,18 +3,6 @@
 #include "Point2D.h"
 #include <string.h>
 
-// interface for components
-class IActorComponent
-{
-public:
-	virtual void BeginUpdate(Actor & i_Actor)
-	{}
-	virtual void Update(Actor & i_Actor)
-	{}
-	virtual void EndUpdate(Actor & i_Actor)
-	{}
-};
-
 class Actor
 {
 public:

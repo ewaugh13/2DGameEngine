@@ -21,12 +21,16 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="GamePlay.h" />
+    <ClInclude Include="IActorComponent.h" />
     <ClInclude Include="MonsterAI.h" />
+    <ClInclude Include="MonsterMovement.h" />
+    <ClInclude Include="PlayerMovement.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="MonsterAI.cpp" />
+    <ClCompile Include="PlayerMovement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
