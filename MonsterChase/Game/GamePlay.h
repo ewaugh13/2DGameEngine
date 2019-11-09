@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "MonsterAI.h"
+#include "Actor.h"
 
 extern const int GRID_SIZE;
 extern bool PLAYING;
@@ -17,6 +17,5 @@ public:
 
 private:
 	int turnAmountGenerateMonsters;
-	MonsterAI monsterAIProcessor;
 };
 

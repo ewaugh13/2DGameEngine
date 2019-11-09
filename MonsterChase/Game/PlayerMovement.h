@@ -12,6 +12,6 @@ public:
 	{
 	}
 
-	void BeginUpdate(Actor & i_Actor);
+	void BeginUpdate(Actor & i_player);
 };
 

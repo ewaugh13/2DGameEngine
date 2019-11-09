@@ -3,12 +3,12 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "MonsterMovement.h"
 
 
 GamePlay::GamePlay(int turnAmountGenerateMonsters)
 {
 	this->turnAmountGenerateMonsters = turnAmountGenerateMonsters;
-	this->monsterAIProcessor = MonsterAI();
 }
 
 
@@ -36,6 +36,7 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 			monsterName[1] = '\0';
 
 			monsters[numMonsters - 1] = new Actor(monsterName, getActorLocation());
+			monsters[numMonsters - 1]->AddComponent(new MonsterMovement(player));
 			engine->freeMemory(monsterName);
 		}
 
@@ -50,45 +51,18 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
 
-		this->monsterAIProcessor.monsterMovement(monsters, numMonsters, GRID_SIZE);
+		//this->monsterAIProcessor.monsterMovement(monsters, numMonsters, GRID_SIZE);
 
 		player->BeginUpdate();
 		player->Update();
 		player->EndUpdate();
 
-		/*switch (_getch())
+		for (size_t i = 0; i < numMonsters; i++)
 		{
-			case 'A':
-			case 'a':
-				player->GetPosition().decrementXValue();
-				if (player->GetPosition().GetX() < -GRID_SIZE)
-					player->GetPosition().SetX((float)-GRID_SIZE);
-				break;
-			case 'D':
-			case 'd':
-				player->GetPosition().incrementXValue();
-				if (player->GetPosition().GetX() > GRID_SIZE)
-					player->GetPosition().SetX((float)GRID_SIZE);
-				break;
-			case 'W':
-			case 'w':
-				player->GetPosition().incrementYValue();
-				if (player->GetPosition().GetY() > GRID_SIZE)
-					player->GetPosition().SetY((float)GRID_SIZE);
-				break;
-			case 'S':
-			case 's':
-				player->GetPosition().decrementYValue();
-				if (player->GetPosition().GetY() < -GRID_SIZE)
-					player->GetPosition().SetY((float)-GRID_SIZE);
-				break;
-			case 'Q':
-			case 'q':
-				PLAYING = false;
-				break;
-			default:
-				continue;
-		}*/
+			monsters[i]->BeginUpdate();
+			monsters[i]->Update();
+			monsters[i]->EndUpdate();
+		}
 
 		// destroy monster if its on the same space as a player
 		int newNumMonsters = numMonsters;

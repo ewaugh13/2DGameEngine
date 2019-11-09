@@ -22,14 +22,13 @@
     <ClInclude Include="Actor-inl.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="GamePlay.h" />
-    <ClInclude Include="MonsterAI.h" />
     <ClInclude Include="MonsterMovement.h" />
     <ClInclude Include="PlayerMovement.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="GamePlay.cpp" />
-    <ClCompile Include="MonsterAI.cpp" />
+    <ClCompile Include="MonsterMovement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,9 @@ public:
 		m_name(i_name ? _strdup(i_name) : nullptr), m_position(i_initalPosition)
 	{
 	}
+
+	Actor(const Actor & i_OtherActor);
+
 	~Actor();
 
 #pragma region Getters and Setters

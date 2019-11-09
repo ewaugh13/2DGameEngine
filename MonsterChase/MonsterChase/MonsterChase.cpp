@@ -4,6 +4,7 @@
 #include <crtdbg.h>
 #include <malloc.h>
 #include <PlayerMovement.h>
+#include <MonsterMovement.h>
 
 #include "Engine.h"
 #include "GamePlay.h"
@@ -18,6 +19,17 @@ int main()
 	{
 		Engine * engine = new Engine();
 		GamePlay * gameplay = new GamePlay(TURN_AMOUNT_GENERATE_MONSTER);
+
+		// get the player name and set a location
+		std::cout << "What would you like to name the Player" << ": ";
+		char * playerName;
+		engine->getPlayerInput(playerName);
+
+		Actor * player = new Actor(playerName, Point2D(0.0f, 0.0f));
+		engine->freeMemory(playerName);
+
+		// add player components
+		player->AddComponent(new PlayerMovement());
 
 		// get the number of monsters to create
 		std::cout << "How many monsters do you want to start with: ";
@@ -34,20 +46,11 @@ int main()
 			char * monsterName;
 			engine->getPlayerInput(monsterName);
 
+			// create monster and add component for movement
 			monsters[i] = new Actor(monsterName, gameplay->getActorLocation());
+			monsters[i]->AddComponent(new MonsterMovement(player));
 			engine->freeMemory(monsterName);
 		}
-
-		// get the player name and set a location
-		std::cout << "What would you like to name the Player" << ": ";
-		char * playerName;
-		engine->getPlayerInput(playerName);
-
-		Actor * player = new Actor(playerName, Point2D(0.0f, 0.0f));
-		engine->freeMemory(playerName);
-
-		// add player components
-		player->AddComponent(new PlayerMovement());
 
 		// while loop for game loop until user input to quit
 		gameplay->gamePlayLoop(engine, player, monsters, numMonsters);

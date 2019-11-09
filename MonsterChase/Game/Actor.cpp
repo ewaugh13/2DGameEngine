@@ -2,11 +2,22 @@
 #include <stdlib.h>
 #include <assert.h>
 
+Actor::Actor(const Actor & i_OtherActor) : 
+	m_name(_strdup(i_OtherActor.m_name)), m_position(i_OtherActor.m_position), m_Components(i_OtherActor.m_Components)
+{
+}
+
 Actor::~Actor()
 {
 	if (this->m_name)
 	{
 		free(this->m_name);
+	}
+
+	for (size_t i = 0; i < m_Components.size(); i++)
+	{
+		assert(m_Components[i]);
+		delete m_Components[i];
 	}
 }
 
