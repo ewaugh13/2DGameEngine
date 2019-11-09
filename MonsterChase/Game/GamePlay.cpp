@@ -44,10 +44,10 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 		// print monster locations
 		for (unsigned int i = 0; i < numMonsters; i++)
 		{
-			printf("Monster %s at [%02d,%02d]\n", monsters[i]->Name(), static_cast<int>(monsters[i]->Position().X()), static_cast<int>(monsters[i]->Position().Y()));
+			printf("Monster %s at [%02d,%02d]\n", monsters[i]->GetName(), static_cast<int>(monsters[i]->GetPosition().GetX()), static_cast<int>(monsters[i]->GetPosition().GetY()));
 		}
 		// print player location
-		printf("Player %s at [%02d,%02d]\n", player->Name(), static_cast<int>(player->Position().X()), static_cast<int>(player->Position().Y()));
+		printf("Player %s at [%02d,%02d]\n", player->GetName(), static_cast<int>(player->GetPosition().GetX()), static_cast<int>(player->GetPosition().GetY()));
 
 		// print instructions for player
 		std::cout << "Press A to move left, D to move right, W to move up, S to move down or Q to quit." << std::endl;
@@ -58,27 +58,27 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 		{
 			case 'A':
 			case 'a':
-				player->Position().decrementXValue();
-				if (player->Position().X() < -this->gridSize)
-					player->Position().X((float)-this->gridSize);
+				player->GetPosition().decrementXValue();
+				if (player->GetPosition().GetX() < -this->gridSize)
+					player->GetPosition().SetX((float)-this->gridSize);
 				break;
 			case 'D':
 			case 'd':
-				player->Position().incrementXValue();
-				if (player->Position().X() > this->gridSize)
-					player->Position().X((float)this->gridSize);
+				player->GetPosition().incrementXValue();
+				if (player->GetPosition().GetX() > this->gridSize)
+					player->GetPosition().SetX((float)this->gridSize);
 				break;
 			case 'W':
 			case 'w':
-				player->Position().incrementYValue();
-				if (player->Position().Y() > this->gridSize)
-					player->Position().Y((float)this->gridSize);
+				player->GetPosition().incrementYValue();
+				if (player->GetPosition().GetY() > this->gridSize)
+					player->GetPosition().SetY((float)this->gridSize);
 				break;
 			case 'S':
 			case 's':
-				player->Position().decrementYValue();
-				if (player->Position().Y() < -this->gridSize)
-					player->Position().Y((float)-this->gridSize);
+				player->GetPosition().decrementYValue();
+				if (player->GetPosition().GetY() < -this->gridSize)
+					player->GetPosition().SetY((float)-this->gridSize);
 				break;
 			case 'Q':
 			case 'q':
@@ -92,7 +92,7 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 		int newNumMonsters = numMonsters;
 		for (size_t i = 0; i < numMonsters; i++)
 		{
-			if (player->Position() == monsters[i]->Position())
+			if (player->GetPosition() == monsters[i]->GetPosition())
 			{
 				newNumMonsters--;
 				if (numMonsters > 0)

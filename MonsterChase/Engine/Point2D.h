@@ -22,12 +22,12 @@ public:
 
 #pragma region Getters and Setters
 	// Getters for private variables
-	inline float X() const { return m_x; }
-	inline float Y() const { return m_y; }
+	inline float GetX() const { return m_x; }
+	inline float GetY() const { return m_y; }
 
 	// Setters for private variables
-	inline void X(float i_x) { m_x = i_x; }
-	inline void Y(float i_y) { m_y = i_y; }
+	inline void SetX(float i_x) { m_x = i_x; }
+	inline void SetY(float i_y) { m_y = i_y; }
 #pragma endregion
 
 #pragma region Incrementers and Decrementers

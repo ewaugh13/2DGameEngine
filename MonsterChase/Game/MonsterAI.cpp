@@ -23,28 +23,28 @@ void MonsterAI::monsterMovement(Actor ** monsters, const int& numMonsters, const
 		switch (direction)
 		{
 			case 0: // up
-				monsters[i]->Position().incrementYValue();
+				monsters[i]->GetPosition().incrementYValue();
 				break;
 			case 1: // right
-				monsters[i]->Position().incrementXValue();
+				monsters[i]->GetPosition().incrementXValue();
 				break;
 			case 2: // down
-				monsters[i]->Position().decrementYValue();
+				monsters[i]->GetPosition().decrementYValue();
 				break;
 			case 3: // left
-				monsters[i]->Position().decrementXValue();
+				monsters[i]->GetPosition().decrementXValue();
 				break;
 			default:
-				monsters[i]->Position().incrementXValue();
+				monsters[i]->GetPosition().incrementXValue();
 		}
 		// check to see if the monster went out of bounds
-		if (monsters[i]->Position().X() > gridSize)
-			monsters[i]->Position().X((float)gridSize);
-		else if (monsters[i]->Position().X() < -gridSize)
-			monsters[i]->Position().X((float)-gridSize);
-		else if (monsters[i]->Position().Y() > gridSize)
-			monsters[i]->Position().Y((float)gridSize);
-		else if (monsters[i]->Position().Y() < -gridSize)
-			monsters[i]->Position().Y((float)-gridSize);
+		if (monsters[i]->GetPosition().GetX() > gridSize)
+			monsters[i]->GetPosition().SetX((float)gridSize);
+		else if (monsters[i]->GetPosition().GetX() < -gridSize)
+			monsters[i]->GetPosition().SetX((float)-gridSize);
+		else if (monsters[i]->GetPosition().GetY() > gridSize)
+			monsters[i]->GetPosition().SetY((float)gridSize);
+		else if (monsters[i]->GetPosition().GetY() < -gridSize)
+			monsters[i]->GetPosition().SetY((float)-gridSize);
 	}
 }

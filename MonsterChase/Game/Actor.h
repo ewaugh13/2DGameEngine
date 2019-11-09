@@ -3,21 +3,33 @@
 #include "Point2D.h"
 #include <string.h>
 
+// interface for components
+class IActorComponent
+{
+public:
+	virtual void BeginUpdate(Actor & i_Actor)
+	{}
+	virtual void Update(Actor & i_Actor)
+	{}
+	virtual void EndUpdate(Actor & i_Actor)
+	{}
+};
+
 class Actor
 {
 public:
-	Actor(const char * i_name, const Point2D& i_initalPosition) :
+	Actor(const char * i_name, const Point2D & i_initalPosition) :
 		m_name(i_name ? _strdup(i_name) : nullptr), m_position(i_initalPosition)
 	{
 	}
 	~Actor();
 
 #pragma region Getters and Setters
-	char * Name() const { return m_name; }
-	void Name(const char * i_name) { m_name = const_cast<char *>(i_name); }
+	char * GetName() const { return m_name; }
+	void SetName(const char * i_name) { m_name = const_cast<char *>(i_name); }
 
-	Point2D& Position() { return m_position; }
-	void Position(const Point2D& i_position) { m_position = i_position; }
+	Point2D& GetPosition() { return m_position; }
+	void SetPosition(const Point2D& i_position) { m_position = i_position; }
 #pragma endregion
 
 

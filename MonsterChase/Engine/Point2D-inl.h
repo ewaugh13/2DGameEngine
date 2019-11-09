@@ -121,12 +121,12 @@ inline Point2D& Point2D::operator/=(float scalar)
 #pragma region Point2D Math
 inline float dot(const Point2D & i_lhs, const Point2D & i_rhs)
 {
-	return i_lhs.X() * i_rhs.X() + i_lhs.Y() * i_rhs.Y();
+	return i_lhs.GetX() * i_rhs.GetX() + i_lhs.GetY() * i_rhs.GetY();
 }
 
 inline float cross(const Point2D & i_lhs, const Point2D & i_rhs)
 {
-	return i_lhs.X() * i_rhs.Y() - i_lhs.Y() * i_rhs.X();
+	return i_lhs.GetX() * i_rhs.GetY() - i_lhs.GetY() * i_rhs.GetX();
 }
 #pragma endregion
 
@@ -135,61 +135,61 @@ inline float cross(const Point2D & i_lhs, const Point2D & i_rhs)
 #pragma region Arithmetic Operators
 inline Point2D operator+(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	return Point2D(leftPoint.X() + rightPoint.X(), leftPoint.Y() + rightPoint.Y());
+	return Point2D(leftPoint.GetX() + rightPoint.GetX(), leftPoint.GetY() + rightPoint.GetY());
 }
 
 inline Point2D operator-(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	return Point2D(leftPoint.X() - rightPoint.X(), leftPoint.Y() - rightPoint.Y());
+	return Point2D(leftPoint.GetX() - rightPoint.GetX(), leftPoint.GetY() - rightPoint.GetY());
 }
 
 inline Point2D operator*(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	return Point2D(leftPoint.X() * rightPoint.X(), leftPoint.Y() * rightPoint.Y());
+	return Point2D(leftPoint.GetX() * rightPoint.GetX(), leftPoint.GetY() * rightPoint.GetY());
 }
 
 inline Point2D operator/(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	return Point2D(leftPoint.X() / rightPoint.X(), leftPoint.Y() / rightPoint.Y());
+	return Point2D(leftPoint.GetX() / rightPoint.GetX(), leftPoint.GetY() / rightPoint.GetY());
 }
 #pragma endregion
 
 #pragma region Comparision Operators
 inline bool operator==(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	return leftPoint.X() == rightPoint.X() && leftPoint.Y() == rightPoint.Y();
+	return leftPoint.GetX() == rightPoint.GetX() && leftPoint.GetY() == rightPoint.GetY();
 }
 
 inline bool operator!=(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	return leftPoint.X() != rightPoint.X() || leftPoint.Y() != rightPoint.Y();
+	return leftPoint.GetX() != rightPoint.GetX() || leftPoint.GetY() != rightPoint.GetY();
 }
 
 inline bool operator>(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
-	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	double currentSize = sqrt(pow(leftPoint.GetX(), 2) + pow(leftPoint.GetY(), 2));
+	double pointSize = sqrt(pow(rightPoint.GetX(), 2) + pow(rightPoint.GetY(), 2));
 	return currentSize > pointSize;
 }
 
 inline bool operator<(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
-	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	double currentSize = sqrt(pow(leftPoint.GetX(), 2) + pow(leftPoint.GetY(), 2));
+	double pointSize = sqrt(pow(rightPoint.GetX(), 2) + pow(rightPoint.GetY(), 2));
 	return currentSize < pointSize;
 }
 
 inline bool operator>=(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
-	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	double currentSize = sqrt(pow(leftPoint.GetX(), 2) + pow(leftPoint.GetY(), 2));
+	double pointSize = sqrt(pow(rightPoint.GetX(), 2) + pow(rightPoint.GetY(), 2));
 	return currentSize >= pointSize;
 }
 
 inline bool operator<=(const Point2D & leftPoint, const Point2D & rightPoint)
 {
-	double currentSize = sqrt(pow(leftPoint.X(), 2) + pow(leftPoint.Y(), 2));
-	double pointSize = sqrt(pow(rightPoint.X(), 2) + pow(rightPoint.Y(), 2));
+	double currentSize = sqrt(pow(leftPoint.GetX(), 2) + pow(leftPoint.GetY(), 2));
+	double pointSize = sqrt(pow(rightPoint.GetX(), 2) + pow(rightPoint.GetY(), 2));
 	return currentSize <= pointSize;
 }
 #pragma endregion
