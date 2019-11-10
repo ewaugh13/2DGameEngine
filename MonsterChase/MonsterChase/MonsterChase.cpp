@@ -47,7 +47,7 @@ int main()
 			engine->getPlayerInput(monsterName);
 
 			// create monster and add component for movement
-			monsters[i] = new Actor(monsterName, gameplay->getActorLocation());
+			monsters[i] = new Actor(monsterName, Point2D::GetRandomPosition(GRID_SIZE));
 			monsters[i]->AddComponent(new MonsterMovement(player));
 			engine->freeMemory(monsterName);
 		}
