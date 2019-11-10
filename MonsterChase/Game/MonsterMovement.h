@@ -11,6 +11,8 @@ public:
 	{
 	}
 
+	MonsterMovement(const MonsterMovement & i_OtherMonsterMovement);
+
 	void BeginUpdate(Actor & i_Monster);
 private:
 	Actor * m_TargetActor;

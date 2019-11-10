@@ -8,10 +8,6 @@ extern bool PLAYING;
 class PlayerMovement : public IActorComponent
 {
 public:
-	PlayerMovement()
-	{
-	}
-
 	void BeginUpdate(Actor & i_player);
 };
 

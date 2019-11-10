@@ -6,6 +6,8 @@
 extern const int GRID_SIZE;
 extern bool PLAYING;
 
+const int TELEPORT_PERCENT = 10;
+
 class GamePlay
 {
 public:
@@ -13,7 +15,6 @@ public:
 	~GamePlay();
 
 	void gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters, unsigned int &numMonsters);
-	Point2D getActorLocation();
 
 private:
 	int turnAmountGenerateMonsters;

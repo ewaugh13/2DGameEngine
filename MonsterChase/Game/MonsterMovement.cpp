@@ -1,5 +1,10 @@
 #include "MonsterMovement.h"
 
+MonsterMovement::MonsterMovement(const MonsterMovement & i_OtherMonsterMovement)
+{
+	this->m_TargetActor = i_OtherMonsterMovement.m_TargetActor;
+}
+
 void MonsterMovement::BeginUpdate(Actor & i_Monster)
 {
 	bool moveMonster = rand() % 2;

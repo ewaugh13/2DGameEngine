@@ -37,9 +37,12 @@ public:
 	void decrementYValue();
 #pragma endregion
 
-#pragma region Const Point2D
+#pragma region Utility Positions
 	// const point2D {0.0f, 0.0f, 0.0f}
 	static const Point2D Zero;
+
+	// gets a random point based off grid size
+	static Point2D GetRandomPosition(int gridSize);
 #pragma endregion
 
 #pragma region Class Operator Overloads

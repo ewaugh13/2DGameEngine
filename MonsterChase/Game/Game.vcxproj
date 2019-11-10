@@ -24,12 +24,14 @@
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="MonsterMovement.h" />
     <ClInclude Include="PlayerMovement.h" />
+    <ClInclude Include="TeleportMonster.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="MonsterMovement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
+    <ClCompile Include="TeleportMonster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

@@ -36,6 +36,9 @@
     <ClInclude Include="Actor-inl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TeleportMonster.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GamePlay.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="MonsterMovement.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TeleportMonster.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>

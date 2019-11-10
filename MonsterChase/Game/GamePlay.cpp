@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "MonsterMovement.h"
+#include "TeleportMonster.h"
 
 
 GamePlay::GamePlay(int turnAmountGenerateMonsters)
@@ -35,8 +36,9 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 			monsterName[0] = (char)(rand() % 255);
 			monsterName[1] = '\0';
 
-			monsters[numMonsters - 1] = new Actor(monsterName, getActorLocation());
+			monsters[numMonsters - 1] = new Actor(monsterName, Point2D::GetRandomPosition(GRID_SIZE));
 			monsters[numMonsters - 1]->AddComponent(new MonsterMovement(player));
+			monsters[numMonsters - 1]->AddComponent(new TeleportMonster(TELEPORT_PERCENT));
 			engine->freeMemory(monsterName);
 		}
 
@@ -96,18 +98,4 @@ void GamePlay::gamePlayLoop(Engine * engine, Actor * player, Actor ** &monsters,
 		}
 		currentTurnCounter++;
 	}
-}
-
-// sets a character's x and y location from a range of -gridSize to gridSize
-Point2D GamePlay::getActorLocation()
-{
-	int randXNegative = rand() % 2;
-	int randYNegative = rand() % 2;
-
-	int x = rand() % GRID_SIZE;
-	int y = rand() % GRID_SIZE;
-	if (randXNegative) { x *= -1; }
-	if (randYNegative) { y *= -1; }
-
-	return Point2D((float)x, (float)y);
 }

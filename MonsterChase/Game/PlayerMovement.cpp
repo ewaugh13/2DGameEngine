@@ -1,12 +1,6 @@
 #include "PlayerMovement.h"
 #include <conio.h>
 
-//PlayerMovement::PlayerMovement(PlayerMovement & i_OtherPMovement)
-//{
-//	this->m_GridSize = i_OtherPMovement.m_GridSize;
-//	this->m_Playing = i_OtherPMovement.m_Playing;
-//}
-
 void PlayerMovement::BeginUpdate(Actor & i_player)
 {
 	switch (_getch())
