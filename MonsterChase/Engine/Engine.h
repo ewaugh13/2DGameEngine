@@ -1,5 +1,7 @@
 #pragma once
 
+#include "HeapManager.h"
+
 class Engine
 {
 public:
@@ -11,5 +13,7 @@ public:
 	void * reinitalizeMemory(void * memoryAddress, size_t sizeOfAllocation);
 	void copyMemory(void * to, void * from, size_t sizeToCopy);
 	void freeMemory(void * memoryAddress);
+private:
+	HeapManager * heapManager;
 };
 

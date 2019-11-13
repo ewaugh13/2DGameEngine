@@ -5,16 +5,14 @@
 #include <stdio.h>
 #include <malloc.h>
 
-
 Engine::Engine()
 {
+	//this->heapManager = new HeapManager();
 }
-
 
 Engine::~Engine()
 {
 }
-
 
 // read player input 1 char at a time until enter a cariage return is read
 void Engine::getPlayerInput(char * &input)
