@@ -225,11 +225,6 @@ inline BlockDescriptor * memListContains(BlockDescriptor * memoryList, void * se
 	{
 		if (currentBlock->m_pNext != nullptr)
 		{
-			if (currentBlock->m_pNext->m_pPrevious != currentBlock)
-			{
-				int x = 0;
-				x++;
-			}
 			assert(currentBlock->m_pNext->m_pPrevious == currentBlock);
 		}
 		ptrdiff_t difference = ABS(DIFFERENCE_BLOCK_BASES(currentBlock->m_pBlockBase, searchBlockBase));

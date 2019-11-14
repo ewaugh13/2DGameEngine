@@ -79,11 +79,6 @@ inline void HeapManager::ShowFreeBlocks() const
 		assert(currentBlock->m_sizeBlock > 0);
 		if (currentBlock->m_pNext != nullptr)
 		{
-			if (currentBlock->m_pNext->m_pPrevious != currentBlock)
-			{
-				int x = 0;
-				x++;
-			}
 			assert(currentBlock->m_pNext->m_pPrevious == currentBlock);
 		}
 		printf("-->[%p,%zu%s", ALLOCATION_MEMORY_ADDRESS(currentBlock->m_pBlockBase), currentBlock->m_sizeBlock, "]");
@@ -104,19 +99,9 @@ inline void HeapManager::ShowOutstandingAllocations() const
 		assert(currentBlock->m_sizeBlock > 0);
 		if (currentBlock->m_pNext != nullptr)
 		{
-			if (currentBlock->m_pNext->m_pPrevious != currentBlock)
-			{
-				int x = 0;
-				x++;
-			}
 			assert(currentBlock->m_pNext->m_pPrevious == currentBlock);
 		}
 		printf("-->[%p,%zu%s", ALLOCATION_MEMORY_ADDRESS(currentBlock->m_pBlockBase), currentBlock->m_sizeBlock, "]");
-		if (currentBlock->m_pNext != nullptr && (currentBlock->m_pNext->m_sizeBlock <= 0 || !(currentBlock->m_pNext->m_sizeBlock > 0)))
-		{
-			int x = 0;
-			x++;
-		}
 		currentBlock = currentBlock->m_pNext;
 	}
 	printf("\n");
