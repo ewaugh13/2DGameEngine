@@ -32,6 +32,25 @@ void operator delete[](void * i_ptr)
 }
 #pragma endregion
 
+#pragma region Other Allocators
+void * operator new(size_t i_size, unsigned int i_alignment)
+{
+	DEBUG_PRINT("Calling new (size_t, i_alignment) with (%Iu, %u).\n", i_size, i_alignment);
+
+	switch (i_alignment)
+	{
+		// TODO use power of 2 macro check
+		case ALIGN_8:
+		case ALIGN_16:
+		case ALIGN_32:
+			return pHeapManager->_alloc(i_size, i_alignment);
+			// default use the default alignment (4)
+		default:
+			return pHeapManager->_alloc(i_size);
+	}
+}
+#pragma endregion
+
 #pragma region Tracked Allocators
 void * operator new(size_t i_size, const char * i_pFile, unsigned int i_Line)
 {
