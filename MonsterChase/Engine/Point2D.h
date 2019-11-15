@@ -47,7 +47,7 @@ public:
 
 #pragma region Class Operator Overloads
 	// assignment operator
-	Point2D& operator=(const Point2D & i_rhs);
+	Point2D& operator=(const Point2D & i_OtherPoint);
 
 #pragma region Arithmetic Operators
 	// negate the x and y values of the current point

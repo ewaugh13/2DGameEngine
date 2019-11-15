@@ -24,12 +24,18 @@
     <ClInclude Include="Point2D-inl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Allocators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Point2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Allocators.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Allocators.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Point2D-inl.h" />
     <ClInclude Include="Point2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Allocators.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Point2D.cpp" />
   </ItemGroup>

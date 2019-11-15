@@ -8,6 +8,7 @@
 
 #include "Engine.h"
 #include "GamePlay.h"
+#include "Allocators.h"
 
 extern const int GRID_SIZE = 100;
 extern bool PLAYING = true;
@@ -25,7 +26,7 @@ int main()
 		char * playerName;
 		engine->getPlayerInput(playerName);
 
-		Actor * player = new Actor(playerName, Point2D(0.0f, 0.0f));
+		Actor * player = new Actor(playerName, Point2D::Zero);
 		engine->freeMemory(playerName);
 
 		// add player components

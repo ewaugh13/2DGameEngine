@@ -2,8 +2,6 @@
 
 #include "HeapManagerProxy.h"
 #include <Windows.h>
-//#include "sysinfoapi.h"
-//#include "memoryapi.h"
 
 #include <assert.h>
 #include <algorithm>

@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
+#include <Windows.h>
 
 Engine::Engine()
 {
-	//this->heapManager = new HeapManager();
 }
 
 Engine::~Engine()
@@ -30,6 +30,22 @@ void Engine::getPlayerInput(char * &input)
 		input[i] = '\0';
 	}
 	std::cout << std::endl;
+}
+
+HeapManager * Engine::initializeHeapManager()
+{
+	// Get SYSTEM_INFO, which includes the memory page size
+	SYSTEM_INFO SysInfo;
+	GetSystemInfo(&SysInfo);
+	// round our size to a multiple of memory page size
+	assert(SysInfo.dwPageSize > 0);
+
+	size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) / SysInfo.dwPageSize);
+
+	// get memeory from virtual alloc
+	void* pHeapMemory = VirtualAlloc(NULL, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+
+	return HeapManager::create(pHeapMemory, sizeHeap, numDescriptors);
 }
 
 void * Engine::initalizeMemory(size_t amouunt, size_t sizeOfAllocation)
