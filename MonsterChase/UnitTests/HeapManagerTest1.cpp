@@ -1,5 +1,6 @@
 #include "CppUnitTest.h"
 
+#include "BlockDescriptorUtil.h"
 #include "HeapManagerProxy.h"
 #include <Windows.h>
 
@@ -7,10 +8,14 @@
 #include <algorithm>
 #include <vector>
 
-
-
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace HeapManagerProxy;
+
+#if _WIN64
+#define BLOCK_DESCRIPTOR_SIZE 32
+#else
+#define BLOCK_DESCRIPTOR_SIZE 16
+#endif
 
 namespace HeapManagerUnitTests
 {
@@ -20,6 +25,8 @@ namespace HeapManagerUnitTests
 
 		TEST_METHOD(JoesTest)
 		{
+			size_t sizeBlockDescriptor = sizeof(BlockDescriptor);
+			assert(BLOCK_DESCRIPTOR_SIZE == sizeBlockDescriptor);
 			assert(JoesHeapManager_UnitTest());
 		}
 
@@ -207,12 +214,6 @@ namespace HeapManagerUnitTests
 
 					bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
 					assert(success);
-
-					if (AllocatedAddresses.size() == 0)
-					{
-						int x = 0;
-						x++;
-					}
 
 					success = free(pHeapManager, pPtr);
 					assert(success);

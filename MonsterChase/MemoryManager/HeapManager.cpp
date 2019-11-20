@@ -14,6 +14,7 @@ HeapManager::HeapManager(void * i_pStartMemory, size_t i_givenHeapMemorySize, un
 	this->m_freeMemoryList = (BlockDescriptor*)ADD_AMOUNT_TO_ADDRESS(i_pStartMemory, (i_givenHeapMemorySize - sizeOfBlockDescriptorsList));
 	this->m_freeMemoryList->m_pBlockBase = i_pStartMemory;
 	this->m_freeMemoryList->m_sizeBlock = i_givenHeapMemorySize - sizeOfBlockDescriptorsList;
+	SET_BLOCK_DESCRIPTOR_REFERENCE(this->m_freeMemoryList);
 
 	this->m_allocatedMemoryList = nullptr;
 
@@ -116,6 +117,7 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 	{
 		currentBlock->m_sizeBlock -= (actualBytesRequested + sizeForAligned);
 		currentBlock->m_pBlockBase = ADD_AMOUNT_TO_ADDRESS(currentBlock->m_pBlockBase, actualBytesRequested + sizeForAligned);
+		SET_BLOCK_DESCRIPTOR_REFERENCE(currentBlock);
 	}
 	// remove current block from our free memory list and add descriptor back to free memory descriptor 
 	else
@@ -137,6 +139,7 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 
 		emptyBlockSpaceBefore->m_pBlockBase = beginningOfCurrent;
 		emptyBlockSpaceBefore->m_sizeBlock = sizeForAligned;
+		SET_BLOCK_DESCRIPTOR_REFERENCE(emptyBlockSpaceBefore);
 
 		if (this->m_freeMemoryList != nullptr)
 		{
@@ -150,8 +153,9 @@ void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 		}
 	}
 
-	// sets the first 4 bytes to store the pointer to the block descriptor
-	(*((BlockDescriptor*)allocatedBlock->m_pBlockBase)).m_pBlockBase = (void*)allocatedBlock;
+	// sets the first 4 bytes of the memory to store the pointer to the block descriptor
+	SET_BLOCK_DESCRIPTOR_REFERENCE(allocatedBlock);
+	allocatedBlock->m_allocated = 1;
 
 	return ALLOCATION_MEMORY_ADDRESS(allocatedBlock->m_pBlockBase);
 }
@@ -167,6 +171,7 @@ void HeapManager::_free(void * i_ptr)
 
 	// remove from allocated list
 	BlockDescriptorUtil::removeNode(newFreeBlock, this->m_allocatedMemoryList);
+	newFreeBlock->m_allocated = 0;
 
 	// coalese the free blocks following the newly freed block
 	this->coalese(newFreeBlock);
@@ -191,9 +196,10 @@ void HeapManager::collect()
 void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
 {
 	void * nextBlockBase = ADD_AMOUNT_TO_ADDRESS(currentFreeBlock->m_pBlockBase, currentFreeBlock->m_sizeBlock);
+	BlockDescriptor * nextBlock = (BlockDescriptor *)(((BlockDescriptor *)nextBlockBase)->m_pBlockBase);
 
 	// if next block is free as well
-	if (BlockDescriptor * nextBlock = memListContains(this->m_freeMemoryList, nextBlockBase))
+	if (nextBlock != nullptr && nextBlock->m_allocated == 0 && nextBlock->m_sizeBlock > 0)
 	{
 		// attempt to coalese nextBlock before we do current
 		coalese(nextBlock);
