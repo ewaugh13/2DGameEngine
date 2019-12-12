@@ -3,7 +3,8 @@
 typedef struct BlockDescriptor
 {
 	void * m_pBlockBase;
-	size_t m_sizeBlock;
+	size_t m_allocated : 1;
+	size_t m_sizeBlock : (sizeof(size_t) * 8) - 1;
 	BlockDescriptor * m_pPrevious;
 	BlockDescriptor * m_pNext;
 } BlockDescriptor;

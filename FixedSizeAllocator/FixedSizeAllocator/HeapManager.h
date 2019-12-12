@@ -42,6 +42,9 @@ const uint8_t DEFAULT_ALIGNMENT = 4;
 // finds the difference between the 2 block bases
 #define DIFFERENCE_BLOCK_BASES(b1, b2) (ptrdiff_t)((uint8_t*)b1 - (uint8_t*)b2)
 
+// sets the first 4 bytes to store the pointer to the block descriptor
+#define SET_BLOCK_DESCRIPTOR_REFERENCE(b) (*((BlockDescriptor*)b->m_pBlockBase)).m_pBlockBase = (void*)b;
+
 // returns the absolute value
 #define ABS(n) ((n<0)? (-n):(n))
 
