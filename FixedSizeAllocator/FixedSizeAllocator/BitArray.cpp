@@ -155,8 +155,13 @@ bool BitArray::GetFirstClearBit(size_t & o_bitNumber) const
 	return bit < numBitsInElement;
 }
 
+// TODO put in inl.h file
 bool BitArray::operator[](size_t i_index) const
 {
-	//TODO
-	return false;
+	size_t byteIndex = GetByteIndex(i_index);
+	size_t bitPosition = GetBitPosition(i_index);
+
+	uint8_t bitEvaluator = GetBitEvaluator(bitPosition);
+
+	return m_pBits[byteIndex] & bitEvaluator;
 }
