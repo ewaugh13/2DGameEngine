@@ -4,10 +4,10 @@
 
 #pragma intrinsic(_BitScanForward)
 
-BitArray::BitArray(size_t i_numBits, HeapManager * i_pAllocator, bool i_startClear = true) :
+BitArray::BitArray(size_t i_numBits, HeapManager * i_pAllocator, bool i_startClear) :
 	m_allocatedUsed(i_pAllocator),
 	m_numBits(i_numBits),
-	m_numBytes(i_numBits / 8)
+	m_numBytes((i_numBits + 8 - 1) / 8)
 {
 	m_pBits = reinterpret_cast<uint64_t *>(i_pAllocator->_alloc(m_numBytes));
 
@@ -99,7 +99,7 @@ void BitArray::SetBit(size_t i_bitNumber)
 	uint8_t bitEvaluator = GetBitEvaluator(bitPosition);
 
 	// using OR will set the bit we are concerned with
-	m_pBits[byteIndex] | bitEvaluator;
+	m_pBits[byteIndex] = m_pBits[byteIndex] | bitEvaluator;
 }
 
 // TODO put in inl.h file
@@ -145,7 +145,7 @@ bool BitArray::GetFirstSetBit(size_t & o_bitNumber) const
 		// whether bit was found in for loop
 		return bit < numBitsInElement;
 	*/
-	return _BitScanForward(reinterpret_cast<unsigned long *>(o_bitNumber), setBits);
+	return _BitScanForward(reinterpret_cast<unsigned long *>(o_bitNumber), static_cast<unsigned long>(setBits));
 }
 
 bool BitArray::GetFirstClearBit(size_t & o_bitNumber) const
@@ -182,7 +182,7 @@ bool BitArray::GetFirstClearBit(size_t & o_bitNumber) const
 	*/
 
 	// need to flip bits to actually get first clear bit
-	return _BitScanForward(reinterpret_cast<unsigned long *>(o_bitNumber), ~clearBits);
+	return _BitScanForward(reinterpret_cast<unsigned long *>(o_bitNumber), static_cast<unsigned long>(~clearBits));
 }
 
 // TODO put in inl.h file

@@ -11,5 +11,5 @@ void Collect();
 // DestroyMemorySystem - destroy your memory systems
 void DestroyMemorySystem();
 
-
+// global extern HeapManager that is initalized by MemorySystem
 extern HeapManager * pHeapManager;

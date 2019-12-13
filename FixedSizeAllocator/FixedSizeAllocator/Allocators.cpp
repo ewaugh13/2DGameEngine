@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 // global extern HeapManager that is initalized by MemorySystem
-HeapManager * pHeapManager;
+extern HeapManager * pHeapManager;
 
 void * __cdecl malloc(size_t i_size)
 {
