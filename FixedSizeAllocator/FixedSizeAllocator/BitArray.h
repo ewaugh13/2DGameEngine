@@ -15,13 +15,24 @@ const uint64_t FULL_8_BYTES = 0xffffffffffffffff;
 #pragma region Bit and Byte Helpers
 
 // the byte that has the bit number
-inline size_t GetByteIndex(size_t i_bitNumber) { return i_bitNumber / NUM_BITS_IN_BYTE; }
+inline size_t GetByteIndex(size_t i_bitNumber, size_t i_numBitsInElement) 
+{ 
+	return i_bitNumber / i_numBitsInElement;
+}
 
 // the bit position of the relevant byte
-inline size_t GetBitPosition(size_t i_bitNumber) { return i_bitNumber % NUM_BITS_IN_BYTE; }
+inline size_t GetBitPosition(size_t i_bitNumber, size_t i_numBitsInElement)
+{ 
+	return i_bitNumber % i_numBitsInElement;
+}
 
 // returns a byte with the only the bit position set 1
-inline uint8_t GetBitEvaluator(size_t i_bitPosition) { return 1 << i_bitPosition; }
+inline size_t GetBitEvaluator(size_t i_bitNumber, size_t i_numBitsInElement)
+{ 
+	size_t bitPosition = GetBitPosition(i_bitNumber, i_numBitsInElement);
+
+	return size_t(1) << bitPosition;
+}
 
 #pragma endregion
 
@@ -48,10 +59,15 @@ public:
 
 	bool operator[](size_t i_index) const;
 
+	uint64_t * GetBits() const { return m_pBits; }
+
 private:
+	// TODO 32 bit vs 64 bit
 	uint64_t * m_pBits;
 	HeapManager * m_allocatedUsed;
 	const size_t m_numBits;
 	const size_t m_numBytes;
+	const size_t numElements;
+	const size_t m_numBitsInElement;
 };
 
