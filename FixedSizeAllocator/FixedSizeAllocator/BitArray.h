@@ -8,6 +8,7 @@
 
 const uint8_t NUM_BITS_IN_BYTE = 8;
 
+const uint64_t FULL_4_BYTES = 0xffffffff;
 const uint64_t FULL_8_BYTES = 0xffffffffffffffff;
 
 #pragma endregion
@@ -58,12 +59,19 @@ public:
 	bool GetFirstClearBit(size_t & o_bitNumber) const;
 
 	bool operator[](size_t i_index) const;
-
+#ifdef _WIN64
 	uint64_t * GetBits() const { return m_pBits; }
+#elif _WIN32
+	uint32_t * GetBits() const { return m_pBits; }
+#endif // _WIN64
 
 private:
 	// TODO 32 bit vs 64 bit
+#ifdef _WIN64
 	uint64_t * m_pBits;
+#elif _WIN32
+	uint32_t * m_pBits;
+#endif // _WIN64
 	HeapManager * m_allocatedUsed;
 	const size_t m_numBits;
 	const size_t m_numBytes;

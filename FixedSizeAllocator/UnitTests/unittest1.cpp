@@ -30,8 +30,11 @@ namespace UnitTests
 			BitArray * bitArray = new BitArray(numBits, pHeapManager);
 			assert(bitArray);
 			assert(bitArray->AreAllClear());
-
+#ifdef _WIN64
 			uint64_t * arrayBits = bitArray->GetBits();
+#elif _WIN32
+			uint32_t * arrayBits = bitArray->GetBits();
+#endif //_WIN64
 
 			bitArray->SetBit(0);
 			assert((*bitArray)[0]);
