@@ -6,6 +6,7 @@
 
 #pragma region Global Constants
 
+// 8 bits in a byte
 const uint8_t NUM_BITS_IN_BYTE = 8;
 
 const uint64_t FULL_4_BYTES = 0xffffffff;
@@ -27,7 +28,7 @@ inline size_t GetBitPosition(size_t i_bitNumber, size_t i_numBitsInElement)
 	return i_bitNumber % i_numBitsInElement;
 }
 
-// returns a byte with the only the bit position set 1
+// returns a byte with the only the bit position set to 1
 inline size_t GetBitEvaluator(size_t i_bitNumber, size_t i_numBitsInElement)
 { 
 	size_t bitPosition = GetBitPosition(i_bitNumber, i_numBitsInElement);
@@ -66,7 +67,6 @@ public:
 #endif // _WIN64
 
 private:
-	// TODO 32 bit vs 64 bit
 #ifdef _WIN64
 	uint64_t * m_pBits;
 #elif _WIN32
@@ -79,3 +79,4 @@ private:
 	const size_t m_numBitsInElement;
 };
 
+#include "BitArray-inl.h"

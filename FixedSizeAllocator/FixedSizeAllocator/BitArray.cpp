@@ -7,8 +7,8 @@
 BitArray::BitArray(size_t i_numBits, HeapManager * i_pAllocator, bool i_startClear) :
 	m_allocatedUsed(i_pAllocator),
 	m_numBits(i_numBits),
-	m_numBytes((i_numBits + 8 - 1) / 8),
-	numElements(m_numBytes / sizeof(m_pBits)),
+	m_numBytes((i_numBits + NUM_BITS_IN_BYTE - 1) / NUM_BITS_IN_BYTE),
+	numElements(m_numBytes / sizeof(m_pBits) + 1),
 	m_numBitsInElement(sizeof(m_pBits) * NUM_BITS_IN_BYTE)
 {
 #ifdef _WIN64
@@ -19,7 +19,7 @@ BitArray::BitArray(size_t i_numBits, HeapManager * i_pAllocator, bool i_startCle
 
 	if (!i_startClear)
 	{
-		for (size_t i = 0; i <= numElements; i++)
+		for (size_t i = 0; i < numElements; i++)
 		{
 #ifdef _WIN64
 			m_pBits[i] = FULL_8_BYTES;
@@ -32,14 +32,13 @@ BitArray::BitArray(size_t i_numBits, HeapManager * i_pAllocator, bool i_startCle
 
 BitArray::~BitArray()
 {
-	// TODO veify
-	m_allocatedUsed->_free(m_pBits);
+	if(m_pBits)
+		m_allocatedUsed->_free(m_pBits);
 }
 
-// TODO put in inl.h file
 void BitArray::SetAll(void)
 {
-	for (size_t i = 0; i <= numElements; i++)
+	for (size_t i = 0; i < numElements; i++)
 	{
 #ifdef _WIN64
 		m_pBits[i] = FULL_8_BYTES;
@@ -49,10 +48,9 @@ void BitArray::SetAll(void)
 	}
 }
 
-// TODO put in inl.h file
 void BitArray::ClearAll(void)
 {
-	for (size_t i = 0; i <= numElements; i++)
+	for (size_t i = 0; i < numElements; i++)
 	{
 		m_pBits[i] = 0x0;
 	}
@@ -60,7 +58,7 @@ void BitArray::ClearAll(void)
 
 bool BitArray::AreAllSet(void) const
 {
-	for (size_t i = 0; i <= numElements; i++)
+	for (size_t i = 0; i < numElements; i++)
 	{
 #ifdef _WIN64
 		if (m_pBits[i] != FULL_8_BYTES)
@@ -75,7 +73,7 @@ bool BitArray::AreAllSet(void) const
 
 bool BitArray::AreAllClear(void) const
 {
-	for (size_t i = 0; i <= numElements; i++)
+	for (size_t i = 0; i < numElements; i++)
 	{
 		if (m_pBits[i] != 0x0)
 			return false;
@@ -83,53 +81,18 @@ bool BitArray::AreAllClear(void) const
 	return true;
 }
 
-// TODO put in inl.h file
-inline bool BitArray::IsBitSet(size_t i_bitNumber) const
-{
-	size_t byteIndex = GetByteIndex(i_bitNumber, m_numBitsInElement);
-	size_t bitEvaluator = GetBitEvaluator(i_bitNumber, m_numBitsInElement);
-
-	return m_pBits[byteIndex] & bitEvaluator;
-}
-
-// TODO put in inl.h file
-inline bool BitArray::IsBitClear(size_t i_bitNumber) const
-{
-	size_t byteIndex = GetByteIndex(i_bitNumber, m_numBitsInElement);
-	size_t bitEvaluator = GetBitEvaluator(i_bitNumber, m_numBitsInElement);
-
-	return !(m_pBits[byteIndex] & bitEvaluator);
-}
-
-// TODO put in inl.h file
-void BitArray::SetBit(size_t i_bitNumber)
-{
-	size_t byteIndex = GetByteIndex(i_bitNumber, m_numBitsInElement);
-	size_t bitEvaluator = GetBitEvaluator(i_bitNumber, m_numBitsInElement);
-
-	// using OR will set the bit we are concerned with
-	m_pBits[byteIndex] = m_pBits[byteIndex] | bitEvaluator;
-}
-
-// TODO put in inl.h file
-void BitArray::ClearBit(size_t i_bitNumber)
-{
-	size_t byteIndex = GetByteIndex(i_bitNumber, m_numBitsInElement);
-	size_t bitEvaluator = GetBitEvaluator(i_bitNumber, m_numBitsInElement);
-
-	// using XOR with inverse of both will clear bit we are concerned with
-	m_pBits[byteIndex] = ~m_pBits[byteIndex] ^ ~bitEvaluator;
-}
-
 bool BitArray::GetFirstSetBit(size_t & o_bitNumber) const
 {
+	// initialize to zero
+	o_bitNumber = 0;
+
 	size_t index = 0;
 
 	// skip bytes where bits are clear
-	while ((m_pBits[index] == 0x0) && (index <= numElements))
+	while ((m_pBits[index] == 0x0) && (index < numElements))
 		index++;
 
-	if (index > numElements)
+	if (index >= numElements)
 		return false;
 
 	// at the index there is a clear bit
@@ -145,23 +108,27 @@ bool BitArray::GetFirstSetBit(size_t & o_bitNumber) const
 	// to get the correct bit of overall bit array
 	o_bitNumber += index * m_numBitsInElement;
 
-	return foundIndex;
+	// found bit must be in range of available bits
+	return foundIndex && o_bitNumber < this->m_numBits;
 }
 
 bool BitArray::GetFirstClearBit(size_t & o_bitNumber) const
 {
+	// initialize to zero
+	o_bitNumber = 0;
+
 	size_t index = 0;
 
 	// skip bytes where bits are set
 #ifdef _WIN64
-	while ((m_pBits[index] == FULL_8_BYTES) && (index <= numElements))
+	while ((m_pBits[index] == FULL_8_BYTES) && (index < numElements))
 		index++;
 #elif _WIN32
-	while ((m_pBits[index] == FULL_4_BYTES) && (index <= numElements))
+	while ((m_pBits[index] == FULL_4_BYTES) && (index < numElements))
 		index++;
 #endif // _WIN64
 
-	if (index > numElements)
+	if (index >= numElements)
 		return false;
 
 	// at the index there is a clear bit
@@ -178,14 +145,6 @@ bool BitArray::GetFirstClearBit(size_t & o_bitNumber) const
 	// to get the correct bit of overall bit array
 	o_bitNumber += index * m_numBitsInElement;
 
-	return foundIndex;
-}
-
-// TODO put in inl.h file
-bool BitArray::operator[](size_t i_index) const
-{
-	size_t byteIndex = GetByteIndex(i_index, m_numBitsInElement);
-	size_t bitEvaluator = GetBitEvaluator(i_index, m_numBitsInElement);
-
-	return m_pBits[byteIndex] & bitEvaluator;
+	// found bit must be in range of available bits
+	return foundIndex && o_bitNumber < this->m_numBits;
 }

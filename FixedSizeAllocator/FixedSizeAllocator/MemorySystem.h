@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HeapManager.h"
+#include "global.h"
 
 // InitializeMemorySystem - initialize your memory system including your HeapManager and some FixedSizeAllocators
 bool InitializeMemorySystem(void * i_pHeapMemory, size_t i_sizeHeapMemory, unsigned int i_OptionalNumDescriptors);
@@ -10,6 +10,3 @@ void Collect();
 
 // DestroyMemorySystem - destroy your memory systems
 void DestroyMemorySystem();
-
-// global extern HeapManager that is initalized by MemorySystem
-extern HeapManager * pHeapManager;

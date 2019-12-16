@@ -159,9 +159,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BitArray-inl.h" />
     <ClInclude Include="BitArray.h" />
     <ClInclude Include="BlockDescriptorUtil.h" />
     <ClInclude Include="FixedSizeAllocator.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="HeapManager-inl.h" />
     <ClInclude Include="HeapManager.h" />
     <ClInclude Include="HeapManagerProxy.h" />

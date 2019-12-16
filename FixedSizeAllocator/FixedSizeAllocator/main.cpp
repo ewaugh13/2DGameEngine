@@ -46,7 +46,7 @@ int main(int, char **)
 
 bool MemorySystem_UnitTest()
 {
-	const size_t maxAllocations = 10 * 1024;
+	const size_t maxAllocations = 1; // 10 * 1024;
 	std::vector<void *> AllocatedAddresses;
 
 	long	numAllocs = 0;
@@ -67,7 +67,12 @@ bool MemorySystem_UnitTest()
 
 		size_t			sizeAlloc = 1 + (rand() & (maxTestAllocationSize - 1));
 
-		void * pPtr = malloc(sizeAlloc);
+		if (numAllocs > 1884)
+		{
+			int x = 0;
+			x++;
+		}
+		void * pPtr = malloc(15);
 
 		// if allocation failed see if garbage collecting will create a large enough block
 		if (pPtr == nullptr)

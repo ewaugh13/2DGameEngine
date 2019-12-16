@@ -29,6 +29,10 @@ namespace UnitTests
 			size_t numBits = 100;
 			BitArray * bitArray = new BitArray(numBits, pHeapManager);
 			assert(bitArray);
+
+			size_t bitNumber = 0;
+			bitArray->GetFirstClearBit(bitNumber);
+			assert(bitNumber == 0);
 			assert(bitArray->AreAllClear());
 #ifdef _WIN64
 			uint64_t * arrayBits = bitArray->GetBits();
@@ -67,7 +71,6 @@ namespace UnitTests
 			assert(!bitArray->AreAllSet());
 			assert(*arrayBits == 0);
 
-			size_t bitNumber = 0;
 			bitArray->GetFirstClearBit(bitNumber);
 			assert(bitNumber == 0);
 
