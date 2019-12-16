@@ -10,6 +10,7 @@
 FSAInitData FSASizes[numFSAs] = { {16, 100}, {32, 200}, {96, 400} };
 
 // ititilizing global extern for the fsa map
+// that is initalized by the memory system
 FSAMap FSAMapData[numFSAs] = {};
 
 // if num is in range of a to b
@@ -47,11 +48,15 @@ void * _alloc(size_t i_size)
 		allocatedAddress = fsa->alloc();
 	if (allocatedAddress)
 	{
+#if defined(_DEBUG)
 		printf("using fixed allocator with block size: %zu\n", sizeBlock);
+#endif //_DEBUG
 		return allocatedAddress;
 	}
 
+#if defined(_DEBUG)
 	printf("using default heap manager\n");
+#endif //_DEBUG
 	return pHeapManager->_alloc(i_size);
 }
 
@@ -80,54 +85,70 @@ void _free(void * i_ptr)
 	}
 	if (fsa)
 	{
+#if defined(_DEBUG)
 		printf("using fixed allocator with block size: %zu\n", sizeBlock);
+#endif //_DEBUG
 		fsa->free(i_ptr);
 	}
 	else
 	{
+#if defined(_DEBUG)
 		printf("using default heap manager\n");
+#endif //_DEBUG
 		pHeapManager->_free(i_ptr);
 	}
 }
 
 void * __cdecl malloc(size_t i_size)
 {
+#if defined(_DEBUG)
 	printf("malloc %zu\n", i_size);
+#endif //_DEBUG
 
 	return _alloc(i_size);
 }
 
 void __cdecl free(void * i_ptr)
 {
+#if defined(_DEBUG)
 	printf("free 0x%" PRIXPTR "\n", reinterpret_cast<uintptr_t>(i_ptr));
+#endif //_DEBUG
 
 	_free(i_ptr);
 }
 
 void * operator new(size_t i_size)
 {
+#if defined(_DEBUG)
 	printf("new %zu\n", i_size);
+#endif //_DEBUG
 	
 	return _alloc(i_size);
 }
 
 void operator delete(void * i_ptr)
 {
+#if defined(_DEBUG)
 	printf("delete 0x%" PRIXPTR "\n", reinterpret_cast<uintptr_t>(i_ptr));
+#endif //_DEBUG
 	
 	_free(i_ptr);
 }
 
 void * operator new[](size_t i_size)
 {
+#if defined(_DEBUG)
 	printf("new [] %zu\n", i_size);
+#endif //_DEBUG
 	
 	return _alloc(i_size);
 }
 
 void operator delete [](void * i_ptr)
 {
+#if defined(_DEBUG)
 	printf("delete [] 0x%" PRIXPTR "\n", reinterpret_cast<uintptr_t>(i_ptr));
+#endif //_DEBUG
 	
 	_free(i_ptr);
 }
