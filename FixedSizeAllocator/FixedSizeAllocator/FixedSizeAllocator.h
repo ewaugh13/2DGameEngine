@@ -25,8 +25,11 @@ public:
 	void * alloc();
 	void free(void * i_ptr);
 
+	// if ptr is in the memory range for this fsa
 	bool InMemoryRange(void * i_ptr);
 
+	// prints out memory for fsa showing which
+	// blocks are free or allocated
 	void ShowMemory();
 
 private:

@@ -24,6 +24,7 @@ void * _alloc(size_t i_size)
 {
 	FixedSizeAllocator * fsa = nullptr;
 	size_t sizeBlock = 0;
+	// search for fsa to use if applicable
 	for (unsigned int i = 0; i < numFSAs; i++)
 	{
 		size_t lowRange, highRange;
@@ -60,6 +61,7 @@ void _free(void * i_ptr)
 {
 	FixedSizeAllocator * fsa = nullptr;
 	size_t sizeBlock = 0;
+	// search for fsa to use if applicable
 	for (unsigned int i = 0; i < numFSAs; i++)
 	{
 		size_t lowRange, highRange;
