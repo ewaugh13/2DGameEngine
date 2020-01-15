@@ -24,17 +24,11 @@
     <ClInclude Include="GamePlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerMovement.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="MonsterMovement.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor-inl.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TeleportMonster.h">
       <Filter>Header Files\Components</Filter>
@@ -42,9 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GamePlay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlayerMovement.cpp">

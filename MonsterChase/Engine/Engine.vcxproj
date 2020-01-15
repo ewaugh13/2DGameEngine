@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor-inl.h" />
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="Allocators.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Point2D-inl.h" />
     <ClInclude Include="Point2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Allocators.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Point2D.cpp" />

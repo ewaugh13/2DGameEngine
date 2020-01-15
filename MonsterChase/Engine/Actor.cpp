@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-Actor::Actor(const Actor & i_OtherActor) : 
+Actor::Actor(const Actor & i_OtherActor) :
 	m_name(_strdup(i_OtherActor.m_name)), m_position(i_OtherActor.m_position), m_Components(i_OtherActor.m_Components)
 {
 }

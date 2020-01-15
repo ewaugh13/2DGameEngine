@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Actor.h"
+
 template<typename ComponentType>
 inline IActorComponent * Actor::GetComponent()
 {

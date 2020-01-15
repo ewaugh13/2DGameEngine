@@ -19,15 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor-inl.h" />
-    <ClInclude Include="Actor.h" />
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="MonsterMovement.h" />
     <ClInclude Include="PlayerMovement.h" />
     <ClInclude Include="TeleportMonster.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="MonsterMovement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
