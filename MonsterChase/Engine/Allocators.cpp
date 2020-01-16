@@ -1,6 +1,22 @@
 #include "Allocators.h"
 
 #pragma region Standard Allocators
+void * __cdecl malloc(size_t i_size)
+{
+	DEBUG_PRINT("Calling new (size_t) with (%Iu).\n", i_size);
+
+	return pHeapManager->_alloc(i_size);
+}
+
+void __cdecl free(void * i_ptr)
+{
+	DEBUG_PRINT("Calling delete (void *) with (%p).\n", i_ptr);
+
+	assert(i_ptr != nullptr);
+	pHeapManager->_free(i_ptr);
+}
+
+
 void * operator new(size_t i_size)
 {
 	DEBUG_PRINT("Calling new (size_t) with (%Iu).\n", i_size);

@@ -33,6 +33,9 @@
     <ClInclude Include="Actor-inl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLibHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
