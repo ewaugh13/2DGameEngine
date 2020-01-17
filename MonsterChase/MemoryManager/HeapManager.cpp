@@ -198,8 +198,10 @@ void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
 	void * nextBlockBase = ADD_AMOUNT_TO_ADDRESS(currentFreeBlock->m_pBlockBase, currentFreeBlock->m_sizeBlock);
 	BlockDescriptor * nextBlock = (BlockDescriptor *)(((BlockDescriptor *)nextBlockBase)->m_pBlockBase);
 
-	// if next block is free as well
-	if (nextBlock != nullptr && nextBlock->m_allocated == 0 && nextBlock->m_sizeBlock > 0)
+	// if next block is free as well and not be past memory pool
+	if (nextBlock != nullptr && 
+		reinterpret_cast<uint8_t*>(nextBlock->m_pBlockBase) + nextBlock->m_sizeBlock <= reinterpret_cast<uint8_t*>(this->endOfMemoryPool) &&
+		nextBlock->m_allocated == 0 && nextBlock->m_sizeBlock > 0)
 	{
 		// attempt to coalese nextBlock before we do current
 		coalese(nextBlock);

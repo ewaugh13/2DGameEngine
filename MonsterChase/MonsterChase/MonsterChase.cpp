@@ -85,7 +85,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
 		GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
 
-		GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\Samus3.dds");
+		GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\SamusNeutral0.dds");
 
 		bool bQuit = false;
 
@@ -101,6 +101,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 				// Tell GLib that we want to render some sprites
 				GLib::Sprites::BeginRendering();
 
+				// if first sprite was loaded
 				if (pPlayerSprite)
 				{
 					static float			moveDist = .01f;
@@ -108,14 +109,17 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 					static GLib::Point2D	Offset = { -180.0f, -100.0f };
 
-					if (Offset.x < -220.0f)
-						moveDir = moveDist;
-					else if (Offset.x > -140.0f)
-						moveDir = -moveDist;
-
-					Offset.x += moveDir;
+					if (GLibHelper::KeyStates['A'])
+						Offset.x -= moveDir;
+					if (GLibHelper::KeyStates['W'])
+						Offset.y += moveDir;
+					if (GLibHelper::KeyStates['S'])
+						Offset.y -= moveDir;
+					if (GLibHelper::KeyStates['D'])
+						Offset.x += moveDir;
 
 					// Tell GLib to render this sprite at our calculated location
+
 					GLib::Sprites::RenderSprite(*pPlayerSprite, Offset, 0.0f);
 				}
 

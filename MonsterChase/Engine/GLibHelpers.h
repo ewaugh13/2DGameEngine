@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GLib.h"
+
 namespace GLibHelper
 {
 	void * LoadFile(const char * i_pFilename, size_t & o_sizeFile);
@@ -8,7 +9,7 @@ namespace GLibHelper
 	GLib::Sprites::Sprite * CreateSprite(const char * i_pFilename);
 
 	const size_t SizeReadTable = 256;
-	static uint8_t KeyStates[SizeReadTable];
+	extern uint8_t * KeyStates;
 
 	void KeyCallback(unsigned int i_VKeyID, bool bWentDown);
 }

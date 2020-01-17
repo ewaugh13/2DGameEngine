@@ -5,6 +5,7 @@
 
 namespace GLibHelper
 {
+	extern uint8_t * KeyStates = reinterpret_cast<uint8_t*>(calloc(SizeReadTable, sizeof(uint8_t)));
 
 	void * LoadFile(const char * i_pFilename, size_t & o_sizeFile)
 	{
