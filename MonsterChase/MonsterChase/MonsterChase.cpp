@@ -10,13 +10,90 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <crtdbg.h>
-#include <malloc.h>
 #include <Windows.h>
 
-extern const int GRID_SIZE = 100;
+extern const int WINDOW_WIDTH = 800;
+extern const int WINDOW_HEIGHT = 800;
+
 extern bool PLAYING = true;
-// number of turns that go by before we generate a new monster
-const int TURN_AMOUNT_GENERATE_MONSTER = 9;
+
+int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
+{
+	// IMPORTANT: first we need to initialize GLib
+	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "GLibTest", -1, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	if (bSuccess)
+	{
+		// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
+		GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
+
+		GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\SamusNeutral0.dds");
+		float playerMoveDist = .01f;
+		GLib::Point2D playerPosition = { -180.0f, -100.0f };
+
+		bool bQuit = false;
+
+		do
+		{
+			// IMPORTANT: We need to let GLib do it's thing. 
+			GLib::Service(bQuit);
+
+			if (!bQuit)
+			{
+				// IMPORTANT: Tell GLib that we want to start rendering
+				GLib::BeginRendering();
+				// Tell GLib that we want to render some sprites
+				GLib::Sprites::BeginRendering();
+
+				if (GLibHelper::KeyStates['Q'])
+				{
+					bQuit = true;
+
+					// Tell GLib we're done rendering sprites
+					GLib::Sprites::EndRendering();
+					// IMPORTANT: Tell GLib we're done rendering
+					GLib::EndRendering();
+
+					continue;
+				}
+
+				// if first sprite was loaded
+				if (pPlayerSprite)
+				{
+					if (GLibHelper::KeyStates['A'])
+						playerPosition.x -= playerMoveDist;
+					if (GLibHelper::KeyStates['W'])
+						playerPosition.y += playerMoveDist;
+					if (GLibHelper::KeyStates['S'])
+						playerPosition.y -= playerMoveDist;
+					if (GLibHelper::KeyStates['D'])
+						playerPosition.x += playerMoveDist;
+
+					// Tell GLib to render this sprite at our calculated location
+					GLib::Sprites::RenderSprite(*pPlayerSprite, playerPosition, 0.0f);
+				}
+
+				// Tell GLib we're done rendering sprites
+				GLib::Sprites::EndRendering();
+				// IMPORTANT: Tell GLib we're done rendering
+				GLib::EndRendering();
+			}
+		} while (bQuit == false);
+
+		if (pPlayerSprite)
+			GLib::Sprites::Release(pPlayerSprite);
+
+		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
+		GLib::Shutdown();
+	}
+
+	// need to free key states info
+	free(GLibHelper::KeyStates);
+
+#if defined _DEBUG
+	_CrtDumpMemoryLeaks();
+#endif // _DEBUG
+}
 
 //int main()
 //{
@@ -74,70 +151,3 @@ const int TURN_AMOUNT_GENERATE_MONSTER = 9;
 //	_CrtDumpMemoryLeaks();
 //	return 0;
 //}
-
-int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
-{
-	// IMPORTANT: first we need to initialize GLib
-	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "GLibTest", -1, 800, 600);
-
-	if (bSuccess)
-	{
-		// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
-		GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
-
-		GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\SamusNeutral0.dds");
-
-		bool bQuit = false;
-
-		do
-		{
-			// IMPORTANT: We need to let GLib do it's thing. 
-			GLib::Service(bQuit);
-
-			if (!bQuit)
-			{
-				// IMPORTANT: Tell GLib that we want to start rendering
-				GLib::BeginRendering();
-				// Tell GLib that we want to render some sprites
-				GLib::Sprites::BeginRendering();
-
-				// if first sprite was loaded
-				if (pPlayerSprite)
-				{
-					static float			moveDist = .01f;
-					static float			moveDir = moveDist;
-
-					static GLib::Point2D	Offset = { -180.0f, -100.0f };
-
-					if (GLibHelper::KeyStates['A'])
-						Offset.x -= moveDir;
-					if (GLibHelper::KeyStates['W'])
-						Offset.y += moveDir;
-					if (GLibHelper::KeyStates['S'])
-						Offset.y -= moveDir;
-					if (GLibHelper::KeyStates['D'])
-						Offset.x += moveDir;
-
-					// Tell GLib to render this sprite at our calculated location
-
-					GLib::Sprites::RenderSprite(*pPlayerSprite, Offset, 0.0f);
-				}
-
-				// Tell GLib we're done rendering sprites
-				GLib::Sprites::EndRendering();
-				// IMPORTANT: Tell GLib we're done rendering
-				GLib::EndRendering();
-			}
-		} while (bQuit == false);
-
-		if (pPlayerSprite)
-			GLib::Sprites::Release(pPlayerSprite);
-
-		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
-		GLib::Shutdown();
-	}
-
-#if defined _DEBUG
-	_CrtDumpMemoryLeaks();
-#endif // _DEBUG
-}
