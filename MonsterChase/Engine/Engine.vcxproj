@@ -26,6 +26,7 @@
     <ClInclude Include="GLibHelpers.h" />
     <ClInclude Include="Point2D-inl.h" />
     <ClInclude Include="Point2D.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GLibHelpers.cpp" />
     <ClCompile Include="Point2D.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GLib\GLib.vcxproj">
