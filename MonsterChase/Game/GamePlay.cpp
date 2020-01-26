@@ -11,24 +11,27 @@ void GamePlay::GameLoop()
 	// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
 	GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
 
-	GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\SamusNeutral0.dds");
-	GLib::Point2D playerPosition = { -180.0f, -100.0f };
-	GLib::Point2D playerPrevPosition = playerPosition;
-
-	float playerMass = 300.0f;
-	float playerMoveForceHorizontal = 10.0f;
-	float playerMoveForceVertical = 5.0f;
-
-	//float dragFactor = 0.3f;
-
-	bool movingLeft = false;
-	bool movingRight = false;
-
 	Timer * timer = new Timer();
-
 	bool bQuit = false;
 
-	float playerAccelHoriz = 0.0f;
+	GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\SamusNeutral0.dds");
+	GLib::Point2D playerPosition = { -180.0f, -100.0f };
+
+	float playerMass = 500.0f;
+	float playerMoveForceHoriz = 30.0f;
+	float playerMoveForceVert = 30.0f;
+
+	float dragFactor = 0.0001f;
+
+	bool movingLeft = false, movingRight = false, movingDown = false, movingUp = false;
+
+	float playerAccelHoriz = 0.0f, playerAccelVert = 0.0f;
+
+	float playerVelocityHoriz = 0.0f, playerVelocityVert = 0.0f;
+	float playerPrevVelocityHoriz = 0.0f, playerPrevVelocityVert = 0.0f;
+
+	float playerMaxVelocityHoriz = 5.0f;
+	float playerMaxVelocityVert = 5.0f;
 
 	do
 	{
@@ -59,89 +62,69 @@ void GamePlay::GameLoop()
 			// if first sprite was loaded
 			if (pPlayerSprite)
 			{
-				//float playerAccelHoriz = 0.0f;
-				float playerAccelVert = 0.0f;
-
 				if (GLibHelper::KeyStates['A'] || GLibHelper::KeyStates['D'])
-					playerAccelHoriz = playerMoveForceHorizontal / playerMass;
+					playerAccelHoriz = playerMoveForceHoriz / playerMass;
+				if (GLibHelper::KeyStates['W'] || GLibHelper::KeyStates['S'])
+					playerAccelVert = playerMoveForceVert / playerMass;
+
+				playerVelocityHoriz += (playerAccelHoriz * deltaTime);
+				// if greater than max velocity set to max
+				playerVelocityHoriz = playerVelocityHoriz > playerMaxVelocityHoriz ? playerMaxVelocityHoriz : playerVelocityHoriz;
+
+				playerVelocityVert += (playerAccelVert * deltaTime);
+				// if greater than max velocity set to max
+				playerVelocityVert = playerVelocityVert > playerMaxVelocityVert ? playerMaxVelocityVert : playerVelocityVert;
 				
-				//if (GLibHelper::KeyStates['W'] || GLibHelper::KeyStates['S'])
-				//{
-				//	verletMultiplyFactor = 2.0f;
-				//	movingVert = true;
-				//	playerAccelVert = playerMoveForceVertical / playerMass;
-				//}
-
-				movingLeft = GLibHelper::KeyStates['A'];
-
-				if (GLibHelper::KeyStates['W'])
-					playerAccelVert = playerMoveForceVertical / playerMass;
-				if (GLibHelper::KeyStates['S'])
-					playerAccelVert = -1 * (playerMoveForceVertical / playerMass);
-
-				movingRight = GLibHelper::KeyStates['D'];
-
-				if (GLibHelper::KeyStates['D'])
-				{
-					int x = 5;
-					x++;
-				}
+				// set move left or right based on player input
+				if(!movingLeft || movingRight)
+					movingLeft = GLibHelper::KeyStates['A'];
+				if(!movingRight || movingLeft)
+					movingRight = GLibHelper::KeyStates['D'];
+				// set move up or down based on player input
+				if (!movingDown || movingUp)
+					movingDown = GLibHelper::KeyStates['S'];
+				if (!movingUp || movingDown)
+					movingUp = GLibHelper::KeyStates['W'];
 				
+				// can't move left and right at the same time
 				if (movingLeft && movingRight)
-					movingLeft, movingRight = false;
-
-				GLib::Point2D playerCurrentPosition = playerPosition;
-
-				if (playerPrevPosition.x == playerPosition.x && playerAccelHoriz > 0.0f)
-				{
-					if (movingLeft)
-						playerPrevPosition.x = playerPosition.x + (playerAccelHoriz * 4.0f * deltaTime);
-					if (movingRight)
-						playerPrevPosition.x = playerPosition.x - (playerAccelHoriz * 4.0f * deltaTime);
-				}
-				if (playerPrevPosition.y == playerPosition.y && playerAccelVert > 0.0f)
-				{
-
-				}
-
-				// use verlet
-				float newX = playerPosition.x;
-				float newY = playerPosition.y;
-				if (playerAccelHoriz > 0.0f && movingRight && !movingLeft)
-					newX = playerPosition.x + std::abs(playerPosition.x - playerPrevPosition.x) + (playerAccelHoriz * deltaTime * deltaTime);
-				else if(playerAccelHoriz > 0.0f && movingLeft && !movingRight)
-					newX = playerPosition.x - (std::abs(playerPosition.x - playerPrevPosition.x) + (playerAccelHoriz * deltaTime * deltaTime));
-				//if (movingVert)
-				//	newY = (verletMultiplyFactor * playerPosition.y) - playerPrevPosition.y + (playerAccelVert * deltaTime);
-
-				playerPosition.x = newX;
-				playerPosition.y = newY;
-
+					movingLeft = false, movingRight = false;
+				// can't move up and down at the same time
+				if (movingDown && movingUp)
+					movingLeft = false, movingRight = false;
 				
-				// set previous to past current
-				if(movingLeft || movingRight)
-					playerPrevPosition = playerCurrentPosition;
+				// use euler midpoint method move left or right
+				if (playerAccelHoriz > 0.0f && movingRight && !movingLeft)
+					playerPosition.x += ((playerPrevVelocityHoriz + playerVelocityHoriz) / 2.0f * deltaTime);
+				else if (playerAccelHoriz > 0.0f && movingLeft && !movingRight)
+					playerPosition.x -= ((playerPrevVelocityHoriz + playerVelocityHoriz) / 2.0f * deltaTime);
+				// use euler midpoint method move down or up
+				if (playerAccelVert > 0.0f && movingUp && !movingDown)
+					playerPosition.y += ((playerPrevVelocityVert + playerVelocityVert) / 2.0f * deltaTime);
+				else if (playerAccelVert > 0.0f && movingDown && !movingUp)
+					playerPosition.y -= ((playerPrevVelocityVert + playerVelocityVert) / 2.0f * deltaTime);
 
-				if (playerAccelHoriz > 0.00001f)
-				{
-					playerAccelHoriz /= 1.5f;
-				}
+				// set previous velocity for mid point
+				playerPrevVelocityHoriz = playerVelocityHoriz;
+				playerPrevVelocityVert = playerVelocityVert;
+
+				// apply drag left and right movement
+				if (playerVelocityHoriz > 0.0f)
+					playerAccelHoriz -= dragFactor;
 				else
 				{
 					playerAccelHoriz = 0.0f;
-					movingLeft = false;
-					movingRight = false;
+					movingLeft = false, movingRight = false;
 				}
 
-				//if (verletMultiplyFactor > 1.0f)
-				//	//verletMultiplyFactor -= dragFactor;
-				//// set back to 0 if needed
-				//if (verletMultiplyFactor <= 1.0f)
-				//{
-				//	//verletMultiplyFactor = 0.0f;
-				//	movingHoriz = false;
-				//	movingVert = false;
-				//}
+				// apply drag down and up movement
+				if (playerVelocityVert > 0.0f)
+					playerAccelVert -= dragFactor;
+				else
+				{
+					playerAccelVert = 0.0f;
+					movingDown = false, movingUp = false;
+				}
 
 				// Tell GLib to render this sprite at our calculated location
 				GLib::Sprites::RenderSprite(*pPlayerSprite, playerPosition, 0.0f);
