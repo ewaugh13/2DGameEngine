@@ -35,9 +35,14 @@ namespace FloatFunctionLibrary
 	bool AlmostEqualUlpsAndAbs(float i_A, float i_B, float i_maxDiff, unsigned int i_maxUlpsDiff);
 
 	// Equal to zero within a certain epsilon
-	bool AlmostEqualZeroCertain(float i_A, float i_maxCertDiff = FLT_EPSILON);
+	inline bool AlmostEqualZeroCertain(float i_A, float i_maxCertDiff = FLT_EPSILON) { return fabs(i_A) <= i_maxCertDiff; }
 
 	// If value is a NaN
-	bool IsNan(float i_A);
+	inline bool IsNan(float i_A)
+	{
+		volatile float volA = i_A;
+		// If not equal to itself it's a NaN (according to IEEE standard)
+		return volA != volA;
+	}
 };
 

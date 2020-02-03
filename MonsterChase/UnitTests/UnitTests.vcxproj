@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FloatTest1.cpp" />
     <ClCompile Include="HeapManagerTest1.cpp" />
     <ClCompile Include="Point2DUnitTest1.cpp" />
   </ItemGroup>
