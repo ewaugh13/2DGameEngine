@@ -13,26 +13,62 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\HeapManager">
+      <UniqueIdentifier>{1b4755dd-d529-493b-a3f3-248b9f8be687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\HeapManager">
+      <UniqueIdentifier>{f0a26e87-5f2c-4650-8bfc-f9eb0d00df54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FixedSizeAllocator">
+      <UniqueIdentifier>{67e3133e-4dfc-4df8-b594-53fe15d9c53c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FixedSizeAllocator">
+      <UniqueIdentifier>{5c03c56e-9e8f-452f-b223-c6ea7a89bdee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeapManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BlockDescriptorUtil.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\HeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="HeapManager.h">
+      <Filter>Header Files\HeapManager</Filter>
     </ClInclude>
     <ClInclude Include="HeapManager-inl.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\HeapManager</Filter>
     </ClInclude>
     <ClInclude Include="HeapManagerProxy.h">
+      <Filter>Header Files\HeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagerGlobals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitArray.h">
+      <Filter>Header Files\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="BitArray-inl.h">
+      <Filter>Header Files\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedSizeAllocator.h">
+      <Filter>Header Files\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HeapManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\HeapManager</Filter>
     </ClCompile>
     <ClCompile Include="HeapManagerProxy.cpp">
+      <Filter>Source Files\HeapManager</Filter>
+    </ClCompile>
+    <ClCompile Include="BitArray.cpp">
+      <Filter>Source Files\FixedSizeAllocator</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedSizeAllocator.cpp">
+      <Filter>Source Files\FixedSizeAllocator</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,14 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitArray-inl.h" />
+    <ClInclude Include="BitArray.h" />
     <ClInclude Include="BlockDescriptorUtil.h" />
+    <ClInclude Include="FixedSizeAllocator.h" />
     <ClInclude Include="HeapManager-inl.h" />
     <ClInclude Include="HeapManager.h" />
     <ClInclude Include="HeapManagerProxy.h" />
+    <ClInclude Include="MemoryManagerGlobals.h" />
+    <ClInclude Include="MemorySystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BitArray.cpp" />
+    <ClCompile Include="FixedSizeAllocator.cpp" />
     <ClCompile Include="HeapManager.cpp" />
     <ClCompile Include="HeapManagerProxy.cpp" />
+    <ClCompile Include="MemorySystem.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

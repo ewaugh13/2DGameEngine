@@ -24,11 +24,6 @@ void * operator new[](size_t i_size);
 void operator delete[](void * i_ptr);
 #pragma endregion
 
-#pragma region Other Allocators
-void * operator new(size_t i_size, unsigned int i_alignment);
-#pragma endregion
-
-
 // example to use tracked (new TRACK_NEW Actor("Eric", Point2D::Zero)
 #pragma region Tracked Allocators
 void * operator new(size_t i_size, const char * i_pFile, unsigned int i_Line);
