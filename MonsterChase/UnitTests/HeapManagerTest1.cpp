@@ -23,12 +23,14 @@ namespace HeapManagerUnitTests
 	{
 	public:
 
-		TEST_METHOD(JoesTest)
-		{
-			size_t sizeBlockDescriptor = sizeof(BlockDescriptor);
-			assert(BLOCK_DESCRIPTOR_SIZE == sizeBlockDescriptor);
-			assert(JoesHeapManager_UnitTest());
-		}
+		// uncomment if test is needed
+
+		//TEST_METHOD(JoesTest)
+		//{
+		//	size_t sizeBlockDescriptor = sizeof(BlockDescriptor);
+		//	assert(BLOCK_DESCRIPTOR_SIZE == sizeBlockDescriptor);
+		//	assert(JoesHeapManager_UnitTest());
+		//}
 
 
 	private:

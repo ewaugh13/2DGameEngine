@@ -13,57 +13,150 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{208b7933-94c3-451c-bb64-e02def7777f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{e91d86cc-308c-449e-b6d1-a3f2fbef3b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Memory">
+      <UniqueIdentifier>{d930cad6-da03-4d41-924b-0f8548523d4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Memory\HeapManager">
+      <UniqueIdentifier>{76380d6e-b31a-45dc-a1a6-3be2acd0f8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Memory\FixedSizeAllocator">
+      <UniqueIdentifier>{91459e6e-e2ae-4682-9e1f-feae23db22f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory">
+      <UniqueIdentifier>{3b4142f7-ec75-461e-a721-004d895863e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory\HeapManager">
+      <UniqueIdentifier>{0e3bb57b-cb21-4643-bf2f-d5c948817d86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory\FixedSizeAllocator">
+      <UniqueIdentifier>{7fc77d77-810e-40e7-8072-e7f72edac5a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{ffebcb92-27b6-43f4-ad8f-45a867562f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Timing">
+      <UniqueIdentifier>{4d83d547-376f-47b0-9db9-79e2f637737a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObject">
+      <UniqueIdentifier>{e1ee63b5-cc3e-48ff-b7b2-12f7b96e1998}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{4de4d58b-bacb-4b7e-8543-e10a505ad16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObject">
+      <UniqueIdentifier>{126a4fd3-3905-411a-94b0-6ad1565cbb76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{d57850e1-3e19-491b-b190-8e6c5c041c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{6c5f4282-ad9d-461f-9d74-25ac6ac98270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{8e336b38-f471-43bd-ae4d-0082461af8fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Timing">
+      <UniqueIdentifier>{a1ad10e4-2a3c-490a-b39c-34f22b4dbf07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Point2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Point2D-inl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GLibHelpers.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Allocators.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\MemoryManager\BlockDescriptorUtil.h">
+      <Filter>Header Files\Memory\HeapManager</Filter>
     </ClInclude>
-    <ClInclude Include="Actor-inl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\MemoryManager\HeapManager.h">
+      <Filter>Header Files\Memory\HeapManager</Filter>
     </ClInclude>
-    <ClInclude Include="GLibHelpers.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\MemoryManager\HeapManager-inl.h">
+      <Filter>Header Files\Memory\HeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MemoryManager\HeapManagerProxy.h">
+      <Filter>Header Files\Memory\HeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MemoryManager\BitArray.h">
+      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MemoryManager\BitArray-inl.h">
+      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MemoryManager\FixedSizeAllocator.h">
+      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MemoryManager\MemoryManagerGlobals.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MemoryManager\MemorySystem.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Point2D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Point2D-inl.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Timing</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor-inl.h">
+      <Filter>Header Files\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="FloatFunctionLibrary.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Point2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Allocators.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MemoryManager\HeapManager.cpp">
+      <Filter>Source Files\Memory\HeapManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MemoryManager\HeapManagerProxy.cpp">
+      <Filter>Source Files\Memory\HeapManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MemoryManager\BitArray.cpp">
+      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MemoryManager\FixedSizeAllocator.cpp">
+      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MemoryManager\MemorySystem.cpp">
+      <Filter>Source Files\Memory</Filter>
     </ClCompile>
     <ClCompile Include="Actor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLibHelpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="FloatFunctionLibrary.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="GLibHelpers.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Point2D.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Timing</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

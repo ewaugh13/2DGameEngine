@@ -19,6 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\MemoryManager\BitArray-inl.h" />
+    <ClInclude Include="..\MemoryManager\BitArray.h" />
+    <ClInclude Include="..\MemoryManager\BlockDescriptorUtil.h" />
+    <ClInclude Include="..\MemoryManager\FixedSizeAllocator.h" />
+    <ClInclude Include="..\MemoryManager\HeapManager-inl.h" />
+    <ClInclude Include="..\MemoryManager\HeapManager.h" />
+    <ClInclude Include="..\MemoryManager\HeapManagerProxy.h" />
+    <ClInclude Include="..\MemoryManager\MemoryManagerGlobals.h" />
+    <ClInclude Include="..\MemoryManager\MemorySystem.h" />
     <ClInclude Include="Actor-inl.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Allocators.h" />
@@ -30,6 +39,11 @@
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\MemoryManager\BitArray.cpp" />
+    <ClCompile Include="..\MemoryManager\FixedSizeAllocator.cpp" />
+    <ClCompile Include="..\MemoryManager\HeapManager.cpp" />
+    <ClCompile Include="..\MemoryManager\HeapManagerProxy.cpp" />
+    <ClCompile Include="..\MemoryManager\MemorySystem.cpp" />
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Allocators.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -41,9 +55,6 @@
   <ItemGroup>
     <ProjectReference Include="..\GLib\GLib.vcxproj">
       <Project>{b2ab67de-b7fa-42ba-b060-959487392aea}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\MemoryManager\MemoryManager.vcxproj">
-      <Project>{6697ef73-bf7c-4b25-9bee-95affd8df453}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
