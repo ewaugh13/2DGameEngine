@@ -17,12 +17,14 @@ void GamePlay::GameLoop()
 	GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\SamusNeutral0.dds");
 	GLib::Point2D playerPosition = { -180.0f, -100.0f };
 
+	// TODO: put these all in a struct for a rigid body
 	float playerMass = 500.0f;
 	float playerMoveForceHoriz = 30.0f;
 	float playerMoveForceVert = 30.0f;
 
 	float dragFactor = 0.0001f;
 
+	// TODO: change these to axis values with a -1 and +1 similar to Unreal
 	bool movingLeft = false, movingRight = false, movingDown = false, movingUp = false;
 
 	float playerAccelHoriz = 0.0f, playerAccelVert = 0.0f;
