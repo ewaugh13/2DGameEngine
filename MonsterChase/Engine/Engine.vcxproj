@@ -36,6 +36,8 @@
     <ClInclude Include="GLibHelpers.h" />
     <ClInclude Include="Point2D-inl.h" />
     <ClInclude Include="Point2D.h" />
+    <ClInclude Include="ReferenceCount.h" />
+    <ClInclude Include="SmartPtr.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

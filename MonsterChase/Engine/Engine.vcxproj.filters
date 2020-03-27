@@ -64,6 +64,9 @@
     <Filter Include="Source Files\Timing">
       <UniqueIdentifier>{a1ad10e4-2a3c-490a-b39c-34f22b4dbf07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Containers">
+      <UniqueIdentifier>{aa244fae-1bb7-4e01-9f93-626b9fb8e840}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -119,6 +122,12 @@
     </ClInclude>
     <ClInclude Include="FloatFunctionLibrary.h">
       <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartPtr.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ReferenceCount.h">
+      <Filter>Header Files\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
