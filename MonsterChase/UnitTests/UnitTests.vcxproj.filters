@@ -19,7 +19,7 @@
     <ClCompile Include="FixedSizeTest1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WeakPtrTest.cpp">
+    <ClCompile Include="SmartWeakPtrTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

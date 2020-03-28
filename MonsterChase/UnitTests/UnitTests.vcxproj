@@ -157,7 +157,7 @@
     <ClCompile Include="FloatTest1.cpp" />
     <ClCompile Include="HeapManagerTest1.cpp" />
     <ClCompile Include="Point2DUnitTest1.cpp" />
-    <ClCompile Include="WeakPtrTest.cpp" />
+    <ClCompile Include="SmartWeakPtrTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
