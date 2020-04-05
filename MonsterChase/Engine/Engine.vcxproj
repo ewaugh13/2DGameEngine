@@ -39,6 +39,7 @@
     <ClInclude Include="ReferenceCount.h" />
     <ClInclude Include="SmartPtr.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="WeakPtr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\MemoryManager\BitArray.cpp" />

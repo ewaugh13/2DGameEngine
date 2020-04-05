@@ -1,10 +1,14 @@
 #pragma once
 
 #include "ReferenceCount.h"
+#include "WeakPtr.h"
 
 template<class T >
 class SmartPtr
 {
+	template<class T>
+	friend class WeakPtr;
+
 public:
 	// Empty constructor
 	SmartPtr() :
@@ -19,10 +23,24 @@ public:
 	}
 
 	// Copy Constructor
-	SmartPtr(SmartPtr & i_Other) :
+	SmartPtr(const SmartPtr & i_Other) :
 		m_Ptr(i_Other.m_Ptr), m_ReferenceCount(i_Other.m_ReferenceCount)
 	{
-		m_ReferenceCount->m_SmartPtrsCount++;
+		if (m_ReferenceCount != nullptr)
+		{
+			m_ReferenceCount->m_SmartPtrsCount++;
+		}
+	}
+
+	// Copy Constructor from WeakPtr
+	SmartPtr(const WeakPtr<T> & i_WeakPtr) :
+		m_Ptr((i_WeakPtr.m_ReferenceCount != nullptr && i_WeakPtr.m_ReferenceCount->m_SmartPtrsCount > 0) ? i_WeakPtr.m_Ptr : nullptr),
+		m_ReferenceCount((i_WeakPtr.m_ReferenceCount != nullptr && i_WeakPtr.m_ReferenceCount->m_SmartPtrsCount > 0) ? i_WeakPtr.m_ReferenceCount : nullptr)
+	{
+		if (m_ReferenceCount != nullptr)
+		{
+			m_ReferenceCount->m_SmartPtrsCount++;
+		}
 	}
 
 	// Move copy constructor
@@ -33,12 +51,26 @@ public:
 		i_Other.m_ReferenceCount = nullptr;
 	}
 
+	// Move copy constructor with WeakPtr
+	SmartPtr(WeakPtr<T> && i_WeakPtr) noexcept :
+		m_Ptr(i_WeakPtr.m_Ptr), m_ReferenceCount(i_WeakPtr.m_ReferenceCount)
+	{
+		i_WeakPtr.m_Ptr = nullptr;
+		i_WeakPtr.m_ReferenceCount = nullptr;
+	}
+
+	// Destructor
+	~SmartPtr()
+	{
+		ReleaseSmartPtr();
+	}
+
 	// Assignment operator
-	SmartPtr & operator=(SmartPtr & i_Other)
+	SmartPtr & operator=(const SmartPtr & i_Other)
 	{
 		if (this != &i_Other)
 		{
-			Release();
+			ReleaseSmartPtr();
 
 			m_Ptr = i_Other.m_Ptr;
 			m_ReferenceCount = i_Other.m_ReferenceCount;
@@ -54,7 +86,7 @@ public:
 	{
 		if (m_Ptr != i_Other.m_Ptr)
 		{
-			Release();
+			ReleaseSmartPtr();
 
 			m_Ptr = i_Other.m_Ptr;
 			m_ReferenceCount = i_Other.m_ReferenceCount;
@@ -66,16 +98,10 @@ public:
 		return *this;
 	}
 
-	// Destructor
-	~SmartPtr()
-	{
-		Release();
-	}
-
 	// Assignment operator to nullptr
 	SmartPtr & operator=(std::nullptr_t i_Nullptr)
 	{
-		Release();
+		ReleaseSmartPtr();
 
 		m_Ptr = nullptr;
 		m_ReferenceCount = nullptr;
@@ -88,6 +114,13 @@ public:
 	inline bool operator==(const SmartPtr<E> & i_Other) const
 	{
 		return m_Ptr == i_Other.m_Ptr;
+	}
+
+	// If a smart ptr and weak ptr hold the same ptr
+	template<class E>
+	inline bool operator==(const WeakPtr<E> & i_SmartPtr) const
+	{
+		return m_Ptr == i_SmartPtr.m_Ptr;
 	}
 
 	// If the smart ptr is holding this value
@@ -158,16 +191,18 @@ public:
 private:
 
 	// Decrement smart ptr count and delete object if no more references
-	void Release()
+	void ReleaseSmartPtr()
 	{
 		if (m_ReferenceCount != nullptr && --m_ReferenceCount->m_SmartPtrsCount == 0)
 		{
 			delete m_Ptr;
-			// TODO: check for WeakPtr once it is implemented
-			delete m_ReferenceCount;
-
 			m_Ptr = nullptr;
-			m_ReferenceCount = nullptr;
+
+			if (m_ReferenceCount->m_WeakPtrsCount == 0)
+			{
+				delete m_ReferenceCount;
+				m_ReferenceCount = nullptr;
+			}
 		}
 	}
 

@@ -129,6 +129,9 @@
     <ClInclude Include="ReferenceCount.h">
       <Filter>Header Files\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="WeakPtr.h">
+      <Filter>Header Files\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
