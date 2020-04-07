@@ -20,6 +20,10 @@ public:
 	WeakPtr(const SmartPtr<T> & i_SmartPtr) :
 		m_Ptr(i_SmartPtr.m_Ptr), m_ReferenceCount(i_SmartPtr.m_ReferenceCount)
 	{
+		if (m_ReferenceCount != nullptr)
+		{
+			m_ReferenceCount->m_WeakPtrsCount++;
+		}
 	}
 
 	// Copy constructor
@@ -126,24 +130,10 @@ public:
 		return m_Ptr != nullptr;
 	}
 
-	// Index into weak ptr holding array ptr
-	inline T operator[](int i_Index)
-	{
-		return m_Ptr[i_Index];
-	}
-
-	// Return num or weak ptrs reference count
+	// Return num of weak ptrs reference count
 	inline unsigned int UseCount()
 	{
 		return m_ReferenceCount->m_WeakPtrsCount;
-	}
-
-	// Swap two different weak ptrs ptrs they are holding
-	inline void Swap(WeakPtr & i_Other)
-	{
-		T * temp = i_Other.m_Ptr;
-		i_Other.m_Ptr = m_Ptr;
-		m_Ptr = temp;
 	}
 
 private:
@@ -153,7 +143,7 @@ private:
 	{
 		if (m_ReferenceCount != nullptr && --m_ReferenceCount->m_WeakPtrsCount == 0)
 		{
-			if (m_ReferenceCount->m_WeakPtrsCount == 0)
+			if (m_ReferenceCount->m_SmartPtrsCount == 0)
 			{
 				delete m_ReferenceCount;
 				m_ReferenceCount = nullptr;
