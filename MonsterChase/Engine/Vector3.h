@@ -2,32 +2,33 @@
 
 #include <math.h>
 
-class Point2D
+class Vector3
 {
 public:
 #pragma region Constructor and Destructor
 	// standard constructor
-	Point2D(float i_x, float i_y) :
-		m_x(i_x),
-		m_y(i_y)
+	Vector3(float i_x, float i_y, float i_z) :
+		m_x(i_x), m_y(i_y), m_z(i_z)
 	{
 	}
 
 	// copy constructor
-	Point2D(const Point2D & i_OtherPoint);
+	Vector3(const Vector3 & i_OtherVector);
 
 	// standard destructor
-	~Point2D();
+	~Vector3();
 #pragma endregion
 
 #pragma region Getters and Setters
 	// Getters for private variables
 	inline float GetX() const { return m_x; }
 	inline float GetY() const { return m_y; }
+	inline float GetZ() const { return m_z; }
 
 	// Setters for private variables
 	inline void SetX(float i_x) { m_x = i_x; }
 	inline void SetY(float i_y) { m_y = i_y; }
+	inline void SetZ(float i_z) { m_z = i_z; }
 #pragma endregion
 
 #pragma region Incrementers and Decrementers
@@ -35,27 +36,29 @@ public:
 	void decrementXValue();
 	void incrementYValue();
 	void decrementYValue();
+	void incrementZValue();
+	void decrementZValue();
 #pragma endregion
 
 #pragma region Utility Positions
-	// const point2D {0.0f, 0.0f, 0.0f}
-	static const Point2D Zero;
+	// const Vector3 {0.0f, 0.0f, 0.0f}
+	static const Vector3 Zero;
 
 	// gets a random point based off grid size
-	static Point2D GetRandomPosition(int gridSize);
+	static Vector3 GetRandomPosition(int gridSize);
 #pragma endregion
 
 #pragma region Class Operator Overloads
 	// assignment operator
-	Point2D& operator=(const Point2D & i_OtherPoint);
+	Vector3& operator=(const Vector3 & i_OtherVector);
 
 #pragma region Arithmetic Operators
 	// negate the x and y values of the current point
-	Point2D operator-() const;
+	Vector3 operator-() const;
 	// multiply scalar to current point and return new value
-	Point2D operator*(float scalar) const;
+	Vector3 operator*(float scalar) const;
 	// divide current by scalar and return new value
-	Point2D operator/(float scalar) const;
+	Vector3 operator/(float scalar) const;
 	// prefix adition to current
 	void operator++();
 	// postfix adition to current
@@ -68,23 +71,23 @@ public:
 
 #pragma region Compound Assignment Operators
 	// add point value to current point
-	Point2D& operator+=(const Point2D & point);
+	Vector3& operator+=(const Vector3 & point);
 	// subtract point value from current point
-	Point2D& operator-=(const Point2D & point);
+	Vector3& operator-=(const Vector3 & point);
 	// multiply point value and current point
-	Point2D& operator*=(const Point2D & point);
+	Vector3& operator*=(const Vector3 & point);
 	// multiply current value by a scalar
-	Point2D& operator*=(float scalar);
+	Vector3& operator*=(float scalar);
 	// divide current point by point
-	Point2D& operator/=(const Point2D & point);
+	Vector3& operator/=(const Vector3 & point);
 	// divide current point by scalar
-	Point2D& operator/=(float scalar);
+	Vector3& operator/=(float scalar);
 #pragma endregion
 
 #pragma endregion
 
 private:
-	float m_x, m_y;
+	float m_x, m_y, m_z;
 };
 
-#include "Point2D-inl.h"
+#include "Vector3-inl.h"

@@ -3,14 +3,14 @@
 #include <string.h>
 #include <vector>
 
-#include "Point2D.h"
+#include "Vector3.h"
 
 class IActorComponent;
 
 class Actor
 {
 public:
-	Actor(const char * i_name, const Point2D & i_initalPosition) :
+	Actor(const char * i_name, const Vector3 & i_initalPosition) :
 		m_name(i_name ? _strdup(i_name) : nullptr), m_position(i_initalPosition)
 	{
 	}
@@ -23,8 +23,8 @@ public:
 	char * GetName() const { return m_name; }
 	void SetName(const char * i_name) { m_name = const_cast<char *>(i_name); }
 
-	Point2D& GetPosition() { return m_position; }
-	void SetPosition(const Point2D& i_position) { m_position = i_position; }
+	Vector3& GetPosition() { return m_position; }
+	void SetPosition(const Vector3& i_position) { m_position = i_position; }
 #pragma endregion
 
 	// add component
@@ -40,7 +40,7 @@ public:
 
 private:
 	char * m_name;
-	Point2D m_position;
+	Vector3 m_position;
 	std::vector<IActorComponent *> m_Components;
 };
 

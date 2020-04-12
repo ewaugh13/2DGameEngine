@@ -10,6 +10,6 @@ void TeleportMonster::BeginUpdate(Actor & i_Monster)
 	// TODO check if monster is close to player before teleport
 	if (rand() % 100 <= this->m_TeleportPercent)
 	{
-		i_Monster.SetPosition(Point2D::GetRandomPosition(GRID_SIZE));
+		i_Monster.SetPosition(Vector3::GetRandomPosition(GRID_SIZE));
 	}
 }

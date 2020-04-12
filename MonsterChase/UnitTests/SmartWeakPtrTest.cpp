@@ -1,5 +1,5 @@
 #include "CppUnitTest.h"
-#include "Point2D.h"
+#include "Vector3.h"
 #include "SmartPtr.h"
 #include "WeakPtr.h"
 
@@ -13,29 +13,29 @@ namespace SmartWeakPtrTest
 
 		TEST_METHOD(SmartPtrTest)
 		{
-			SmartPtr<Point2D> point2DSmartPtr = SmartPtr<Point2D>(new Point2D(5.0f, 5.0f));
-			SmartPtr<Point2D> point2DZeroSmartPtr = SmartPtr<Point2D>(new Point2D(0.0f, 0.0f));
+			SmartPtr<Vector3> Vector3SmartPtr = SmartPtr<Vector3>(new Vector3(5.0f, 5.0f, 0.0f));
+			SmartPtr<Vector3> Vector3ZeroSmartPtr = SmartPtr<Vector3>(new Vector3(0.0f, 0.0f, 0.0f));
 
 			// Test getting smartptr held value
-			Point2D point2DValue = *point2DSmartPtr;
-			Assert::AreEqual(5.0f, point2DValue.GetX());
+			Vector3 Vector3Value = *Vector3SmartPtr;
+			Assert::AreEqual(5.0f, Vector3Value.GetX());
 
 			// Test getting smartptr held ptr
-			Point2D * point2DPtr = point2DSmartPtr.operator->();
-			Assert::AreEqual(5.0f, point2DPtr->GetX());
+			Vector3 * Vector3Ptr = Vector3SmartPtr.operator->();
+			Assert::AreEqual(5.0f, Vector3Ptr->GetX());
 
 			// Test setting smart ptr equal to null and it not being valid
-			Assert::IsTrue(point2DSmartPtr);
-			point2DSmartPtr = nullptr;
-			Assert::IsFalse(point2DSmartPtr);
+			Assert::IsTrue(Vector3SmartPtr);
+			Vector3SmartPtr = nullptr;
+			Assert::IsFalse(Vector3SmartPtr);
 
 			// Test assignment eqaul operator
-			point2DSmartPtr = SmartPtr<Point2D>(new Point2D(6.0f, 6.0f));
-			point2DSmartPtr = point2DZeroSmartPtr;
+			Vector3SmartPtr = SmartPtr<Vector3>(new Vector3(6.0f, 6.0f, 0.0f));
+			Vector3SmartPtr = Vector3ZeroSmartPtr;
 
 			// Test smartptr being equal to null
-			point2DSmartPtr = nullptr;
-			Assert::IsTrue(point2DSmartPtr == nullptr);
+			Vector3SmartPtr = nullptr;
+			Assert::IsTrue(Vector3SmartPtr == nullptr);
 
 			// Test indexing into smart ptr holding array
 			SmartPtr<int> intSmartPtr = SmartPtr<int>(new int[2]{});
@@ -61,34 +61,34 @@ namespace SmartWeakPtrTest
 
 		TEST_METHOD(WeakPtrTest)
 		{
-			SmartPtr<Point2D> point2DSmartPtr = SmartPtr<Point2D>(new Point2D(5.0f, 5.0f));
+			SmartPtr<Vector3> Vector3SmartPtr = SmartPtr<Vector3>(new Vector3(5.0f, 5.0f, 0.0f));
 
 			// Create weakptr from smartptr
-			WeakPtr<Point2D> point2DWeakPtr = WeakPtr<Point2D>(point2DSmartPtr);
+			WeakPtr<Vector3> Vector3WeakPtr = WeakPtr<Vector3>(Vector3SmartPtr);
 
 			// Validate the weakptr ref count
-			Assert::IsTrue(point2DSmartPtr == point2DWeakPtr);
+			Assert::IsTrue(Vector3SmartPtr == Vector3WeakPtr);
 			unsigned int weakPtrRefCount = 1;
-			Assert::AreEqual(weakPtrRefCount, point2DWeakPtr.UseCount());
+			Assert::AreEqual(weakPtrRefCount, Vector3WeakPtr.UseCount());
 
 			// Get smartptr from weakptr
-			SmartPtr<Point2D> aquiredPoint2D = point2DWeakPtr.AcquireSmartPtr();
+			SmartPtr<Vector3> aquiredVector3 = Vector3WeakPtr.AcquireSmartPtr();
 
 			// Access the held value from the aquired smartptr
-			Point2D point2DValue = *aquiredPoint2D;
-			Assert::AreEqual(5.0f, point2DValue.GetX());
+			Vector3 Vector3Value = *aquiredVector3;
+			Assert::AreEqual(5.0f, Vector3Value.GetX());
 
 			// Access the held ptr from the aquired smartptr
-			Point2D * point2DPtr = aquiredPoint2D.operator->();
-			Assert::AreEqual(5.0f, point2DPtr->GetX());
+			Vector3 * Vector3Ptr = aquiredVector3.operator->();
+			Assert::AreEqual(5.0f, Vector3Ptr->GetX());
 
 			// Create a weakptr from a null smartptr and assert it is null
-			point2DSmartPtr = nullptr;
-			WeakPtr<Point2D> weakPtrFromNullSmart = WeakPtr<Point2D>(point2DSmartPtr);
+			Vector3SmartPtr = nullptr;
+			WeakPtr<Vector3> weakPtrFromNullSmart = WeakPtr<Vector3>(Vector3SmartPtr);
 			Assert::IsTrue(weakPtrFromNullSmart == nullptr);
 
 			// Create weakptr from aquired smartptr
-			WeakPtr<Point2D> weakPtrFromAquired = WeakPtr<Point2D>(aquiredPoint2D);
+			WeakPtr<Vector3> weakPtrFromAquired = WeakPtr<Vector3>(aquiredVector3);
 			weakPtrRefCount = 2;
 			Assert::AreEqual(weakPtrRefCount, weakPtrFromAquired.UseCount());
 			Assert::IsTrue(weakPtrFromAquired);

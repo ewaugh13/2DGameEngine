@@ -34,8 +34,8 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FloatFunctionLibrary.h" />
     <ClInclude Include="GLibHelpers.h" />
-    <ClInclude Include="Point2D-inl.h" />
-    <ClInclude Include="Point2D.h" />
+    <ClInclude Include="Vector3-inl.h" />
+    <ClInclude Include="Vector3.h" />
     <ClInclude Include="ReferenceCount.h" />
     <ClInclude Include="SmartPtr.h" />
     <ClInclude Include="Timer.h" />
@@ -52,7 +52,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FloatFunctionLibrary.cpp" />
     <ClCompile Include="GLibHelpers.cpp" />
-    <ClCompile Include="Point2D.cpp" />
+    <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

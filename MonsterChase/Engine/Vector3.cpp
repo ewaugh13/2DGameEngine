@@ -1,23 +1,24 @@
-#include "Point2D.h"
+#include "Vector3.h"
 
 #include <stdlib.h>
 
 #pragma region Constructor and Destructor
-Point2D::Point2D(const Point2D & i_rhs)
+Vector3::Vector3(const Vector3 & i_rhs)
 {
 	this->m_x = i_rhs.m_x;
 	this->m_y = i_rhs.m_y;
+	this->m_z = i_rhs.m_z;
 }
 
-Point2D::~Point2D()
+Vector3::~Vector3()
 {
 }
 #pragma endregion
 
 
-const Point2D Point2D::Zero = Point2D(0.0f, 0.0f);
+const Vector3 Vector3::Zero = Vector3(0.0f, 0.0f, 0.0f);
 
-Point2D Point2D::GetRandomPosition(int gridSize)
+Vector3 Vector3::GetRandomPosition(int gridSize)
 {
 	int randXNegative = rand() % 2;
 	int randYNegative = rand() % 2;
@@ -27,5 +28,5 @@ Point2D Point2D::GetRandomPosition(int gridSize)
 	if (randXNegative) { x *= -1; }
 	if (randYNegative) { y *= -1; }
 
-	return Point2D((float)x, (float)y);
+	return Vector3(static_cast<float>(x), static_cast<float>(y), 0.0f);
 }
