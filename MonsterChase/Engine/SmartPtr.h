@@ -32,6 +32,17 @@ public:
 		}
 	}
 
+	// Copy Constructor for other type of SmartPtr
+	template<class U>
+	SmartPtr(const SmartPtr<U> & i_Other) :
+		m_Ptr(i_Other.m_Ptr), m_ReferenceCount(i_Other.m_ReferenceCount)
+	{
+		if (m_ReferenceCount != nullptr)
+		{
+			m_ReferenceCount->m_SmartPtrsCount++;
+		}
+	}
+
 	// Copy Constructor from WeakPtr
 	SmartPtr(const WeakPtr<T> & i_WeakPtr) :
 		m_Ptr((i_WeakPtr.m_ReferenceCount != nullptr && i_WeakPtr.m_ReferenceCount->m_SmartPtrsCount > 0) ? i_WeakPtr.m_Ptr : nullptr),
