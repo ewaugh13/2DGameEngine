@@ -5,7 +5,7 @@
 
 namespace GLibHelper
 {
-	extern uint8_t * KeyStates = reinterpret_cast<uint8_t*>(calloc(SizeReadTable, sizeof(uint8_t)));
+	extern uint8_t * KeyStates = nullptr;
 
 	void * LoadFile(const char * i_pFilename, size_t & o_sizeFile)
 	{
@@ -87,6 +87,18 @@ namespace GLibHelper
 		GLib::Sprites::SetTexture(*pSprite, *pTexture);
 
 		return pSprite;
+	}
+
+	void InitalizeKeyStates()
+	{
+		if (KeyStates == nullptr)
+		{
+			KeyStates = reinterpret_cast<uint8_t*>(malloc(SizeReadTable * sizeof(uint8_t)));
+			for (unsigned int i = 0; i < SizeReadTable; i++)
+			{
+				KeyStates[i] = false;
+			}
+		}
 	}
 
 	void KeyCallback(unsigned int i_VKeyID, bool bWentDown)

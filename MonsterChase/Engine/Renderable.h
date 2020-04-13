@@ -2,7 +2,7 @@
 
 #include "Actor.h"
 #include "GLib.h"
-#include "WeakPtr.h"
+#include "SmartPtr.h"
 
 namespace Renderer
 {
