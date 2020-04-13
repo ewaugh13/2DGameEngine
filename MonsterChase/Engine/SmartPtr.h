@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Destructors.h"
 #include "ReferenceCount.h"
 #include "WeakPtr.h"
 
-template<class T >
+template<class T, class Destructor = DefaultDestructor<T>>
 class SmartPtr
 {
-	template<class T>
+	template<class T, class Destructor>
 	friend class WeakPtr;
 
 public:
@@ -44,7 +45,7 @@ public:
 	}
 
 	// Copy Constructor from WeakPtr
-	SmartPtr(const WeakPtr<T> & i_WeakPtr) :
+	SmartPtr(const WeakPtr<T, Destructor> & i_WeakPtr) :
 		m_Ptr((i_WeakPtr.m_ReferenceCount != nullptr && i_WeakPtr.m_ReferenceCount->m_SmartPtrsCount > 0) ? i_WeakPtr.m_Ptr : nullptr),
 		m_ReferenceCount((i_WeakPtr.m_ReferenceCount != nullptr && i_WeakPtr.m_ReferenceCount->m_SmartPtrsCount > 0) ? i_WeakPtr.m_ReferenceCount : nullptr)
 	{
@@ -63,7 +64,7 @@ public:
 	}
 
 	// Move copy constructor with WeakPtr
-	SmartPtr(WeakPtr<T> && i_WeakPtr) noexcept :
+	SmartPtr(WeakPtr<T, Destructor> && i_WeakPtr) noexcept :
 		m_Ptr(i_WeakPtr.m_Ptr), m_ReferenceCount(i_WeakPtr.m_ReferenceCount)
 	{
 		i_WeakPtr.m_Ptr = nullptr;
@@ -128,8 +129,8 @@ public:
 	}
 
 	// If a smart ptr and weak ptr hold the same ptr
-	template<class E>
-	inline bool operator==(const WeakPtr<E> & i_SmartPtr) const
+	template<class E, class OtherDestructor>
+	inline bool operator==(const WeakPtr<E, OtherDestructor> & i_SmartPtr) const
 	{
 		return m_Ptr == i_SmartPtr.m_Ptr;
 	}
@@ -206,7 +207,7 @@ private:
 	{
 		if (m_ReferenceCount != nullptr && --m_ReferenceCount->m_SmartPtrsCount == 0)
 		{
-			delete m_Ptr;
+			Destructor::release(m_Ptr);
 			m_Ptr = nullptr;
 
 			if (m_ReferenceCount->m_WeakPtrsCount == 0)

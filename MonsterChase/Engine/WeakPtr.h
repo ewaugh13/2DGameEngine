@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Destructors.h"
 #include "ReferenceCount.h"
 #include "SmartPtr.h"
 
-template<class T >
+template<class T, class Destructor = DefaultDestructor<T>>
 class WeakPtr
 {
-	template<class T>
+	template<class T, class Destructor>
 	friend class SmartPtr;
 
 public:
@@ -17,7 +18,7 @@ public:
 	}
 
 	// Constructor with SmartPtr
-	WeakPtr(const SmartPtr<T> & i_SmartPtr) :
+	WeakPtr(const SmartPtr<T, Destructor> & i_SmartPtr) :
 		m_Ptr(i_SmartPtr.m_Ptr), m_ReferenceCount(i_SmartPtr.m_ReferenceCount)
 	{
 		if (m_ReferenceCount != nullptr)
@@ -59,7 +60,7 @@ public:
 	}
 
 	// Assignment operator
-	WeakPtr & operator=(const SmartPtr<T> & i_SmartPtr)
+	WeakPtr & operator=(const SmartPtr<T, Destructor> & i_SmartPtr)
 	{
 		if (this != &i_SmartPtr)
 		{
@@ -85,9 +86,9 @@ public:
 		return *this;
 	}
 
-	inline SmartPtr<T> AcquireSmartPtr()
+	inline SmartPtr<T, Destructor> AcquireSmartPtr()
 	{
-		return SmartPtr<T>(*this);
+		return SmartPtr<T, Destructor>(*this);
 	}
 
 	// If two weak ptrs are holding the same ptr
