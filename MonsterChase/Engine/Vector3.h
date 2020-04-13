@@ -84,6 +84,17 @@ public:
 	Vector3& operator/=(float scalar);
 #pragma endregion
 
+#pragma region Vector3 Math
+
+	// gets the magnitude of this vector
+	float magnitude();
+	// does the dot product between 2 vectors
+	float dot(const Vector3 & i_OtherVector);
+	// does the cross product between 2 vectors
+	Vector3 cross(const Vector3 & i_OtherVector);
+
+#pragma endregion
+
 #pragma endregion
 
 private:

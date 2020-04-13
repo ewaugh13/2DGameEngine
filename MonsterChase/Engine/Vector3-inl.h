@@ -135,18 +135,24 @@ inline Vector3& Vector3::operator/=(float scalar)
 #pragma region Non Class Methods
 
 #pragma region Vector3 Math
-inline float dot(const Vector3 & i_lhs, const Vector3 & i_rhs)
+
+inline float Vector3::magnitude()
 {
-	return i_lhs.GetX() * i_rhs.GetX() + i_lhs.GetY() * i_rhs.GetY() + i_lhs.GetZ() * i_rhs.GetZ();
+	return static_cast<float>(sqrt(pow(GetX(), 2) + pow(GetY(), 2)));
 }
 
-inline Vector3 cross(const Vector3 & i_lhs, const Vector3 & i_rhs)
+inline float Vector3::dot(const Vector3 & i_OtherVector)
 {
-	return Vector3(i_lhs.GetY() * i_rhs.GetZ() - i_lhs.GetZ() * i_rhs.GetY(),
-		i_lhs.GetZ() * i_rhs.GetX() - i_lhs.GetX() * i_rhs.GetZ(),
-		i_lhs.GetX() * i_rhs.GetY() - i_lhs.GetY() * i_rhs.GetX());
-
+	return GetX() * i_OtherVector.GetX() + GetY() * i_OtherVector.GetY() + GetZ() * i_OtherVector.GetZ();
 }
+
+inline Vector3 Vector3::cross(const Vector3 & i_OtherVector)
+{
+	return Vector3(GetY() * i_OtherVector.GetZ() - GetZ() * i_OtherVector.GetY(),
+		GetZ() * i_OtherVector.GetX() - GetX() * i_OtherVector.GetZ(),
+		GetX() * i_OtherVector.GetY() - GetY() * i_OtherVector.GetX());
+}
+
 #pragma endregion
 
 #pragma region Non-Class Operator Overloads
