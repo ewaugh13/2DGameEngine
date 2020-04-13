@@ -16,15 +16,17 @@ void GamePlay::GameLoop()
 	Timer * timer = new Timer();
 	bool bQuit = false;
 
+
+	Actor * actor = new Actor("Samus", Vector3(-180.0f, -100.0f, 0.0f));
+
 	GLib::Sprites::Sprite * pPlayerSprite = GLibHelper::CreateSprite("data\\SamusNeutral0.dds");
-	Vector3 playerPosition = Vector3(-180.0f, -100.0f, 0.0f);
 
 	// TODO: put these all in a struct for a rigid body
 	float playerMass = 500.0f;
 
 	Vector3 playerMoveForceAmount = Vector3(30.0f, 30.0f, 0.0f);
 
-	float dragFactor = 0.0001f;
+	float dragFactor = 0.001f;
 
 	Vector3 playerForces = Vector3::Zero;
 	Vector3 playerAccel = Vector3::Zero;
@@ -84,7 +86,7 @@ void GamePlay::GameLoop()
 				if (playerVelocity.GetY() > playerMaxVelocity.GetY())
 					playerVelocity.SetY(playerMaxVelocity.GetY());
 
-				playerPosition += (playerPrevVelocity + playerVelocity) / 2.0f * deltaTime;
+				actor->SetPosition(actor->GetPosition() + (playerPrevVelocity + playerVelocity) / 2.0f * deltaTime);
 
 				// set previous velocity for mid point
 				playerPrevVelocity = playerVelocity;
@@ -92,54 +94,18 @@ void GamePlay::GameLoop()
 				// apply drag left and right movement
 				Vector3 dragForce = playerVelocity * playerVelocity * dragFactor;
 				if (!FloatFunctionLibrary::AlmostEqualZeroCertain(playerVelocity.GetX(), 0.01f))
-				{
-					if (playerVelocity.GetX() > 0)
-					{
-						playerForces.SetX(playerForces.GetX() - dragForce.GetX());
-						if (playerVelocity.GetX() < 0)
-						{
-							playerForces.SetX(0);
-						}
-					}
-					else
-					{
-						playerForces.SetX(playerForces.GetX() + dragForce.GetX());
-						if (playerVelocity.GetX() > 0)
-						{
-							playerForces.SetX(0);
-						}
-					}
-				}
+					playerForces.SetX(playerForces.GetX() + (playerVelocity.GetX() > 0 ? -dragForce.GetX() : dragForce.GetX()));
 				else
-				{
 					playerForces.SetX(0);
-				}
 				
 				// TODO: change this to be gravity based
-				if (!FloatFunctionLibrary::AlmostEqualZeroCertain(playerVelocity.GetY(), 0.001f))
-				{
-					if (playerVelocity.GetY() > 0)
-					{
-						playerForces.SetY(playerForces.GetY() - dragForce.GetY());
-						if (playerVelocity.GetY() < 0)
-						{
-							playerForces.SetY(0);
-						}
-					}
-					else
-					{
-						playerForces.SetY(playerForces.GetY() + dragForce.GetY());
-						if (playerVelocity.GetY() > 0)
-						{
-							playerForces.SetY(0);
-						}
-					}
-				}
+				if (!FloatFunctionLibrary::AlmostEqualZeroCertain(playerVelocity.GetY(), 0.01f))
+					playerForces.SetY(playerForces.GetY() + (playerVelocity.GetY() > 0 ? -dragForce.GetY() : dragForce.GetY()));
 				else
 					playerForces.SetY(0);
 
 				// Tell GLib to render this sprite at our calculated location
-				GLib::Sprites::RenderSprite(*pPlayerSprite, { playerPosition.GetX(), playerPosition.GetY() }, 0.0f);
+				GLib::Sprites::RenderSprite(*pPlayerSprite, { actor->GetPosition().GetX(), actor->GetPosition().GetY() }, 0.0f);
 			}
 
 			// Tell GLib we're done rendering sprites
