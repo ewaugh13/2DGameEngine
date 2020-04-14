@@ -16,7 +16,12 @@ namespace Renderer
 
 	void Renderer::Draw(float i_DeltaTime)
 	{
-		for (std::vector<SmartPtr<Renderable>>::iterator iter = Renderables.begin(); iter != Renderables.end(); )
+		// IMPORTANT: Tell GLib that we want to start rendering
+		GLib::BeginRendering();
+		// Tell GLib that we want to render some sprites
+		GLib::Sprites::BeginRendering();
+
+		for (std::vector<SmartPtr<Renderable>>::iterator iter = Renderables.begin(); iter != Renderables.end(); iter++)
 		{
 			SmartPtr<Renderable> currentRenderable = *iter;
 
@@ -34,5 +39,11 @@ namespace Renderer
 		GLib::Sprites::EndRendering();
 		// IMPORTANT: Tell GLib we're done rendering
 		GLib::EndRendering();
+	}
+
+	void ShutDown()
+	{
+		Renderables.clear();
+		Renderables.shrink_to_fit();
 	}
 }

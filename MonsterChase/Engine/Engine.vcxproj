@@ -35,8 +35,10 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FloatFunctionLibrary.h" />
     <ClInclude Include="GLibHelpers.h" />
+    <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Vector3-inl.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="ReferenceCount.h" />
@@ -55,6 +57,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FloatFunctionLibrary.cpp" />
     <ClCompile Include="GLibHelpers.cpp" />
+    <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Timer.cpp" />

@@ -8,5 +8,8 @@ namespace Renderer
 
 	// Draw all sprites
 	void Draw(float i_DeltaTime);
+
+	// Clear all renderables
+	void ShutDown();
 }
 
