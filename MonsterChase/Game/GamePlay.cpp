@@ -14,6 +14,8 @@
 // does the main gameplay loop
 void GamePlay::GameLoop()
 {
+	using namespace MyEngine;
+
 	// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
 	GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
 
@@ -21,10 +23,10 @@ void GamePlay::GameLoop()
 		Timer * timer = new Timer();
 		bool bQuit = false;
 
-		SmartPtr<Actor> smartPtrActor = SmartPtr<Actor>(new Actor("Samus", Vector3(-180.0f, -100.0f, 0.0f)));
+		SmartPtr<Actor> smartPtrActor = Actor::CreateActor("data\\Samus.json");
 
-		SmartPtr<Renderer::Renderable> playerSprite = Renderer::AddRenderable(smartPtrActor, Renderer::SpriteSmartPtr(GLibHelper::CreateSprite("data\\SamusNeutral0.dds")));
-		SmartPtr<Physics::RigidBody> playerRigidBody = Physics::AddRigidBodyActor(smartPtrActor, Vector3(30.0f, 30.0f, 0.0f), Vector3(5.0f, 5.0f, 0.0f), 500.0f, 0.001f);
+		SmartPtr<Renderer::Renderable> playerSprite = Renderer::AddRenderable(smartPtrActor, "data\\Samus.json");
+		SmartPtr<Physics::RigidBody> playerRigidBody = Physics::AddRigidBodyActor(smartPtrActor, "data\\Samus.json");
 
 		do
 		{

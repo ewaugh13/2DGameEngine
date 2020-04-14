@@ -4,7 +4,7 @@
 
 extern const int GRID_SIZE;
 
-class TeleportMonster : public IActorComponent
+class TeleportMonster : public MyEngine::IActorComponent
 {
 public:
 	TeleportMonster(int i_TeleportPercent) : m_TeleportPercent(i_TeleportPercent)
@@ -13,7 +13,7 @@ public:
 
 	TeleportMonster(const TeleportMonster & i_OtherTeleportMonster);
 
-	void BeginUpdate(Actor & i_Monster);
+	void BeginUpdate(MyEngine::Actor & i_Monster);
 private:
 	int m_TeleportPercent;
 };

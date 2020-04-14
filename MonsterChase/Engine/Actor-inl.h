@@ -2,15 +2,18 @@
 
 #include "Actor.h"
 
-template<typename ComponentType>
-inline IActorComponent * Actor::GetComponent()
+namespace MyEngine
 {
-	for (auto & component : this->m_Components)
+	template<typename ComponentType>
+	inline IActorComponent * Actor::GetComponent()
 	{
-		if (ComponentType component = dynamic_cast<ComponentType>(component))
+		for (auto & component : this->m_Components)
 		{
-			return component;
+			if (ComponentType component = dynamic_cast<ComponentType>(component))
+			{
+				return component;
+			}
 		}
+		return nullptr;
 	}
-	return nullptr;
 }

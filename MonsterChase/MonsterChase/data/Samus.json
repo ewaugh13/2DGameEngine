@@ -1,0 +1,13 @@
+{
+  "name": "Samus",
+  "initial_position": [ -180.0, -100.0, 0.0 ],
+  "rigid_body_data": {
+    "mass": 500.0,
+    "kd": 2.0,
+    "movement_forces": [ 30.0, 30.0, 0.0 ],
+    "max_velocity": [ 5.0, 5.0, 0.0 ]
+  },
+  "render_data": {
+    "sprite": "data\\SamusNeutral0.dds"
+  }
+}

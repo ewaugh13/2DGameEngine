@@ -196,7 +196,12 @@ void HeapManager::collect()
 void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
 {
 	void * nextBlockBase = ADD_AMOUNT_TO_ADDRESS(currentFreeBlock->m_pBlockBase, currentFreeBlock->m_sizeBlock);
-	BlockDescriptor * nextBlock = (BlockDescriptor *)(((BlockDescriptor *)nextBlockBase)->m_pBlockBase);
+	BlockDescriptor * nextBlock = nullptr;
+	
+	if (Contains(((BlockDescriptor *)nextBlockBase)->m_pBlockBase))
+	{
+		nextBlock = (BlockDescriptor *)(((BlockDescriptor *)nextBlockBase)->m_pBlockBase);
+	}
 
 	// if next block is free as well and not be past memory pool
 	if (nextBlock != nullptr && 

@@ -2,14 +2,17 @@
 
 #include "Renderable.h"
 
-namespace Renderer
+namespace MyEngine
 {
-	SmartPtr<Renderable> AddRenderable(const SmartPtr<Actor> & i_Actor, SpriteSmartPtr i_Sprite = SpriteSmartPtr());
+	namespace Renderer
+	{
+		SmartPtr<Renderable> AddRenderable(const SmartPtr<Actor> & i_Actor, const char * i_ScriptFilename);
 
-	// Draw all sprites
-	void Draw(float i_DeltaTime);
+		// Draw all sprites
+		void Draw(float i_DeltaTime);
 
-	// Clear all renderables
-	void ShutDown();
+		// Clear all renderables
+		void ShutDown();
+	}
 }
 

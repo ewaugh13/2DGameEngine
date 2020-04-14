@@ -5,9 +5,9 @@
 extern const int GRID_SIZE;
 extern bool PLAYING;
 
-class PlayerMovement : public IActorComponent
+class PlayerMovement : public MyEngine::IActorComponent
 {
 public:
-	void BeginUpdate(Actor & i_player);
+	void BeginUpdate(MyEngine::Actor & i_player);
 };
 
