@@ -5,7 +5,7 @@ MonsterMovement::MonsterMovement(const MonsterMovement & i_OtherMonsterMovement)
 	this->m_TargetActor = i_OtherMonsterMovement.m_TargetActor;
 }
 
-void MonsterMovement::BeginUpdate(MyEngine::Actor & i_Monster)
+void MonsterMovement::BeginUpdate(Engine::Actor & i_Monster)
 {
 	bool moveMonster = rand() % 2;
 

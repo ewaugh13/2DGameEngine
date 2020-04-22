@@ -6,7 +6,7 @@
 #include <string.h>
 #include <vector>
 
-namespace MyEngine
+namespace Engine
 {
 	class IActorComponent;
 

@@ -1,7 +1,7 @@
 #include "PlayerMovement.h"
 #include <conio.h>
 
-void PlayerMovement::BeginUpdate(MyEngine::Actor & i_player)
+void PlayerMovement::BeginUpdate(Engine::Actor & i_player)
 {
 	switch (_getch())
 	{

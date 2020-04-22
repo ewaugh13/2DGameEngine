@@ -8,7 +8,7 @@
 
 #include "../External/nlohmann/json.hpp"
 
-namespace MyEngine
+namespace Engine
 {
 	namespace Renderer
 	{
@@ -18,7 +18,7 @@ namespace MyEngine
 		{
 			using json = nlohmann::json;
 
-			std::vector<uint8_t> playerData = MyEngine::File::LoadFileToBuffer(i_ScriptFilename);
+			std::vector<uint8_t> playerData = File::LoadFileToBuffer(i_ScriptFilename);
 			if (!playerData.empty())
 			{
 				json playerJSON = json::parse(playerData);

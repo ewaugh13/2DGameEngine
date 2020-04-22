@@ -7,15 +7,6 @@
 #define ALIGN_16 16
 #define ALIGN_32 32
 
-// TODO transfer this to somewhere else
-#ifdef  _DEBUG
-#define TRACK_NEW(__FILE__, __LINE__)
-#define DEBUG_PRINT(fmt, ...) printf(fmt, __VA_ARGS__)
-#else
-#define TRACK_NEW
-#define DEBUG_PRINT
-#endif //  _DEBUG
-
 #pragma region Standard Allocators
 void * operator new(size_t i_size);
 void operator delete(void * i_ptr);

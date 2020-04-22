@@ -4,7 +4,7 @@
 #include "GLib.h"
 #include "SmartPtr.h"
 
-namespace MyEngine
+namespace Engine
 {
 	namespace Renderer
 	{

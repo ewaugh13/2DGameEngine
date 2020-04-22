@@ -1,5 +1,5 @@
 #include "Allocators.h"
-
+#include "ConsolePrint.h"
 #include "MemoryManagerGlobals.h"
 
 // initalizing global extern for fsa sizes

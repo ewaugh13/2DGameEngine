@@ -2,7 +2,7 @@
 
 #include "Actor.h"
 
-namespace MyEngine
+namespace Engine
 {
 	template<typename ComponentType>
 	inline IActorComponent * Actor::GetComponent()

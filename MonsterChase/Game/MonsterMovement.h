@@ -4,16 +4,16 @@
 
 extern const int GRID_SIZE;
 
-class MonsterMovement : public MyEngine::IActorComponent
+class MonsterMovement : public Engine::IActorComponent
 {
 public:
-	MonsterMovement(MyEngine::Actor * i_TargetActor) : m_TargetActor(i_TargetActor)
+	MonsterMovement(Engine::Actor * i_TargetActor) : m_TargetActor(i_TargetActor)
 	{
 	}
 
 	MonsterMovement(const MonsterMovement & i_OtherMonsterMovement);
 
-	void BeginUpdate(MyEngine::Actor & i_Monster);
+	void BeginUpdate(Engine::Actor & i_Monster);
 private:
-	MyEngine::Actor * m_TargetActor;
+	Engine::Actor * m_TargetActor;
 };

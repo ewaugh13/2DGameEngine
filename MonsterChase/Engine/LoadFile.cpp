@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <vector>
 
-namespace MyEngine
+namespace Engine
 {
 	namespace File
 	{

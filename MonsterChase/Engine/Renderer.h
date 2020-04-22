@@ -2,7 +2,7 @@
 
 #include "Renderable.h"
 
-namespace MyEngine
+namespace Engine
 {
 	namespace Renderer
 	{

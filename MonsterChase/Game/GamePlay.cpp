@@ -14,7 +14,7 @@
 // does the main gameplay loop
 void GamePlay::GameLoop()
 {
-	using namespace MyEngine;
+	using namespace Engine;
 
 	// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
 	GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);

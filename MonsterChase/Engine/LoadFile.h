@@ -4,7 +4,7 @@
 #include <string>
 #include <stdint.h>
 
-namespace MyEngine
+namespace Engine
 {
 	namespace File
 	{

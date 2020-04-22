@@ -7,7 +7,7 @@
 
 #include "../External/nlohmann/json.hpp"
 
-namespace MyEngine
+namespace Engine
 {
 	// TODO: make more universal
 	void operator<<(Vector3 & vec, nlohmann::json & json_obj)
@@ -23,7 +23,7 @@ namespace MyEngine
 	{
 		using json = nlohmann::json;
 
-		std::vector<uint8_t> playerData = MyEngine::File::LoadFileToBuffer(i_ScriptFilename);
+		std::vector<uint8_t> playerData = File::LoadFileToBuffer(i_ScriptFilename);
 
 		if (!playerData.empty())
 		{

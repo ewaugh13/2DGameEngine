@@ -2,7 +2,7 @@
 
 #include "RigidBody.h"
 
-namespace MyEngine
+namespace Engine
 {
 	namespace Physics
 	{

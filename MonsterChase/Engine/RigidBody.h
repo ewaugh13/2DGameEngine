@@ -4,7 +4,7 @@
 #include "Vector3.h"
 #include "WeakPtr.h"
 
-namespace MyEngine
+namespace Engine
 {
 	namespace Physics
 	{

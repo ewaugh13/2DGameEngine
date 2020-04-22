@@ -31,20 +31,32 @@
     <ClInclude Include="Actor-inl.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Allocators.h" />
+    <ClInclude Include="ConsolePrint.h" />
     <ClInclude Include="Destructors.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Events.h" />
     <ClInclude Include="FloatFunctionLibrary.h" />
     <ClInclude Include="GLibHelpers.h" />
+    <ClInclude Include="HashedString-inl.h" />
+    <ClInclude Include="HashedString.h" />
+    <ClInclude Include="IJob.h" />
+    <ClInclude Include="INamed.h" />
+    <ClInclude Include="JobRunner.h" />
+    <ClInclude Include="JobSystem.h" />
     <ClInclude Include="LoadFile.h" />
+    <ClInclude Include="Mutex.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="ScopeLock.h" />
+    <ClInclude Include="SharedJobQueue.h" />
     <ClInclude Include="Vector3-inl.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="ReferenceCount.h" />
     <ClInclude Include="SmartPtr.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="WaitableObject.h" />
     <ClInclude Include="WeakPtr.h" />
   </ItemGroup>
   <ItemGroup>
@@ -55,12 +67,20 @@
     <ClCompile Include="..\MemoryManager\MemorySystem.cpp" />
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Allocators.cpp" />
+    <ClCompile Include="ConsolePrint.Win32.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Events.cpp" />
     <ClCompile Include="FloatFunctionLibrary.cpp" />
     <ClCompile Include="GLibHelpers.cpp" />
+    <ClCompile Include="HashedString.cpp" />
+    <ClCompile Include="IJob.cpp" />
+    <ClCompile Include="JobRunner.cpp" />
+    <ClCompile Include="JobSystem.cpp" />
     <ClCompile Include="LoadFile.cpp" />
+    <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SharedJobQueue.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
