@@ -24,6 +24,9 @@ namespace Engine
 
 		std::vector<SmartPtr<RigidBody>> ActorRigidBodies;
 
+		std::vector<RigidBody> NewRigidBodies;
+		//Engine::Mutex NewRigidBodiesMutex;
+
 		SmartPtr<RigidBody> AddRigidBodyActor(const SmartPtr<Actor> & i_Actor, const char * i_ScriptFilename)
 		{
 			using json = nlohmann::json;

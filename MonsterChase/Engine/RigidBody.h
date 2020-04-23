@@ -30,8 +30,7 @@ namespace Engine
 		public:
 
 			void SetForces(Vector3 & i_NewForce) { m_Forces = i_NewForce; }
-			void SetHorizontalForce(float i_NewXForce) { m_Forces.SetX(i_NewXForce); }
-			void SetVerticalForce(float i_NewYForce) { m_Forces.SetY(i_NewYForce); }
+			void SetForces(Vector3 && i_NewForce) { m_Forces = i_NewForce; }
 
 		} RigidBody;
 	}

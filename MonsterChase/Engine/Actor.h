@@ -14,7 +14,7 @@ namespace Engine
 	{
 	public:
 
-		static SmartPtr<Actor> CreateActor(const char * i_ScriptFilename);
+		static SmartPtr<Actor> CreateActor(const char * i_Name, Vector3 & i_InitPosition);
 
 		Actor(const Actor & i_OtherActor);
 

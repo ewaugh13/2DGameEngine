@@ -9,40 +9,14 @@
 
 namespace Engine
 {
-	// TODO: make more universal
-	void operator<<(Vector3 & vec, nlohmann::json & json_obj)
-	{
-		assert(json_obj.is_array() && json_obj.size() == 3);
-
-		vec.SetX(json_obj[0]);
-		vec.SetY(json_obj[1]);
-		vec.SetZ(json_obj[2]);
-	}
-
-	SmartPtr<Actor> Actor::CreateActor(const char * i_ScriptFilename)
-	{
-		using json = nlohmann::json;
-
-		std::vector<uint8_t> playerData = File::LoadFileToBuffer(i_ScriptFilename);
-
-		if (!playerData.empty())
-		{
-			json playerJSON = json::parse(playerData);
-
-			std::string playerName = playerJSON["name"];
-
-			Vector3 initalPosition = Vector3::Zero;
-			initalPosition << playerJSON["initial_position"];
-
-			return SmartPtr<Actor>(new Actor(playerName.c_str(), initalPosition));
-		}
-
-		return SmartPtr<Actor>();
-	}
-
 	Actor::Actor(const char * i_name, const Vector3 & i_initalPosition) :
 		m_name(i_name ? _strdup(i_name) : nullptr), m_position(i_initalPosition)
 	{
+	}
+
+	SmartPtr<Actor> Actor::CreateActor(const char * i_Name, Vector3 & i_InitPosition)
+	{
+		return SmartPtr<Actor>(new Actor(i_Name, i_InitPosition));
 	}
 
 	Actor::Actor(const Actor & i_OtherActor) :

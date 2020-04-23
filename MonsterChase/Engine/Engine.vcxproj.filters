@@ -219,6 +219,9 @@
     <ClInclude Include="ConsolePrint.h">
       <Filter>Header Files\Console</Filter>
     </ClInclude>
+    <ClInclude Include="ActorCreator.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -289,6 +292,9 @@
     </ClCompile>
     <ClCompile Include="ConsolePrint.Win32.cpp">
       <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorCreator.cpp">
+      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

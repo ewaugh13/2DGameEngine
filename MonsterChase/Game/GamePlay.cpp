@@ -1,8 +1,10 @@
 #include "GamePlay.h"
 
+#include "ActorCreator.h"
 #include "FloatFunctionLibrary.h"
 #include "GLib.h"
 #include "GLibHelpers.h"
+#include "JobSystem.h"
 #include "Renderable.h"
 #include "Renderer.h"
 #include "RigidBody.h"
@@ -16,6 +18,8 @@ void GamePlay::GameLoop()
 {
 	using namespace Engine;
 
+	Engine::JobSystem::CreateQueue("Default", 2);
+
 	// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
 	GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
 
@@ -23,7 +27,17 @@ void GamePlay::GameLoop()
 		Timer * timer = new Timer();
 		bool bQuit = false;
 
-		SmartPtr<Actor> smartPtrActor = Actor::CreateActor("data\\Samus.json");
+		Engine::AutoResetEvent createActorEvent;
+
+		SmartPtr<Actor> smartPtrActor;
+		CreateGameObjectAsync("data\\Samus.json", [&smartPtrActor](SmartPtr<Actor>& i_Actor)
+		{
+			smartPtrActor = i_Actor;
+			//DEBUG_PRINT("Actor loaded");
+		}
+		, &createActorEvent);
+
+		createActorEvent.Wait();
 
 		SmartPtr<Renderer::Renderable> playerSprite = Renderer::AddRenderable(smartPtrActor, "data\\Samus.json");
 		SmartPtr<Physics::RigidBody> playerRigidBody = Physics::AddRigidBodyActor(smartPtrActor, "data\\Samus.json");
@@ -49,17 +63,17 @@ void GamePlay::GameLoop()
 					// player input
 					// moving left
 					if (GLibHelper::KeyStates['A'] && !GLibHelper::KeyStates['D'])
-						playerRigidBody->SetHorizontalForce((-1));
+						playerRigidBody->SetForces(Vector3(-1, 0, 0));
 					// moving right
 					else if (!GLibHelper::KeyStates['A'] && GLibHelper::KeyStates['D'])
-						playerRigidBody->SetHorizontalForce((1));
+						playerRigidBody->SetForces(Vector3(1, 0, 0));
 
 					// moving down
 					if (GLibHelper::KeyStates['S'] && !GLibHelper::KeyStates['W'])
-						playerRigidBody->SetVerticalForce((-1));
+						playerRigidBody->SetForces(Vector3(0, -1, 0));
 					// moving up
 					else if (!GLibHelper::KeyStates['S'] && GLibHelper::KeyStates['W'])
-						playerRigidBody->SetVerticalForce((1));
+						playerRigidBody->SetForces(Vector3(0, 1, 0));
 
 					Physics::Tick(deltaTime);
 				}
@@ -75,6 +89,8 @@ void GamePlay::GameLoop()
 
 	Physics::ShutDown();
 	Renderer::ShutDown();
+
+	Engine::JobSystem::RequestShutdown();
 
 	// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 	GLib::Shutdown();
