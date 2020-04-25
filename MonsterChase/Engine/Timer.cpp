@@ -36,5 +36,5 @@ float Timer::CalcLastFrameTime_ms()
 
 float Timer::DeltaTime()
 {
-	return 13.3f / 1000.0f;
+	return CalcLastFrameTime_ms() / 1000.0f;
 }

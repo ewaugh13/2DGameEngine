@@ -2,16 +2,19 @@
 
 #include "Renderable.h"
 
+#include "../External/nlohmann/json.hpp"
+
 namespace Engine
 {
 	namespace Renderer
 	{
-		SmartPtr<Renderable> AddRenderable(const SmartPtr<Actor> & i_Actor, const char * i_ScriptFilename);
+		void AddRenderable(const SmartPtr<Actor> & i_Actor, nlohmann::json & i_RenderableJSON);
 
-		// Draw all sprites
-		void Draw(float i_DeltaTime);
+		void Tick(float i_DeltaTime);
 
-		// Clear all renderables
+		void CheckForNewRenderables();
+
+		void Init();
 		void ShutDown();
 	}
 }

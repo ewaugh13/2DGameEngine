@@ -3,12 +3,32 @@
 #include "SmartPtr.h"
 #include "Vector3.h"
 
+#include <map>
 #include <string.h>
 #include <vector>
 
 namespace Engine
 {
-	class IActorComponent;
+	// interface for components
+	class IActorComponent
+	{
+	public:
+		~IActorComponent()
+		{}
+
+		virtual void BeginUpdate(float)
+		{}
+		virtual void Update(float)
+		{}
+		virtual void EndUpdate(float)
+		{}
+	};
+
+	class ComponentDestructor
+	{
+	public:
+		static void release(IActorComponent * i_ptr) { delete i_ptr; }
+	};
 
 	class Actor
 	{
@@ -29,15 +49,14 @@ namespace Engine
 #pragma endregion
 
 		// add component
-		void AddComponent(IActorComponent * m_pNewComponent);
+		void AddComponent(std::string i_ComponentName, IActorComponent * i_NewComponent);
 		// get component
-		template<typename ComponentType>
-		IActorComponent * GetComponent();
+		IActorComponent * GetComponent (const std::string & i_ComponentName) const;
 
 		// update
-		void BeginUpdate();
-		void Update();
-		void EndUpdate();
+		void BeginUpdate(float i_DeltaTime);
+		void Update(float i_DeltaTime);
+		void EndUpdate(float i_DeltaTime);
 
 	private:
 
@@ -46,21 +65,9 @@ namespace Engine
 
 		char * m_name;
 		Vector3 m_position;
-		std::vector<IActorComponent *> m_Components;
-	};
 
-	// interface for components
-	class IActorComponent
-	{
-	public:
-		virtual void BeginUpdate(Actor &)
-		{}
-		virtual void Update(Actor &)
-		{}
-		virtual void EndUpdate(Actor &)
-		{}
+		std::map<std::string, IActorComponent*> m_Components;
 	};
-
 }
 
 #include "Actor-inl.h"

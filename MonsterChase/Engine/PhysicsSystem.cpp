@@ -1,12 +1,12 @@
 #include "PhysicsSystem.h"
 
-#include "Actor.h"
+#include "ActorCreator.h"
+#include "Destructors.h"
 #include "FloatFunctionLibrary.h"
 #include "LoadFile.h"
+#include "ScopeLock.h"
 
 #include <assert.h>
-
-#include "../External/nlohmann/json.hpp"
 
 namespace Engine
 {
@@ -22,89 +22,85 @@ namespace Engine
 			vec.SetZ(json_obj[2]);
 		}
 
-		std::vector<SmartPtr<RigidBody>> ActorRigidBodies;
+		bool bShutdown = false;
 
-		std::vector<RigidBody> NewRigidBodies;
-		//Engine::Mutex NewRigidBodiesMutex;
+		std::vector<SmartPtr<RigidBody, RigidBodyDestructor>> AllRigidBodies;
 
-		SmartPtr<RigidBody> AddRigidBodyActor(const SmartPtr<Actor> & i_Actor, const char * i_ScriptFilename)
+		std::vector<SmartPtr<RigidBody, RigidBodyDestructor>> NewRigidBodies;
+		Engine::Mutex NewRigidBodiesMutex;
+
+		void AddRigidBodyActor(const SmartPtr<Actor> & i_Actor, nlohmann::json & i_RigidBodyJSON)
 		{
-			using json = nlohmann::json;
-
-			std::vector<uint8_t> playerData = File::LoadFileToBuffer(i_ScriptFilename);
-			if (!playerData.empty())
+			if (!bShutdown)
 			{
-				json playerJSON = json::parse(playerData);
-				if (playerJSON.contains("rigid_body_data"))
+				using json = nlohmann::json;
+
+				assert(i_RigidBodyJSON["mass"].is_number_float());
+				assert(i_RigidBodyJSON["kd"].is_number_float());
+
+				float mass = i_RigidBodyJSON["mass"];
+				float kd = i_RigidBodyJSON["kd"];
+
+				Vector3 movementForces = Vector3::Zero;
+				movementForces << (i_RigidBodyJSON["movement_forces"]);
+
+				Vector3 movementVelocity = Vector3::Zero;
+				movementVelocity << (i_RigidBodyJSON["max_velocity"]);
+
+				SmartPtr<RigidBody, RigidBodyDestructor> newRigidBodyActor(new RigidBody(i_Actor, movementForces, movementVelocity, mass, kd));
+
 				{
-					assert(playerJSON["rigid_body_data"]["mass"].is_number_float());
-					assert(playerJSON["rigid_body_data"]["kd"].is_number_float());
-
-					float mass = playerJSON["rigid_body_data"]["mass"];
-					float kd = playerJSON["rigid_body_data"]["kd"];
-
-					Vector3 movementForces = Vector3::Zero;
-					movementForces << (playerJSON["rigid_body_data"]["movement_forces"]);
-
-					Vector3 movementVelocity = Vector3::Zero;
-					movementVelocity << (playerJSON["rigid_body_data"]["max_velocity"]);
-
-					SmartPtr<RigidBody> newRigidBodyActor(new RigidBody(i_Actor, movementForces, movementVelocity, mass, kd));
-					ActorRigidBodies.push_back(newRigidBodyActor);
-
-					return newRigidBodyActor;
+					ScopeLock Lock(NewRigidBodiesMutex);
+					NewRigidBodies.push_back(newRigidBodyActor);
 				}
 			}
-
-			return SmartPtr<RigidBody>();
 		}
 
 		void Tick(float i_DeltaTime)
 		{
-			for (std::vector<SmartPtr<RigidBody>>::iterator iter = ActorRigidBodies.begin(); iter != ActorRigidBodies.end(); iter++)
+			CheckForNewRigidBodies();
+		}
+
+		void CheckForNewRigidBodies()
+		{
+			ScopeLock Lock(NewRigidBodiesMutex);
+			for (std::vector<SmartPtr<RigidBody, RigidBodyDestructor>>::iterator iter = NewRigidBodies.begin(); iter != NewRigidBodies.end(); iter++)
 			{
-				SmartPtr<RigidBody> currRigid = *iter;
-
-				SmartPtr<Actor> currentActor = currRigid->m_Actor.AcquireSmartPtr();
-
-				// if there is an actor and a sprite draw it
+				SmartPtr<RigidBody, RigidBodyDestructor> rigidBody = SmartPtr<RigidBody, RigidBodyDestructor>(*iter);
+				
+				SmartPtr<Actor> currentActor = rigidBody->m_Actor.AcquireSmartPtr();
 				if (currentActor)
 				{
-					currRigid->m_Acceleration = currRigid->m_Forces * currRigid->m_MovementForces / currRigid->m_Mass;
-
-					Vector3 nextVelocity = currRigid->m_Velocity + (currRigid->m_Acceleration * i_DeltaTime);
-
-					if (nextVelocity.GetX() > currRigid->m_MaxVelocity.GetX())
-						nextVelocity.SetX(currRigid->m_MaxVelocity.GetX());
-					if (nextVelocity.GetY() > currRigid->m_MaxVelocity.GetY())
-						nextVelocity.SetY(currRigid->m_MaxVelocity.GetY());
-
-					Vector3 averageVelocity = (nextVelocity + currRigid->m_Velocity) / 2.0f;
-					currentActor->SetPosition(currentActor->GetPosition() + averageVelocity * i_DeltaTime);
-
-					// set previous velocity for mid point
-					currRigid->m_Velocity = nextVelocity;
-
-					// apply drag left and right movement
-					Vector3 dragForce = currRigid->m_Velocity * currRigid->m_Velocity * currRigid->m_Kd;
-					if (!FloatFunctionLibrary::AlmostEqualZeroCertain(currRigid->m_Velocity.GetX(), 0.01f))
-						currRigid->m_Forces.SetX(currRigid->m_Forces.GetX() + (currRigid->m_Velocity.GetX() > 0 ? -dragForce.GetX() : dragForce.GetX()));
-					else
-						currRigid->m_Forces.SetX(0);
-
-					// TODO: change this to be gravity based
-					if (!FloatFunctionLibrary::AlmostEqualZeroCertain(currRigid->m_Velocity.GetY(), 0.01f))
-						currRigid->m_Forces.SetY(currRigid->m_Forces.GetY() + (currRigid->m_Velocity.GetY() > 0 ? -dragForce.GetY() : dragForce.GetY()));
-					else
-						currRigid->m_Forces.SetY(0);
+					currentActor->AddComponent("rigidbody", rigidBody.operator->());
 				}
+
+				AllRigidBodies.push_back(*iter);
 			}
+
+			NewRigidBodies.clear();
+		}
+
+		void Init()
+		{
+			using namespace std::placeholders;
+
+			RegisterComponentCreator("rigidbody", std::bind(AddRigidBodyActor, _1, _2));
 		}
 
 		void ShutDown()
 		{
-			ActorRigidBodies.clear();
-			ActorRigidBodies.shrink_to_fit();
+			bShutdown = true;
+
+			AllRigidBodies.clear();
+			AllRigidBodies.shrink_to_fit();
+
+			DeregisterComponentCreator("rigidbody");
+
+			{
+				ScopeLock Lock(NewRigidBodiesMutex);
+				NewRigidBodies.clear();
+				NewRigidBodies.shrink_to_fit();
+			}
 		}
 	}
 }

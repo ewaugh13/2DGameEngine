@@ -81,7 +81,9 @@
     <ClCompile Include="LoadFile.cpp" />
     <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
+    <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="SharedJobQueue.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Timer.cpp" />

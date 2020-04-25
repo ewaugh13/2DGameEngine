@@ -31,45 +31,46 @@ namespace Engine
 			free(m_name);
 		}
 
-		for (size_t i = 0; i < m_Components.size(); i++)
+		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
 		{
-			assert(m_Components[i]);
-			delete m_Components[i];
+			assert(componentPair.second);
+			if (componentPair.second != nullptr)
+				delete componentPair.second;
 		}
 	}
 
-	void Actor::AddComponent(IActorComponent * m_pNewComponent)
+	void Actor::AddComponent(std::string i_ComponentName, IActorComponent * i_NewComponent)
 	{
-		this->m_Components.push_back(m_pNewComponent);
+		m_Components.insert({ i_ComponentName, i_NewComponent });
 	}
 
-	void Actor::BeginUpdate()
+	void Actor::BeginUpdate(float i_DeltaTime)
 	{
-		const size_t count = this->m_Components.size();
-		for (size_t i = 0; i < count; i++)
+		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
 		{
-			assert(this->m_Components[i]);
-			m_Components[i]->BeginUpdate(*this);
+			assert(componentPair.second);
+			if (componentPair.second != nullptr)
+				componentPair.second->BeginUpdate(i_DeltaTime);
 		}
 	}
 
-	void Actor::Update()
+	void Actor::Update(float i_DeltaTime)
 	{
-		const size_t count = this->m_Components.size();
-		for (size_t i = 0; i < count; i++)
+		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
 		{
-			assert(this->m_Components[i]);
-			m_Components[i]->Update(*this);
+			assert(componentPair.second);
+			if (componentPair.second != nullptr)
+				componentPair.second->Update(i_DeltaTime);
 		}
 	}
 
-	void Actor::EndUpdate()
+	void Actor::EndUpdate(float i_DeltaTime)
 	{
-		const size_t count = this->m_Components.size();
-		for (size_t i = 0; i < count; i++)
+		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
 		{
-			assert(this->m_Components[i]);
-			m_Components[i]->EndUpdate(*this);
+			assert(componentPair.second);
+			if (componentPair.second != nullptr)
+				componentPair.second->EndUpdate(i_DeltaTime);
 		}
 	}
 }

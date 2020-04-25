@@ -16,19 +16,19 @@ namespace Engine
 	}
 
 	// TODO: turn into hashmap
-	static std::map<std::string, std::function<void(SmartPtr<Actor>&, nlohmann::json&)>> ControllerCreators;
+	static std::map<std::string, std::function<void(SmartPtr<Actor>&, nlohmann::json&)>> ComponentCreators;
 
-	void RegisterControllerCreator(const std::string & i_ControllerName, std::function<void(SmartPtr<Actor>&, nlohmann::json&)> i_ControllerCreator)
+	void RegisterComponentCreator(const std::string & i_ControllerName, std::function<void(SmartPtr<Actor>&, nlohmann::json&)> i_ControllerCreator)
 	{
-		ControllerCreators.insert({ i_ControllerName, i_ControllerCreator });
+		ComponentCreators.insert({ i_ControllerName, i_ControllerCreator });
 	}
 
-	void DeregisterControllerCreator(const std::string & i_ControllerName)
+	void DeregisterComponentCreator(const std::string & i_ControllerName)
 	{
-		auto creator = ControllerCreators.find(i_ControllerName);
-		if (creator != ControllerCreators.end())
+		auto creator = ComponentCreators.find(i_ControllerName);
+		if (creator != ComponentCreators.end())
 		{
-			ControllerCreators.erase(i_ControllerName);
+			ComponentCreators.erase(i_ControllerName);
 		}
 	}
 
@@ -51,17 +51,21 @@ namespace Engine
 
 			newActor = SmartPtr<Actor>(Actor::CreateActor(playerName.c_str(), initalPosition));
 
-			if (playerJSON.contains("controller"))
+			if (playerJSON.contains("components"))
 			{
-				assert(playerJSON["controller"].is_object());
-				assert(playerJSON["controller"]["type"].is_string());
-				assert(playerJSON["controller"]["initializer"].is_object());
+				assert(playerJSON["components"].is_object());
 
-				auto ControllerCreator = ControllerCreators.find(playerJSON["controller"]["type"]);
-				if (ControllerCreator != ControllerCreators.end())
+				for (json::iterator it = playerJSON["components"].begin(); it != playerJSON["components"].end(); it++)
 				{
-					ControllerCreator->second(newActor, playerJSON["controller"]["initializer"]);
+					const std::string & componentName = it.key();
+
+					auto componentCreator = ComponentCreators.find(componentName);
+					if (componentCreator != ComponentCreators.end())
+					{
+						componentCreator->second(newActor, it.value());
+					}
 				}
+
 			}
 		}
 

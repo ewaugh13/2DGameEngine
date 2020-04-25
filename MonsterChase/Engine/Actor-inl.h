@@ -4,16 +4,14 @@
 
 namespace Engine
 {
-	template<typename ComponentType>
-	inline IActorComponent * Actor::GetComponent()
+	inline IActorComponent * Actor::GetComponent(const std::string & i_ComponentName) const
 	{
-		for (auto & component : this->m_Components)
+		auto it = m_Components.find(i_ComponentName);
+		if (it != m_Components.end())
 		{
-			if (ComponentType component = dynamic_cast<ComponentType>(component))
-			{
-				return component;
-			}
+			return (*it).second;
 		}
+
 		return nullptr;
 	}
 }

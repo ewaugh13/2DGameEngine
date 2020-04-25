@@ -2,17 +2,19 @@
 
 #include "RigidBody.h"
 
+#include "../External/nlohmann/json.hpp"
+
 namespace Engine
 {
 	namespace Physics
 	{
-		// TODO: add json info here
-		SmartPtr<RigidBody> AddRigidBodyActor(const SmartPtr<Actor> & i_Actor, const char * i_ScriptFilename);
+		void AddRigidBodyActor(const SmartPtr<Actor> & i_Actor, nlohmann::json & i_RigidBodyJSON);
 
-		// Draw all sprites
 		void Tick(float i_DeltaTime);
 
-		// Clear all rigid bodies
+		void CheckForNewRigidBodies();
+
+		void Init();
 		void ShutDown();
 	}
 }

@@ -10,6 +10,10 @@ class SmartPtr
 	template<class T, class Destructor>
 	friend class WeakPtr;
 
+	template<class U, class DestroyU>
+	friend class SmartPtr;
+
+
 public:
 	// Empty constructor
 	SmartPtr() :
@@ -36,6 +40,17 @@ public:
 	// Copy Constructor for other type of SmartPtr
 	template<class U>
 	SmartPtr(const SmartPtr<U> & i_Other) :
+		m_Ptr(i_Other.m_Ptr), m_ReferenceCount(i_Other.m_ReferenceCount)
+	{
+		if (m_ReferenceCount != nullptr)
+		{
+			m_ReferenceCount->m_SmartPtrsCount++;
+		}
+	}
+
+	// Copy Constructor for other type of SmartPtr and own destructor
+	template<class U, class DestroyU>
+	SmartPtr(const SmartPtr<U, DestroyU> & i_Other) :
 		m_Ptr(i_Other.m_Ptr), m_ReferenceCount(i_Other.m_ReferenceCount)
 	{
 		if (m_ReferenceCount != nullptr)

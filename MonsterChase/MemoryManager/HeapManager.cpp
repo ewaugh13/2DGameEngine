@@ -197,6 +197,11 @@ void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
 {
 	void * nextBlockBase = ADD_AMOUNT_TO_ADDRESS(currentFreeBlock->m_pBlockBase, currentFreeBlock->m_sizeBlock);
 	BlockDescriptor * nextBlock = nullptr;
+
+	if (nextBlockBase == 0)
+	{
+		return;
+	}
 	
 	if (Contains(((BlockDescriptor *)nextBlockBase)->m_pBlockBase))
 	{

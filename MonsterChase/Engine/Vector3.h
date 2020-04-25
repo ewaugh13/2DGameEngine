@@ -6,6 +6,13 @@ class Vector3
 {
 public:
 #pragma region Constructor and Destructor
+
+	// standard constructor
+	Vector3() :
+		m_x(0), m_y(0), m_z(0)
+	{
+	}
+
 	// standard constructor
 	Vector3(float i_x, float i_y, float i_z) :
 		m_x(i_x), m_y(i_y), m_z(i_z)

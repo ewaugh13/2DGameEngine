@@ -1,75 +1,90 @@
 #include "Renderer.h"
 
+#include "ActorCreator.h"
 #include "GLibHelpers.h"
 #include "LoadFile.h"
+#include "ScopeLock.h"
 
 #include <assert.h>
 #include <vector>
-
-#include "../External/nlohmann/json.hpp"
 
 namespace Engine
 {
 	namespace Renderer
 	{
-		std::vector<SmartPtr<Renderable>> Renderables;
+		bool bShutdown = false;
 
-		SmartPtr<Renderable> Renderer::AddRenderable(const SmartPtr<Actor>& i_Actor, const char * i_ScriptFilename)
+		std::vector<SmartPtr<Renderable, RenderableDestructor>> AllRenderables;
+
+		std::vector<SmartPtr<Renderable, RenderableDestructor>> NewRenderables;
+		Engine::Mutex NewRenderablesMutex;
+
+		void AddRenderable(const SmartPtr<Actor> & i_Actor, nlohmann::json & i_RenderableJSON)
 		{
-			using json = nlohmann::json;
-
-			std::vector<uint8_t> playerData = File::LoadFileToBuffer(i_ScriptFilename);
-			if (!playerData.empty())
+			if (!bShutdown)
 			{
-				json playerJSON = json::parse(playerData);
-				if (playerJSON.contains("render_data"))
+				using json = nlohmann::json;
+
+				assert(i_RenderableJSON["sprite"].is_string());
+
+				std::string spriteFilePath = i_RenderableJSON["sprite"];
+
+				SpriteSmartPtr sprite = SpriteSmartPtr(GLibHelper::CreateSprite(spriteFilePath.c_str()));
+
+				SmartPtr<Renderable, RenderableDestructor> newRenderableActor(new Renderable(i_Actor, sprite));
+
 				{
-					assert(playerJSON["render_data"]["sprite"].is_string());
-
-					std::string spriteFilePath = playerJSON["render_data"]["sprite"];
-
-					SpriteSmartPtr i_Sprite = SpriteSmartPtr(GLibHelper::CreateSprite(spriteFilePath.c_str()));
-					SmartPtr<Renderable> newRenderableActor(new Renderable(i_Actor, i_Sprite));
-					Renderables.push_back(newRenderableActor);
-
-					return newRenderableActor;
+					ScopeLock Lock(NewRenderablesMutex);
+					NewRenderables.push_back(newRenderableActor);
 				}
 			}
-
-			return SmartPtr<Renderable>();
 		}
 
-		void Renderer::Draw(float i_DeltaTime)
+		void Tick(float i_DeltaTime)
 		{
-			// IMPORTANT: Tell GLib that we want to start rendering
-			GLib::BeginRendering();
-			// Tell GLib that we want to render some sprites
-			GLib::Sprites::BeginRendering();
+			CheckForNewRenderables();
+		}
 
-			for (std::vector<SmartPtr<Renderable>>::iterator iter = Renderables.begin(); iter != Renderables.end(); iter++)
+		void CheckForNewRenderables()
+		{
+			ScopeLock Lock(NewRenderablesMutex);
+			for (std::vector<SmartPtr<Renderable, RenderableDestructor>>::iterator iter = NewRenderables.begin(); iter != NewRenderables.end(); iter++)
 			{
-				SmartPtr<Renderable> currentRenderable = *iter;
+				SmartPtr<Renderable, RenderableDestructor> renderable = SmartPtr<Renderable, RenderableDestructor>(*iter);
 
-				SmartPtr<Actor> currentActor = currentRenderable->m_Actor.AcquireSmartPtr();
-
-				// if there is an actor and a sprite draw it
-				if (currentActor && currentRenderable->m_Sprite)
+				SmartPtr<Actor> currentActor = renderable->m_Actor.AcquireSmartPtr();
+				if (currentActor)
 				{
-					Vector3 actorPos = currentActor->GetPosition();
-					GLib::Sprites::RenderSprite(*(currentRenderable->m_Sprite), { actorPos.GetX(), actorPos.GetY() }, 0.0f);
+					currentActor->AddComponent("renderable", renderable.operator->());
 				}
+
+				AllRenderables.push_back(*iter);
 			}
 
-			// Tell GLib we're done rendering sprites
-			GLib::Sprites::EndRendering();
-			// IMPORTANT: Tell GLib we're done rendering
-			GLib::EndRendering();
+			NewRenderables.clear();
+		}
+
+		void Init()
+		{
+			using namespace std::placeholders;
+
+			RegisterComponentCreator("renderable", std::bind(AddRenderable, _1, _2));
 		}
 
 		void ShutDown()
 		{
-			Renderables.clear();
-			Renderables.shrink_to_fit();
+			bShutdown = true;
+
+			AllRenderables.clear();
+			AllRenderables.shrink_to_fit();
+
+			DeregisterComponentCreator("renderable");
+
+			{
+				ScopeLock Lock(NewRenderablesMutex);
+				NewRenderables.clear();
+				NewRenderables.shrink_to_fit();
+			}
 		}
 	}
 }
