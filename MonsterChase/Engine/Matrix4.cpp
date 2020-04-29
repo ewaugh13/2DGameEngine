@@ -46,6 +46,14 @@ namespace Engine
 		return *this;
 	}
 
+	bool Matrix4::operator==(const Matrix4 & i_Other) const
+	{
+		return m_11 == i_Other.m_11 && m_12 == i_Other.m_12 && m_13 == i_Other.m_13 && m_14 == i_Other.m_14
+			&& m_21 == i_Other.m_21 && m_22 == i_Other.m_22 && m_23 == i_Other.m_23 && m_24 == i_Other.m_24
+			&& m_31 == i_Other.m_31 && m_32 == i_Other.m_32 && m_33 == i_Other.m_33 && m_34 == i_Other.m_34
+			&& m_41 == i_Other.m_41 && m_42 == i_Other.m_42 && m_43 == i_Other.m_43 && m_44 == i_Other.m_44;
+	}
+
 	Matrix4 Matrix4::operator*(const Matrix4 & i_Other) const
 	{
 		Matrix4 returnMatrix = Matrix4();
@@ -293,7 +301,7 @@ namespace Engine
 
 		// get adjugate matrix
 		m_11 = -(h * k * n) + (g * l * n) + (h * j * o) - (f * l * o) - (g * j * p) + (f * k * p);
-		m_12 = (d * k * n) - (c * l * n) - (d * j * o) + (d * j * o) + (b * l * o) - (c * j * p);
+		m_12 = (d * k * n) - (c * l * n) - (d * j * o) + (b * l * o) + (c * j * p) - (b * k * p);
 		m_13 = -(d * g * n) + (c * h * n) + (d * f * o) - (b * h * o) - (c * f * p) + (b * g * p);
 		m_14 = (d * g * j) - (c * h * j) - (d * f * k) + (b * h * k) + (c * f * l) - (b * g * l);
 
@@ -308,7 +316,7 @@ namespace Engine
 		m_34 = (d * f * i) - (b * h * i) - (d * e * j) + (a * h * j) + (b * e * l) - (a * f * l);
 
 		m_41 = (g * j * m) - (f * k * m) - (g * i * n) + (e * k * n) + (f * i * o) - (e * j * o);
-		m_42 = -(c * j * m) + (b * k * m) + (c * i * n) - (a * k * n) - (b * i * o) - (a * j * o);
+		m_42 = -(c * j * m) + (b * k * m) + (c * i * n) - (a * k * n) - (b * i * o) + (a * j * o);
 		m_43 = (c * f * m) - (b * g * m) - (c * e * n) + (a * g * n) + (b * e * o) - (a * f * o);
 		m_44 = -(c * f * i) + (b * g * i) + (c * e * j) - (a * g * j) - (b * e * k) + (a * f * k);
 

@@ -22,6 +22,8 @@ namespace Engine
 		Matrix4(const Matrix4 & i_Other);
 		Matrix4 & operator=(const Matrix4 & i_Other);
 
+		bool operator==(const Matrix4 & i_Other) const;
+
 		Matrix4 operator*(const Matrix4 & i_Other) const;
 		Matrix4 operator*(const float i_Scalar) const;
 

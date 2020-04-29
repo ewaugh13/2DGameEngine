@@ -13,6 +13,8 @@ namespace SmartWeakPtrTest
 
 		TEST_METHOD(SmartPtrTest)
 		{
+			using namespace Engine;
+
 			SmartPtr<Vector3> Vector3SmartPtr = SmartPtr<Vector3>(new Vector3(5.0f, 5.0f, 0.0f));
 			SmartPtr<Vector3> Vector3ZeroSmartPtr = SmartPtr<Vector3>(new Vector3(0.0f, 0.0f, 0.0f));
 
@@ -61,6 +63,8 @@ namespace SmartWeakPtrTest
 
 		TEST_METHOD(WeakPtrTest)
 		{
+			using namespace Engine;
+
 			SmartPtr<Vector3> Vector3SmartPtr = SmartPtr<Vector3>(new Vector3(5.0f, 5.0f, 0.0f));
 
 			// Create weakptr from smartptr
