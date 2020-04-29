@@ -45,6 +45,8 @@
     <ClInclude Include="JobRunner.h" />
     <ClInclude Include="JobSystem.h" />
     <ClInclude Include="LoadFile.h" />
+    <ClInclude Include="Matrix3-inl.h" />
+    <ClInclude Include="Matrix3.h" />
     <ClInclude Include="Matrix4-inl.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Mutex.h" />
@@ -83,6 +85,7 @@
     <ClCompile Include="JobRunner.cpp" />
     <ClCompile Include="JobSystem.cpp" />
     <ClCompile Include="LoadFile.cpp" />
+    <ClCompile Include="Matrix3.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />

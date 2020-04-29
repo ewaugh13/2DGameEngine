@@ -7,6 +7,7 @@ namespace Engine
 	class Vector3
 	{
 		friend class Vector4;
+		friend class Matrix3;
 		friend class Matrix4;
 
 	public:
