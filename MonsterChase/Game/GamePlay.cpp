@@ -5,9 +5,8 @@
 #include "GLib.h"
 #include "GLibHelpers.h"
 #include "JobSystem.h"
-#include "Renderable.h"
+#include "Collision.h"
 #include "Renderer.h"
-#include "RigidBody.h"
 #include "PhysicsSystem.h"
 #include "Timer.h"
 
@@ -21,6 +20,7 @@ void GamePlay::GameLoop()
 	Engine::JobSystem::CreateQueue("Default", 2);
 
 	Physics::Init();
+	Collision::Init();
 	Renderer::Init();
 
 	// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
@@ -47,6 +47,7 @@ void GamePlay::GameLoop()
 		// TODO: maybe should be begin event instead of tick
 		// first tick 
 		Physics::Tick(deltaTime);
+		Collision::Tick(deltaTime);
 		Renderer::Tick(deltaTime);
 
 		Physics::RigidBody * playerRigidBodyComp = dynamic_cast<Physics::RigidBody*>(smartPtrActor->GetComponent("rigidbody"));
@@ -56,6 +57,7 @@ void GamePlay::GameLoop()
 			deltaTime = timer->DeltaTime();
 
 			Physics::Tick(deltaTime);
+			Collision::Tick(deltaTime);
 			Renderer::Tick(deltaTime);
 
 			// IMPORTANT: We need to let GLib do it's thing. 
@@ -99,6 +101,7 @@ void GamePlay::GameLoop()
 	}
 
 	Physics::ShutDown();
+	Collision::ShutDown();
 	Renderer::ShutDown();
 
 	Engine::JobSystem::RequestShutdown();

@@ -8,6 +8,10 @@
       "movement_forces": [ 30.0, 30.0, 0.0 ],
       "max_velocity": [ 5.0, 5.0, 0.0 ]
     },
+    "collideable": {
+      "center": [ 0.0, 0.0 ],
+      "extents": [ 32.0, 92.0 ]
+    },
     "renderable": {
       "sprite": "data\\SamusNeutral0.dds"
     }

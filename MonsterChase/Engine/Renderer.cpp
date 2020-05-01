@@ -40,19 +40,14 @@ namespace Engine
 			}
 		}
 
-		void Tick(float i_DeltaTime)
-		{
-			CheckForNewRenderables();
-		}
-
 		void CheckForNewRenderables()
 		{
 			ScopeLock Lock(NewRenderablesMutex);
 			for (std::vector<SmartPtr<Renderable, RenderableDestructor>>::iterator iter = NewRenderables.begin(); iter != NewRenderables.end(); iter++)
 			{
-				SmartPtr<Renderable, RenderableDestructor> renderable = SmartPtr<Renderable, RenderableDestructor>(*iter);
+				SmartPtr<Renderable, RenderableDestructor> renderable = *iter;
 
-				SmartPtr<Actor> currentActor = renderable->m_Actor.AcquireSmartPtr();
+				SmartPtr<Actor> currentActor = renderable->GetActor().AcquireSmartPtr();
 				if (currentActor)
 				{
 					currentActor->AddComponent("renderable", renderable.operator->());
@@ -62,6 +57,11 @@ namespace Engine
 			}
 
 			NewRenderables.clear();
+		}
+
+		void Tick(float i_DeltaTime)
+		{
+			CheckForNewRenderables();
 		}
 
 		void Init()

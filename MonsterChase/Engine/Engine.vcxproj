@@ -32,6 +32,8 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorCreator.h" />
     <ClInclude Include="Allocators.h" />
+    <ClInclude Include="Collideable.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="ConsolePrint.h" />
     <ClInclude Include="Destructors.h" />
     <ClInclude Include="Engine.h" />
@@ -75,6 +77,8 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="ActorCreator.cpp" />
     <ClCompile Include="Allocators.cpp" />
+    <ClCompile Include="Collideable.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ConsolePrint.Win32.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Events.cpp" />

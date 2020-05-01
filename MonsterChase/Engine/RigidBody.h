@@ -23,8 +23,12 @@ namespace Engine
 
 			void BeginUpdate(float i_DeltaTime);
 
+			WeakPtr<Actor> GetActor() const { return m_Actor; }
+
 			void SetForces(Vector3 & i_NewForce) { m_Forces = i_NewForce; }
 			void SetForces(Vector3 && i_NewForce) { m_Forces = i_NewForce; }
+
+		private:
 
 			WeakPtr<Actor> m_Actor;
 			Vector3 m_Forces;

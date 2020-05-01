@@ -29,7 +29,7 @@ namespace Engine
 		std::vector<SmartPtr<RigidBody, RigidBodyDestructor>> NewRigidBodies;
 		Engine::Mutex NewRigidBodiesMutex;
 
-		void AddRigidBodyActor(const SmartPtr<Actor> & i_Actor, nlohmann::json & i_RigidBodyJSON)
+		void AddRigidBody(const SmartPtr<Actor> & i_Actor, nlohmann::json & i_RigidBodyJSON)
 		{
 			if (!bShutdown)
 			{
@@ -56,19 +56,14 @@ namespace Engine
 			}
 		}
 
-		void Tick(float i_DeltaTime)
-		{
-			CheckForNewRigidBodies();
-		}
-
 		void CheckForNewRigidBodies()
 		{
 			ScopeLock Lock(NewRigidBodiesMutex);
 			for (std::vector<SmartPtr<RigidBody, RigidBodyDestructor>>::iterator iter = NewRigidBodies.begin(); iter != NewRigidBodies.end(); iter++)
 			{
-				SmartPtr<RigidBody, RigidBodyDestructor> rigidBody = SmartPtr<RigidBody, RigidBodyDestructor>(*iter);
-				
-				SmartPtr<Actor> currentActor = rigidBody->m_Actor.AcquireSmartPtr();
+				SmartPtr<RigidBody, RigidBodyDestructor> rigidBody = *iter;
+
+				SmartPtr<Actor> currentActor = rigidBody->GetActor().AcquireSmartPtr();
 				if (currentActor)
 				{
 					currentActor->AddComponent("rigidbody", rigidBody.operator->());
@@ -80,11 +75,16 @@ namespace Engine
 			NewRigidBodies.clear();
 		}
 
+		void Tick(float i_DeltaTime)
+		{
+			CheckForNewRigidBodies();
+		}
+
 		void Init()
 		{
 			using namespace std::placeholders;
 
-			RegisterComponentCreator("rigidbody", std::bind(AddRigidBodyActor, _1, _2));
+			RegisterComponentCreator("rigidbody", std::bind(AddRigidBody, _1, _2));
 		}
 
 		void ShutDown()

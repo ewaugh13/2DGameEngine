@@ -12,8 +12,6 @@ namespace Engine
 
 		void Tick(float i_DeltaTime);
 
-		void CheckForNewRenderables();
-
 		void Init();
 		void ShutDown();
 	}

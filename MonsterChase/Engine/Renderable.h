@@ -36,6 +36,9 @@ namespace Engine
 
 			virtual void EndUpdate(float i_DeltaTime);
 
+			WeakPtr<Actor> GetActor() const { return m_Actor; }
+
+		private:
 			WeakPtr<Actor> m_Actor;
 			SpriteSmartPtr m_Sprite;
 
