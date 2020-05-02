@@ -7,7 +7,7 @@ const unsigned int numDescriptors = 2048;
 
 namespace Engine
 {
-	HeapManager * initializeHeapManager();
+	HeapManager::HeapManager * initializeHeapManager();
 	void * initalizeMemory(size_t amouunt, size_t sizeOfAllocation);
 	void freeMemory(void * memoryAddress);
 };

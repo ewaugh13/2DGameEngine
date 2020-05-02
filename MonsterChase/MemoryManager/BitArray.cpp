@@ -4,7 +4,7 @@
 
 #pragma intrinsic(_BitScanForward)
 
-BitArray::BitArray(size_t i_numBits, HeapManager * i_pAllocator, bool i_startClear) :
+BitArray::BitArray(size_t i_numBits, HeapManager::HeapManager * i_pAllocator, bool i_startClear) :
 	m_allocatedUsed(i_pAllocator),
 	m_numBits(i_numBits),
 	m_numBytes((i_numBits + NUM_BITS_IN_BYTE - 1) / NUM_BITS_IN_BYTE),

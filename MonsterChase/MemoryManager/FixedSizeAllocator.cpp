@@ -2,7 +2,7 @@
 #include "HeapManager.h"
 
 // global extern HeapManager that is initalized by MemorySystem
-HeapManager * pHeapManager;
+HeapManager::HeapManager * pHeapManager;
 
 FixedSizeAllocator::FixedSizeAllocator(size_t i_blockSize, size_t i_numBlocks) :
 	m_pAllocatorMemory(reinterpret_cast<uint8_t *>(pHeapManager->_alloc(i_blockSize * i_numBlocks))),

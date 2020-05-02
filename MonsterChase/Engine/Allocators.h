@@ -24,5 +24,5 @@ void * operator new[](size_t i_size, const char * i_pFile, unsigned int i_Line);
 void operator delete[](void * i_ptr, const char * i_pFile, unsigned int i_Line);
 #pragma endregion
 
-static HeapManager * pHeapManager = Engine::initializeHeapManager();
+static HeapManager::HeapManager * pHeapManager = Engine::initializeHeapManager();
 

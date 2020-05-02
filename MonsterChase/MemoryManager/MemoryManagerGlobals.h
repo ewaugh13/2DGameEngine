@@ -7,7 +7,7 @@
 const unsigned int numFSAs = 3;
 
 // extern global HeapManager that is initalized by MemorySystem
-extern HeapManager * pHeapManager;
+extern HeapManager::HeapManager * pHeapManager;
 
 // extern global for fixed sized allocator map that is initalized in Allocators
 // and MemorySystem creates the maps

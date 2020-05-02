@@ -41,7 +41,7 @@ inline size_t GetBitEvaluator(size_t i_bitNumber, size_t i_numBitsInElement)
 class BitArray
 {
 public:
-	BitArray(size_t i_numBits, HeapManager * i_pAllocator, bool i_startClear = true);
+	BitArray(size_t i_numBits, HeapManager::HeapManager * i_pAllocator, bool i_startClear = true);
 	~BitArray();
 
 	void SetAll(void);
@@ -72,7 +72,7 @@ private:
 #elif _WIN32
 	uint32_t * m_pBits;
 #endif // _WIN64
-	HeapManager * m_allocatedUsed;
+	HeapManager::HeapManager * m_allocatedUsed;
 	const size_t m_numBits;
 	const size_t m_numBytes;
 	const size_t numElements;

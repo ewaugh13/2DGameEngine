@@ -8,7 +8,7 @@
 
 namespace Engine
 {
-	HeapManager * initializeHeapManager()
+	HeapManager::HeapManager * initializeHeapManager()
 	{
 		// Get SYSTEM_INFO, which includes the memory page size
 		SYSTEM_INFO SysInfo;
@@ -21,7 +21,7 @@ namespace Engine
 		// get memeory from virtual alloc
 		void* pHeapMemory = VirtualAlloc(NULL, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
 
-		return HeapManager::create(pHeapMemory, sizeHeap, numDescriptors);
+		return HeapManager::HeapManager::create(pHeapMemory, sizeHeap, numDescriptors);
 	}
 
 	void * initalizeMemory(size_t amouunt, size_t sizeOfAllocation)

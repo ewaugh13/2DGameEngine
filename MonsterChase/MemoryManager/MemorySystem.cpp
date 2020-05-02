@@ -2,7 +2,7 @@
 
 bool InitializeMemorySystem(void * i_pHeapMemory, size_t i_sizeHeapMemory, unsigned int i_OptionalNumDescriptors)
 {
-	pHeapManager = HeapManager::create(i_pHeapMemory, i_sizeHeapMemory, i_OptionalNumDescriptors);
+	pHeapManager = HeapManager::HeapManager::create(i_pHeapMemory, i_sizeHeapMemory, i_OptionalNumDescriptors);
 	assert(pHeapManager);
 
 	for (unsigned int i = 0; i < numFSAs; i++)
