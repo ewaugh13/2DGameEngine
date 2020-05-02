@@ -153,10 +153,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionTest1.cpp" />
     <ClCompile Include="FixedSizeTest1.cpp" />
     <ClCompile Include="FloatTest1.cpp" />
     <ClCompile Include="HeapManagerTest1.cpp" />
-    <ClCompile Include="Point2DUnitTest1.cpp" />
+    <ClCompile Include="MathTest1.cpp" />
     <ClCompile Include="SmartWeakPtrTest.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -25,6 +25,8 @@ namespace Engine
 
 			WeakPtr<Actor> GetActor() const { return m_Actor; }
 
+			Vector3 GetVelocity() const { return m_Velocity; }
+
 			void SetForces(Vector3 & i_NewForce) { m_Forces = i_NewForce; }
 			void SetForces(Vector3 && i_NewForce) { m_Forces = i_NewForce; }
 

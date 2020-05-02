@@ -1,5 +1,9 @@
 #include "Collideable.h"
 
+#include "Collision.h"
+
+#include <assert.h>
+
 namespace Engine
 {
 	namespace Collision
@@ -23,7 +27,27 @@ namespace Engine
 
 		void Collideable::Update(float i_DeltaTime)
 		{
-			// TODO logic for update
+			bool bFoundCollision = false;
+
+			CollisionPair foundCollision;
+
+			if (FindCollision(this, i_DeltaTime, foundCollision))
+			{
+				foundCollision.m_pCollideables;
+				assert(foundCollision.m_pCollideables[0]);
+				assert(foundCollision.m_pCollideables[1]);
+
+				if (foundCollision.m_pCollideables[0]->m_CollisionCallback)
+					foundCollision.m_pCollideables[0]->m_CollisionCallback(foundCollision.m_pCollideables[1]->m_Actor);
+
+				if (foundCollision.m_pCollideables[1]->m_CollisionCallback)
+					foundCollision.m_pCollideables[1]->m_CollisionCallback(foundCollision.m_pCollideables[0]->m_Actor);
+
+				bFoundCollision = true;
+			}
+
+			if(bFoundCollision)
+				Collision::SetCollisionLastTick(bFoundCollision);
 		}
 	}
 }

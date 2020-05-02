@@ -142,13 +142,11 @@ namespace Engine
 
 #pragma endregion
 
-#pragma region Non Class Methods
-
 #pragma region Vector3 Math
 
 	inline double Vector3::Magnitude() const
 	{
-		return sqrt(pow(GetX(), 2) + pow(GetY(), 2)) + pow(GetZ(), 2);
+		return sqrt(pow(m_x, 2) + pow(m_y, 2)) + pow(m_z, 2);
 	}
 
 	inline Vector3 Vector3::Normalized() const
@@ -163,17 +161,19 @@ namespace Engine
 
 	inline float Vector3::Dot(const Vector3 & i_OtherVector) const
 	{
-		return GetX() * i_OtherVector.GetX() + GetY() * i_OtherVector.GetY() + GetZ() * i_OtherVector.GetZ();
+		return m_x * i_OtherVector.m_x + m_y * i_OtherVector.m_y + m_z * i_OtherVector.m_z;
 	}
 
 	inline Vector3 Vector3::Cross(const Vector3 & i_OtherVector) const
 	{
-		return Vector3(GetY() * i_OtherVector.GetZ() - GetZ() * i_OtherVector.GetY(),
-			GetZ() * i_OtherVector.GetX() - GetX() * i_OtherVector.GetZ(),
-			GetX() * i_OtherVector.GetY() - GetY() * i_OtherVector.GetX());
+		return Vector3(m_y * i_OtherVector.m_z - m_z * i_OtherVector.m_y,
+			m_z * i_OtherVector.m_x - m_x * i_OtherVector.m_z,
+			m_x * i_OtherVector.m_y - m_y * i_OtherVector.m_x);
 	}
 
 #pragma endregion
+
+#pragma region Non Class Methods
 
 #pragma region Non-Class Operator Overloads
 

@@ -11,6 +11,8 @@ namespace Engine
 {
 	namespace Collision
 	{
+		class Collideable;
+
 		// Axis Aligned Bounding Box (Hit Box)
 		typedef struct AABB
 		{
@@ -21,10 +23,16 @@ namespace Engine
 		typedef struct CollisionCheckData
 		{
 			SmartPtr<Actor> m_Actor;
-			Matrix4	m_ObjectToWorld;
+			Matrix4	m_ActorToWorld;
 			Matrix3	m_OrientationInWorld;
 			Vector3	m_BBCenterInWorld;
 		} CollisionCheckData;
+
+		typedef struct CollisionPair
+		{
+			Collideable * m_pCollideables[2];
+			float m_CollisionTime;
+		} CollisionPair;
 
 		typedef std::function<void(WeakPtr<Actor>&)> CollisionCallback_t;
 		void PrintCollide(WeakPtr<Actor> & i_Actor);
@@ -44,13 +52,17 @@ namespace Engine
 
 			WeakPtr<Actor> GetActor() const { return m_Actor; }
 
+			CollisionCheckData GetCachedCheckData() const { return m_CachedCheckData; }
+
+			AABB GetBoundingBox() const { return m_BoundingBox; }
+
 			void SetCollisionCallback(const CollisionCallback_t & i_Callback) { m_CollisionCallback = i_Callback; }
 
 		private:
 			WeakPtr<Actor> m_Actor;
 			AABB m_BoundingBox;
 			CollisionCallback_t	m_CollisionCallback;
-			CollisionCheckData	m_CachedCheckData;
+			CollisionCheckData m_CachedCheckData;
 		};
 
 		class CollideableDestructor : public ComponentDestructor

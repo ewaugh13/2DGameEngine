@@ -122,6 +122,11 @@ void operator delete(void * i_ptr)
 {
 	DEBUG_PRINT("Calling delete (void *) with (%p).\n", i_ptr);
 
+	if (i_ptr == nullptr)
+	{
+		int x = 5;
+		x++;
+	}
 	assert(i_ptr != nullptr);
 	_free(i_ptr);
 }

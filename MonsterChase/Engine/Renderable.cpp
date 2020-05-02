@@ -23,7 +23,11 @@ namespace Engine
 			if (currentActor && m_Sprite)
 			{
 				Vector3 actorPos = currentActor->GetPosition();
-				GLib::Sprites::RenderSprite(*(m_Sprite), { actorPos.GetX(), actorPos.GetY() }, 0.0f);
+
+				const float Pi = 3.14159265358979323846f;
+				float rotationRadians = (currentActor->GetZRotation() * Pi) / 180.0f;
+
+				GLib::Sprites::RenderSprite(*(m_Sprite), { actorPos.GetX(), actorPos.GetY() }, rotationRadians);
 			}
 
 			// Tell GLib we're done rendering sprites

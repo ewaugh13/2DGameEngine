@@ -155,13 +155,11 @@ namespace Engine
 
 #pragma endregion
 
-#pragma region Non Class Methods
-
 #pragma region Vector4 Math
 
 	inline double Vector4::Magnitude() const
 	{
-		return sqrt(pow(GetX(), 2) + pow(GetY(), 2)) + pow(GetZ(), 2) + pow(GetW(), 2);
+		return sqrt(pow(m_x, 2) + pow(m_y, 2)) + pow(m_z, 2) + pow(m_w, 2);
 	}
 
 	inline Vector4 Vector4::Normalized() const
@@ -176,10 +174,12 @@ namespace Engine
 
 	inline float Vector4::Dot(const Vector4 & i_OtherVector) const
 	{
-		return GetX() * i_OtherVector.GetX() + GetY() * i_OtherVector.GetY() + GetZ() * i_OtherVector.GetZ() + GetW() * i_OtherVector.GetW();
+		return m_x * i_OtherVector.m_x + m_y * i_OtherVector.m_y + m_z * i_OtherVector.m_z + m_w * i_OtherVector.m_w;
 	}
 
 #pragma endregion
+
+#pragma region Non Class Methods
 
 #pragma region Non-Class Operator Overloads
 

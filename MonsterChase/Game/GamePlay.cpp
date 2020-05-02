@@ -33,7 +33,7 @@ void GamePlay::GameLoop()
 		Engine::AutoResetEvent createActorEvent;
 
 		SmartPtr<Actor> smartPtrActor;
-		CreateGameObjectAsync("data\\Samus.json", [&smartPtrActor](SmartPtr<Actor>& i_Actor)
+		CreateGameObjectAsync("..\\data\\Samus.json", [&smartPtrActor](SmartPtr<Actor>& i_Actor)
 		{
 			smartPtrActor = i_Actor;
 			//DEBUG_PRINT("Actor loaded");

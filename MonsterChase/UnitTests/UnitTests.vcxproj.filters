@@ -10,9 +10,6 @@
     <ClCompile Include="HeapManagerTest1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Point2DUnitTest1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FloatTest1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -20,6 +17,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SmartWeakPtrTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MathTest1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionTest1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

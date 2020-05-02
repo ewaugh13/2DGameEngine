@@ -1,5 +1,7 @@
 #include "Actor.h"
+
 #include "LoadFile.h"
+#include "RigidBody.h"
 
 #include <assert.h>
 #include <vector>
@@ -9,8 +11,8 @@
 
 namespace Engine
 {
-	Actor::Actor(const char * i_name, const Vector3 & i_initalPosition) :
-		m_name(i_name ? _strdup(i_name) : nullptr), m_position(i_initalPosition)
+	Actor::Actor(const char * i_name, const Vector3 & i_initalPosition, float i_zRotation) :
+		m_name(i_name ? _strdup(i_name) : nullptr), m_position(i_initalPosition), m_ZRotation(i_zRotation)
 	{
 	}
 
@@ -37,6 +39,19 @@ namespace Engine
 			if (componentPair.second != nullptr)
 				delete componentPair.second;
 		}
+	}
+
+	Vector3 Actor::GetVelocity() const
+	{
+		Physics::RigidBody * playerRigidBodyComp = dynamic_cast<Physics::RigidBody*>(GetComponent("rigidbody"));
+
+		// if the actor has a rigid body return that velocity
+		if (playerRigidBodyComp)
+		{
+			return playerRigidBodyComp->GetVelocity();
+		}
+
+		return Vector3::Zero;
 	}
 
 	void Actor::AddComponent(std::string i_ComponentName, IActorComponent * i_NewComponent)
