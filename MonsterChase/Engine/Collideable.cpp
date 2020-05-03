@@ -29,6 +29,9 @@ namespace Engine
 		{
 			bool bFoundCollision = false;
 
+			if (!Collision::GetCachedCheckCalledThisTick())
+				Collision::CacheCollisionCheckData();
+
 			CollisionPair foundCollision;
 
 			if (FindCollision(this, i_DeltaTime, foundCollision))

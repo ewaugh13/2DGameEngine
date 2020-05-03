@@ -22,6 +22,7 @@ namespace Engine
 
 		bool bShutdown = false;
 		bool bFoundCollisionThisTick = false;
+		bool bCachedCheckCalledThisTick = false;
 
 		std::vector<SmartPtr<Collideable, CollideableDestructor>> AllCollideables;
 
@@ -43,7 +44,9 @@ namespace Engine
 				AABB collisionBox = AABB({ center, extents });
 
 				// TODO figure out setting callback
-				SmartPtr<Collideable, CollideableDestructor> newCollideableActor(new Collideable(i_Actor, collisionBox, CollisionCheckData()));
+				CollisionCheckData checkData = CollisionCheckData();
+				checkData.m_Actor = i_Actor;
+				SmartPtr<Collideable, CollideableDestructor> newCollideableActor(new Collideable(i_Actor, collisionBox, checkData));
 
 				{
 					ScopeLock Lock(NewCollideablesMutex);
@@ -52,14 +55,24 @@ namespace Engine
 			}
 		}
 
-		void SetCollisionLastTick(bool i_bFoundCollisionThisTick)
+		bool GetCachedCheckCalledThisTick()
 		{
-			bFoundCollisionThisTick = i_bFoundCollisionThisTick;
+			return bCachedCheckCalledThisTick;
+		}
+
+		void SetCachedCheckCalledThisTick(bool i_bCachedCheckCalledThisTick)
+		{
+			bCachedCheckCalledThisTick = i_bCachedCheckCalledThisTick;
 		}
 
 		bool FoundCollisionLastTick()
 		{
 			return bFoundCollisionThisTick;
+		}
+
+		void SetCollisionLastTick(bool i_bFoundCollisionThisTick)
+		{
+			bFoundCollisionThisTick = i_bFoundCollisionThisTick;
 		}
 
 		void CheckForNewCollideables()
@@ -83,15 +96,14 @@ namespace Engine
 
 		void Tick(float i_DeltaTime)
 		{
-			// TODO figure out how to make collision this tick work with Update call
-			bFoundCollisionThisTick = false;
 			CheckForNewCollideables();
 
-			// store relevant collision data for this tick
-			CacheCollisionCheckData();
+			bFoundCollisionThisTick = false;
+			bCachedCheckCalledThisTick = false;
 		}
 
 		bool CheckCollision2D(const Collideable & i_Collideable1, const Collideable & i_Collideable2, float i_DeltaTime, float & o_TimeCollision);
+		bool DetectCrossTimes(float i_Center, float i_Extent, float i_Point, float i_TravelAlongAxis, float& o_TimeEntered, float & o_TimeExited);
 
 		bool FindCollision(Collideable * i_CurrentCollideable, float i_DeltaTime, CollisionPair & o_FoundCollisionPair)
 		{
@@ -127,20 +139,24 @@ namespace Engine
 
 		void CacheCollisionCheckData()
 		{
-			size_t collideableCount = AllCollideables.size();
-			for (size_t i = 0; i < collideableCount; i++)
-			{
-				Collideable currCollideable = *AllCollideables[i];
+			bCachedCheckCalledThisTick = true;
 
-				CollisionCheckData collisionData = currCollideable.GetCachedCheckData();
+			size_t collideableCount = AllCollideables.size();
+			for (size_t i = 0; i < collideableCount;)
+			{
+				SmartPtr<Collideable, CollideableDestructor> currCollideable = AllCollideables[i];
+
+				CollisionCheckData collisionData = currCollideable->GetCachedCheckData();
 
 				if (collisionData.m_Actor)
 				{
 					collisionData.m_OrientationInWorld = Matrix3::CreateZRotationColVec(collisionData.m_Actor->GetZRotation());
 					Matrix4 objectRot = Matrix4::CreateZRotationColVec(collisionData.m_Actor->GetZRotation());
 					Matrix4 objectTrans = Matrix4::CreateTranslationColVec(collisionData.m_Actor->GetPosition());
-					collisionData.m_ActorToWorld = objectTrans * objectTrans;
-					collisionData.m_BBCenterInWorld = collisionData.m_ActorToWorld.TransformPointColVec(currCollideable.GetBoundingBox().m_Center);
+					collisionData.m_ActorToWorld = objectTrans * objectRot;
+					collisionData.m_BBCenterInWorld = collisionData.m_ActorToWorld.TransformPointColVec(currCollideable->GetBoundingBox().m_Center);
+
+					currCollideable->SetCachedCheckData(collisionData);
 
 					++i;
 				}
@@ -168,21 +184,16 @@ namespace Engine
 			float timeEntered = 0.0f;
 			float timeExited = 1.0f;
 
-			// Actor2 vs Actor1 relative travel
-			Vector3 actor2Travel = (actor2->GetVelocity() - actor1->GetVelocity()) * i_DeltaTime;
-
 			// check all axes
 
 			// check Actor2 against actor1's coordinate system
 
+			// Actor2 vs Actor1 relative travel
+			Vector3 actor2Travel = (actor2->GetVelocity() - actor1->GetVelocity()) * i_DeltaTime;
+			Vector3 Obj2Travel = actor2Travel;
+
 			// Actor1 X Axis
 			{
-				// TODO dot product and normalized() in unit test
-
-				//Vector3 actor1XAxisInWorld = checkData1.m_OrientationInWorld.GetCol(0).Normalized();
-
-				//float actor1BBCenterOnXAxis = checkData1.m_BBCenterInWorld.Dot(actor1XAxisInWorld);
-
 				// M_WorldToA = M_AToWorld^-1 (Inverse)
 				// M_AToB = M_WorldToB * M_AToWorld
 				Matrix4 mActor2ToActor1 = checkDataActor1.m_ActorToWorld.GetInverse() * checkDataActor2.m_ActorToWorld;
@@ -194,16 +205,53 @@ namespace Engine
 
 				Vector4 actor2CenterInActor1 = mActor2ToActor1 * Vector4(i_Collideable2.GetBoundingBox().m_Center, 1.0f);
 
-				// Debug these values and compare to above
 				Vector3 actor1XAxisInWorld = checkDataActor1.m_OrientationInWorld.GetCol(0).Normalized();
-				float Obj1BBCenterOnAxis = checkDataActor1.m_BBCenterInWorld.Dot(actor1XAxisInWorld);
-				float Obj2BBCenterOnAxis = checkDataActor2.m_BBCenterInWorld.Dot(actor1XAxisInWorld);
 
+				float actor2TravelAlongXAxis = actor2Travel.Dot(actor1XAxisInWorld);
 
-				bool isSeperated = fabs(actor2CenterInActor1.GetX() - i_Collideable1.GetBoundingBox().m_Center.GetX())
-					> i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x;
-				if (isSeperated)
+				float axisEntered = 0.0f;
+				float axisExited = 1.0f;
+
+				// Debug these values and compare to above
+				Vector3 Obj1XAxisInWorld = checkDataActor1.m_OrientationInWorld.GetCol(0).Normalized();
+				float Obj1BBCenterOnAxis = checkDataActor1.m_BBCenterInWorld.Dot(Obj1XAxisInWorld);
+				float Obj2BBCenterOnAxis = checkDataActor2.m_BBCenterInWorld.Dot(Obj1XAxisInWorld);
+
+				float Obj2ProjectedExtents =
+					fabs(Obj1XAxisInWorld.Dot(checkDataActor2.m_OrientationInWorld.GetCol(0).Normalized() * i_Collideable2.GetBoundingBox().m_Extents.GetX())) +
+					fabs(Obj1XAxisInWorld.Dot(checkDataActor2.m_OrientationInWorld.GetCol(1).Normalized() * i_Collideable2.GetBoundingBox().m_Extents.GetY())) +
+					fabs(Obj1XAxisInWorld.Dot(checkDataActor2.m_OrientationInWorld.GetCol(2).Normalized() * i_Collideable2.GetBoundingBox().m_Extents.GetZ()));
+
+				float Obj1ExpandedExtents = i_Collideable1.GetBoundingBox().m_Extents.GetX() + Obj2ProjectedExtents;
+
+				float Obj2TravelAlongAxis = Obj2Travel.Dot(Obj1XAxisInWorld);
+
+				// notes on his compared to mine
+
+				// fabs of first chunk = Obj1BBCenterOnAxis maybe?
+
+				// Obj1ExpandedExtents = i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x
+				float actor1ExpandedExtents_x = i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x;
+
+				float joesDiffCenter = fabs(Obj1BBCenterOnAxis - Obj2BBCenterOnAxis);
+				float myDiffCenter = fabs(actor2CenterInActor1.GetX() - i_Collideable1.GetBoundingBox().m_Center.GetX());
+
+				float joesExtententsX = Obj1ExpandedExtents;
+				float myExtententsX = i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x;
+
+				float actor1Center_x = i_Collideable1.GetBoundingBox().m_Center.GetX();
+				if (!DetectCrossTimes(actor1Center_x, actor1ExpandedExtents_x, actor2CenterInActor1.GetX(), actor2TravelAlongXAxis, axisEntered, axisExited))
 					return false;
+
+				if (axisEntered > timeEntered)
+					timeEntered = axisEntered;
+				if (axisExited < timeExited)
+					timeExited = axisExited;
+
+				//bool isSeperated = fabs(actor2CenterInActor1.GetX() - i_Collideable1.GetBoundingBox().m_Center.GetX())
+				//> i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x;
+				//if (isSeperated)
+				//	return false;
 			}
 
 			// Actor1 Y Axis
@@ -217,16 +265,27 @@ namespace Engine
 
 				Vector4 actor2CenterInActor1 = mActor2ToActor1 * Vector4(i_Collideable2.GetBoundingBox().m_Center, 1.0f);
 
-				// Debug these values and compare to above
 				Vector3 actor1YAxisInWorld = checkDataActor1.m_OrientationInWorld.GetCol(1).Normalized();
-				float Obj1BBCenterOnAxis = checkDataActor1.m_BBCenterInWorld.Dot(actor1YAxisInWorld);
-				float Obj2BBCenterOnAxis = checkDataActor2.m_BBCenterInWorld.Dot(actor1YAxisInWorld);
+				float actor2TravelAlongYAxis = actor2Travel.Dot(actor1YAxisInWorld);
 
+				float axisEntered = 0.0f;
+				float axisExited = 1.0f;
 
-				bool isSeperated = fabs(actor2CenterInActor1.GetY() - i_Collideable1.GetBoundingBox().m_Center.GetY()) 
-					> i_Collideable1.GetBoundingBox().m_Extents.GetY() + actor2ProjectionOntoActor1_y;
-				if (isSeperated)
+				float actor1ExpandedExtents_y = i_Collideable1.GetBoundingBox().m_Extents.GetY() + actor2ProjectionOntoActor1_y;
+				float actor1Center_y = i_Collideable1.GetBoundingBox().m_Center.GetY();
+
+				if (!DetectCrossTimes(actor1Center_y, actor1ExpandedExtents_y, actor2CenterInActor1.GetY(), actor2TravelAlongYAxis, axisEntered, axisExited))
 					return false;
+
+				if (axisEntered > timeEntered)
+					timeEntered = axisEntered;
+				if (axisExited < timeExited)
+					timeExited = axisExited;
+
+				//	bool isSeperated = fabs(actor2CenterInActor1.GetY() - i_Collideable1.GetBoundingBox().m_Center.GetY())
+				//> i_Collideable1.GetBoundingBox().m_Extents.GetY() + actor2ProjectionOntoActor1_y;
+				//	if (isSeperated)
+				//		return false;
 			}
 
 			// Actor1 vs Actor2 relative velocity
@@ -243,16 +302,27 @@ namespace Engine
 
 				Vector4 actor1CenterInActor2 = mActor1ToActor2 * Vector4(i_Collideable1.GetBoundingBox().m_Center, 1.0f);
 
-				// Debug these values and compare to above
 				Vector3 actor2XAxisInWorld = checkDataActor2.m_OrientationInWorld.GetCol(0).Normalized();
-				float Obj1BBCenterOnAxis = checkDataActor1.m_BBCenterInWorld.Dot(actor2XAxisInWorld);
-				float Obj2BBCenterOnAxis = checkDataActor2.m_BBCenterInWorld.Dot(actor2XAxisInWorld);
+				float actor1TravelAlongXAxis = actor1Travel.Dot(actor2XAxisInWorld);
 
+				float axisEntered = 0.0f;
+				float axisExited = 1.0f;
 
-				bool isSeperated = fabs(actor1CenterInActor2.GetX() - i_Collideable2.GetBoundingBox().m_Center.GetX())
-					> i_Collideable2.GetBoundingBox().m_Extents.GetX() + actor1ProjectionOntoActor2_x;
-				if (isSeperated)
+				float actor2ExpandedExtents_x = i_Collideable2.GetBoundingBox().m_Extents.GetX() + actor1ProjectionOntoActor2_x;
+				float actor2Center_x = i_Collideable2.GetBoundingBox().m_Center.GetX();
+
+				if (!DetectCrossTimes(actor2Center_x, actor2ExpandedExtents_x, actor1CenterInActor2.GetX(), actor1TravelAlongXAxis, axisEntered, axisExited))
 					return false;
+
+				if (axisEntered > timeEntered)
+					timeEntered = axisEntered;
+				if (axisExited < timeExited)
+					timeExited = axisExited;
+
+				//bool isSeperated = fabs(actor1CenterInActor2.GetX() - i_Collideable2.GetBoundingBox().m_Center.GetX())
+				//			> i_Collideable2.GetBoundingBox().m_Extents.GetX() + actor1ProjectionOntoActor2_x;
+				//if (isSeperated)
+				//	return false;
 			}
 
 			// Actor2 Y Axis
@@ -266,21 +336,64 @@ namespace Engine
 
 				Vector4 actor1CenterInActor2 = mActor1ToActor2 * Vector4(i_Collideable1.GetBoundingBox().m_Center, 1.0f);
 
-				// Debug these values and compare to above
 				Vector3 actor2YAxisInWorld = checkDataActor2.m_OrientationInWorld.GetCol(1).Normalized();
-				float Obj1BBCenterOnAxis = checkDataActor1.m_BBCenterInWorld.Dot(actor2YAxisInWorld);
-				float Obj2BBCenterOnAxis = checkDataActor2.m_BBCenterInWorld.Dot(actor2YAxisInWorld);
+				float actor1TravelAlongYAxis = actor1Travel.Dot(actor2YAxisInWorld);
 
+				float axisEntered = 0.0f;
+				float axisExited = 1.0f;
 
-				bool isSeperated = fabs(actor1CenterInActor2.GetY() - i_Collideable2.GetBoundingBox().m_Center.GetY())
-					> i_Collideable2.GetBoundingBox().m_Extents.GetY() + actor1ProjectionOntoActor2_y;
-				if (isSeperated)
+				float actor2ExpandedExtents_y = i_Collideable2.GetBoundingBox().m_Extents.GetY() + actor1ProjectionOntoActor2_y;
+				float actor2Center_y = i_Collideable2.GetBoundingBox().m_Center.GetY();
+
+				if (!DetectCrossTimes(actor2Center_y, actor2ExpandedExtents_y, actor1CenterInActor2.GetY(), actor1TravelAlongYAxis, axisEntered, axisExited))
 					return false;
+
+				if (axisEntered > timeEntered)
+					timeEntered = axisEntered;
+				if (axisExited < timeExited)
+					timeExited = axisExited;
+
+				//bool isSeperated = fabs(actor1CenterInActor2.GetY() - i_Collideable2.GetBoundingBox().m_Center.GetY())
+				//> i_Collideable2.GetBoundingBox().m_Extents.GetY() + actor1ProjectionOntoActor2_y;
+				//if (isSeperated)
+				//	return false;
 			}
 
-			return true;
-			//o_TimeCollision = timeEntered;
-			//return timeEntered < timeExited;
+			//return true;
+			o_TimeCollision = timeEntered;
+			return timeEntered < timeExited;
+		}
+
+		bool DetectCrossTimes(float i_Center, float i_Extent, float i_Point, float i_TravelAlongAxis, float & o_TimeEntered, float & o_TimeExited)
+		{
+			assert(i_Extent > 0.0f);
+
+			float i_Start = i_Center - i_Extent;
+			float i_End = i_Center + i_Extent;
+
+			if (FloatFunctionLibrary::AlmostEqualZeroCertain(i_TravelAlongAxis))
+			{
+				if ((i_Point < i_Start) || (i_Point > i_End))
+					return false;
+				else
+				{
+					o_TimeEntered = 0.0f;
+					o_TimeExited = 1.0f;
+					return true;
+				}
+			}
+			o_TimeEntered = (i_Start - i_Point) / i_TravelAlongAxis;
+			o_TimeExited = (i_End - i_Point) / i_TravelAlongAxis;
+
+			if (o_TimeEntered > o_TimeExited)
+			{
+				float temp = o_TimeEntered;
+				o_TimeEntered = o_TimeExited;
+				o_TimeExited = temp;
+			}
+
+			return !((o_TimeEntered >= 1.0f) || (o_TimeExited <= 0.0f));
+
 		}
 
 		void Init()

@@ -27,6 +27,9 @@ namespace Engine
 
 			Vector3 GetVelocity() const { return m_Velocity; }
 
+			void SetMaxVelocity(Vector3 & i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }
+			void SetMaxVelocity(Vector3 && i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }
+
 			void SetForces(Vector3 & i_NewForce) { m_Forces = i_NewForce; }
 			void SetForces(Vector3 && i_NewForce) { m_Forces = i_NewForce; }
 

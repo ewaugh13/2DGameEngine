@@ -54,6 +54,8 @@ namespace Engine
 
 			CollisionCheckData GetCachedCheckData() const { return m_CachedCheckData; }
 
+			void SetCachedCheckData(CollisionCheckData i_CachedCheckData) { m_CachedCheckData = i_CachedCheckData; }
+
 			AABB GetBoundingBox() const { return m_BoundingBox; }
 
 			void SetCollisionCallback(const CollisionCallback_t & i_Callback) { m_CollisionCallback = i_Callback; }

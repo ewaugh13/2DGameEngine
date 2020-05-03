@@ -13,8 +13,11 @@ namespace Engine
 	{
 		void AddCollidable(SmartPtr<Actor> & i_Actor, nlohmann::json & i_CollideableJSON);
 
-		void SetCollisionLastTick(bool i_bFoundCollisionThisTick);
+		bool GetCachedCheckCalledThisTick();
+		void SetCachedCheckCalledThisTick(bool i_bCachedCheckCalledThisTick);
+
 		bool FoundCollisionLastTick();
+		void SetCollisionLastTick(bool i_bFoundCollisionThisTick);
 
 		void Tick(float i_DeltaTime);
 

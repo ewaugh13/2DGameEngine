@@ -1,6 +1,6 @@
 {
   "name": "Samus",
-  "initial_position": [ -180.0, -100.0, 0.0 ],
+  "initial_position": [ 0.0, -100.0, 0.0 ],
   "components": {
     "rigidbody": {
       "mass": 50.0,
@@ -10,7 +10,7 @@
     },
     "collideable": {
       "center": [ 16.0, 46.0 ],
-      "extents": [ 16.0, 46.0 ]
+      "extents": [ 10.0, 20.0 ]
     },
     "renderable": {
       "sprite": "data\\SamusNeutral0.dds"
