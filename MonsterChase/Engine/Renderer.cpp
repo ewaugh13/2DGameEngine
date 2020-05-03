@@ -68,7 +68,7 @@ namespace Engine
 		{
 			using namespace std::placeholders;
 
-			RegisterComponentCreator("renderable", std::bind(AddRenderable, _1, _2));
+			ActorCreator::RegisterComponentCreator("renderable", std::bind(AddRenderable, _1, _2));
 		}
 
 		void ShutDown()
@@ -78,7 +78,7 @@ namespace Engine
 			AllRenderables.clear();
 			AllRenderables.shrink_to_fit();
 
-			DeregisterComponentCreator("renderable");
+			ActorCreator::DeregisterComponentCreator("renderable");
 
 			{
 				ScopeLock Lock(NewRenderablesMutex);

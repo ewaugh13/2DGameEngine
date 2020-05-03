@@ -49,6 +49,10 @@ void * FixedSizeAllocator::alloc()
 
 void FixedSizeAllocator::free(void * i_ptr)
 {
+	if (i_ptr == nullptr)
+	{
+		return;
+	}
 	// must be in range of this fixed sized allocators memory
 	assert(InMemoryRange(i_ptr));
 

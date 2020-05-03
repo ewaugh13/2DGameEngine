@@ -205,7 +205,7 @@ namespace HeapManager
 		void * nextBlockBase = ADD_AMOUNT_TO_ADDRESS(currentFreeBlock->m_pBlockBase, currentFreeBlock->m_sizeBlock);
 		BlockDescriptor * nextBlock = nullptr;
 
-		if (nextBlockBase == 0)
+		if (!Contains(nextBlockBase) || nextBlockBase == 0)
 		{
 			return;
 		}
@@ -216,7 +216,7 @@ namespace HeapManager
 		}
 
 		// if next block is free as well and not be past memory pool
-		if (nextBlock != nullptr &&
+		if (nextBlock != nullptr && nextBlock != currentFreeBlock &&
 			reinterpret_cast<uint8_t*>(nextBlock->m_pBlockBase) + nextBlock->m_sizeBlock <= reinterpret_cast<uint8_t*>(this->endOfMemoryPool) &&
 			nextBlock->m_allocated == 0 && nextBlock->m_sizeBlock > 0)
 		{

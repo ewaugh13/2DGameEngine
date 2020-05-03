@@ -23,7 +23,7 @@ namespace FixedSizeTests
 			const unsigned int numDescriptors = 2048;
 			void * pHeapMemory = HeapAlloc(GetProcessHeap(), 0, sizeHeap);
 
-			HeapManager * pHeapManager = HeapManager::create(pHeapMemory, sizeHeap, numDescriptors);
+			HeapManager::HeapManager * pHeapManager = HeapManager::HeapManager::create(pHeapMemory, sizeHeap, numDescriptors);
 			assert(pHeapManager);
 
 			size_t numBits = 100;

@@ -84,7 +84,7 @@ namespace Engine
 		{
 			using namespace std::placeholders;
 
-			RegisterComponentCreator("rigidbody", std::bind(AddRigidBody, _1, _2));
+			ActorCreator::RegisterComponentCreator("rigidbody", std::bind(AddRigidBody, _1, _2));
 		}
 
 		void ShutDown()
@@ -94,7 +94,7 @@ namespace Engine
 			AllRigidBodies.clear();
 			AllRigidBodies.shrink_to_fit();
 
-			DeregisterComponentCreator("rigidbody");
+			ActorCreator::DeregisterComponentCreator("rigidbody");
 
 			{
 				ScopeLock Lock(NewRigidBodiesMutex);

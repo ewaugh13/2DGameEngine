@@ -287,7 +287,7 @@ namespace Engine
 		{
 			using namespace std::placeholders;
 
-			RegisterComponentCreator("collideable", std::bind(AddCollidable, _1, _2));
+			ActorCreator::RegisterComponentCreator("collideable", std::bind(AddCollidable, _1, _2));
 		}
 
 		void ShutDown()
@@ -297,7 +297,7 @@ namespace Engine
 			AllCollideables.clear();
 			AllCollideables.shrink_to_fit();
 
-			DeregisterComponentCreator("collideable");
+			ActorCreator::DeregisterComponentCreator("collideable");
 
 			{
 				ScopeLock Lock(NewCollideablesMutex);
