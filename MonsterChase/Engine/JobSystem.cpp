@@ -60,8 +60,7 @@ namespace Engine
 
 			DEBUG_PRINT("Job System: Waiting for Queue runner threads to shut down.\n");
 
-			const int THREADCOUNT = AllThreads.size();
-			DWORD result = WaitForMultipleObjects(THREADCOUNT, &AllThreads[0], TRUE, INFINITE);
+			DWORD result = WaitForMultipleObjects(static_cast<DWORD>(AllThreads.size()), &AllThreads[0], TRUE, INFINITE);
 			assert(result == WAIT_OBJECT_0);
 
 			iter = Queues.begin();
