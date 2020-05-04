@@ -14,8 +14,10 @@ namespace Engine
 #endif
 		{
 		public:
-			IJob(const char* i_pName) :
-				INamed(i_pName)
+			IJob(const char* i_pName)
+#ifdef _DEBUG
+			:	INamed(i_pName)
+#endif
 			{}
 
 			virtual	~IJob() { }
