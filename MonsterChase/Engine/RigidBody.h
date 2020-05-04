@@ -30,6 +30,11 @@ namespace Engine
 			void SetMaxVelocity(Vector3 & i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }
 			void SetMaxVelocity(Vector3 && i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }
 
+			Vector3 GetForces() const { return m_Forces; }
+
+			void SetXForce(float i_NewXForce) { m_Forces.SetX(i_NewXForce); }
+			void SetYForce(float i_NewYForce) { m_Forces.SetY(i_NewYForce); }
+
 			void SetForces(Vector3 & i_NewForce) { m_Forces = i_NewForce; }
 			void SetForces(Vector3 && i_NewForce) { m_Forces = i_NewForce; }
 

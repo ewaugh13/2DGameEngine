@@ -131,7 +131,9 @@ namespace Engine
 			assert(Queues.find(HashedName) == Queues.end());
 
 			JobQueueData* pNewJobQueueData = new JobQueueData;
+#ifdef _DEBUG
 			pNewJobQueueData->m_SharedQueue.SetName(i_pName);
+#endif
 
 			Queues[HashedName] = pNewJobQueueData;
 

@@ -75,6 +75,7 @@ namespace HeapManager
 
 	void * HeapManager::_alloc(size_t i_bytes, unsigned int i_alignment)
 	{
+		Engine::ScopeLock Lock(HeapManagerMutex);
 		// if we have no free memory or empty block descriptors return nullptr
 		if (this->m_freeMemoryList->m_pBlockBase == nullptr || this->m_freeMemoryDescriptors == nullptr)
 		{
@@ -169,6 +170,7 @@ namespace HeapManager
 	void HeapManager::_free(void * i_ptr)
 	{
 		Engine::ScopeLock Lock(HeapManagerMutex);
+
 		if (i_ptr == nullptr)
 		{
 			return;
@@ -189,6 +191,8 @@ namespace HeapManager
 
 	void HeapManager::collect()
 	{
+		Engine::ScopeLock Lock(HeapManagerMutex);
+
 		// iterate over all free to try and coallese
 		BlockDescriptor * currentBlock = this->m_freeMemoryList;
 
@@ -202,6 +206,8 @@ namespace HeapManager
 
 	void HeapManager::coalese(BlockDescriptor * currentFreeBlock)
 	{
+		Engine::ScopeLock Lock(HeapManagerMutex);
+
 		void * nextBlockBase = ADD_AMOUNT_TO_ADDRESS(currentFreeBlock->m_pBlockBase, currentFreeBlock->m_sizeBlock);
 		BlockDescriptor * nextBlock = nullptr;
 

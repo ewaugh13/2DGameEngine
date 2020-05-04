@@ -45,13 +45,13 @@ void * _alloc(size_t i_size)
 	if (allocatedAddress)
 	{
 #if defined(_DEBUG)
-		printf("using fixed allocator with block size: %zu\n", sizeBlock);
+		//printf("using fixed allocator with block size: %zu\n", sizeBlock);
 #endif //_DEBUG
 		return allocatedAddress;
 	}
 
 #if defined(_DEBUG)
-	printf("using default heap manager\n");
+	//printf("using default heap manager\n");
 #endif //_DEBUG
 	return pHeapManager->_alloc(i_size);
 }
@@ -82,14 +82,14 @@ void _free(void * i_ptr)
 	if (fsa)
 	{
 #if defined(_DEBUG)
-		printf("using fixed allocator with block size: %zu\n", sizeBlock);
+		//printf("using fixed allocator with block size: %zu\n", sizeBlock);
 #endif //_DEBUG
 		fsa->free(i_ptr);
 	}
 	else
 	{
 #if defined(_DEBUG)
-		printf("using default heap manager\n");
+		//printf("using default heap manager\n");
 #endif //_DEBUG
 		pHeapManager->_free(i_ptr);
 	}
@@ -98,14 +98,14 @@ void _free(void * i_ptr)
 #pragma region Standard Allocators
 void * __cdecl malloc(size_t i_size)
 {
-	DEBUG_PRINT("Calling new (size_t) with (%Iu).\n", i_size);
+	//DEBUG_PRINT("Calling new (size_t) with (%Iu).\n", i_size);
 
 	return _alloc(i_size);
 }
 
 void __cdecl free(void * i_ptr)
 {
-	DEBUG_PRINT("Calling delete (void *) with (%p).\n", i_ptr);
+	//DEBUG_PRINT("Calling delete (void *) with (%p).\n", i_ptr);
 
 	assert(i_ptr != nullptr);
 	_free(i_ptr);
@@ -113,34 +113,29 @@ void __cdecl free(void * i_ptr)
 
 void * operator new(size_t i_size)
 {
-	DEBUG_PRINT("Calling new (size_t) with (%Iu).\n", i_size);
+	//DEBUG_PRINT("Calling new (size_t) with (%Iu).\n", i_size);
 
 	return _alloc(i_size);
 }
 
 void operator delete(void * i_ptr)
 {
-	DEBUG_PRINT("Calling delete (void *) with (%p).\n", i_ptr);
+	//DEBUG_PRINT("Calling delete (void *) with (%p).\n", i_ptr);
 
-	if (i_ptr == nullptr)
-	{
-		int x = 5;
-		x++;
-	}
 	assert(i_ptr != nullptr);
 	_free(i_ptr);
 }
 
 void * operator new[](size_t i_size)
 {
-	DEBUG_PRINT("Calling new[] (size_t) with (%Iu).\n", i_size);
+	//DEBUG_PRINT("Calling new[] (size_t) with (%Iu).\n", i_size);
 	
 	return _alloc(i_size);
 }
 
 void operator delete[](void * i_ptr)
 {
-	DEBUG_PRINT("Calling delete[] (void *) with (%p).\n", i_ptr);
+	//DEBUG_PRINT("Calling delete[] (void *) with (%p).\n", i_ptr);
 
 	assert(i_ptr != nullptr);
 	_free(i_ptr);
@@ -150,14 +145,14 @@ void operator delete[](void * i_ptr)
 #pragma region Tracked Allocators
 void * operator new(size_t i_size, const char * i_pFile, unsigned int i_Line)
 {
-	DEBUG_PRINT("Calling new (size_t) with (%Iu). (Called from (%s) on line (%u)\n", i_size, i_pFile, i_Line);
+	//DEBUG_PRINT("Calling new (size_t) with (%Iu). (Called from (%s) on line (%u)\n", i_size, i_pFile, i_Line);
 
 	return _alloc(i_size);
 }
 
 void operator delete(void * i_ptr, const char * i_pFile, unsigned int i_Line)
 {
-	DEBUG_PRINT("Calling delete (void *) with (%p). (Called from (%s) on line (%u)\n", i_ptr, i_pFile, i_Line);
+	//DEBUG_PRINT("Calling delete (void *) with (%p). (Called from (%s) on line (%u)\n", i_ptr, i_pFile, i_Line);
 
 	assert(i_ptr != nullptr);
 	_free(i_ptr);
@@ -165,14 +160,14 @@ void operator delete(void * i_ptr, const char * i_pFile, unsigned int i_Line)
 
 void * operator new[](size_t i_size, const char * i_pFile, unsigned int i_Line)
 {
-	DEBUG_PRINT("Calling new[] (size_t) with (%Iu). (Called from (%s) on line (%u)\n", i_size, i_pFile, i_Line);
+	//DEBUG_PRINT("Calling new[] (size_t) with (%Iu). (Called from (%s) on line (%u)\n", i_size, i_pFile, i_Line);
 
 	return _alloc(i_size);
 }
 
 void operator delete[](void * i_ptr, const char * i_pFile, unsigned int i_Line)
 {
-	DEBUG_PRINT("Calling delete[] (void *) with (%p). (Called from (%s) on line (%u)\n", i_ptr, i_pFile, i_Line);
+	//DEBUG_PRINT("Calling delete[] (void *) with (%p). (Called from (%s) on line (%u)\n", i_ptr, i_pFile, i_Line);
 
 	assert(i_ptr != nullptr);
 	_free(i_ptr);

@@ -57,9 +57,7 @@ namespace CollisionTests
 			Collision::Tick(deltaTime);
 
 			Physics::RigidBody * player1RigidBody = dynamic_cast<Physics::RigidBody*>(smartPtrActor1->GetComponent("rigidbody"));
-
 			Collision::Collideable * player1Collideable = dynamic_cast<Collision::Collideable*>(smartPtrActor1->GetComponent("collideable"));
-			Collision::Collideable * player2Collideable = dynamic_cast<Collision::Collideable*>(smartPtrActor2->GetComponent("collideable"));
 
 			bool foundCollision = false;
 
@@ -71,13 +69,14 @@ namespace CollisionTests
 					foundCollision = true;
 				}
 			};
-
 			player1Collideable->SetCollisionCallback(callbackActor1);
 
+			// move player1 to the right until it hits player2
 			while (!foundCollision)
 			{
 				deltaTime = timer->DeltaTime();
 
+				// moving player1 to the right
 				player1RigidBody->SetForces(Vector3(1.0f, 0.0f, 0.0f));
 
 				Physics::Tick(deltaTime);

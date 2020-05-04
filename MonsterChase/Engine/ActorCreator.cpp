@@ -42,20 +42,20 @@ namespace Engine
 		{
 			using json = nlohmann::json;
 
-			std::vector<uint8_t> playerContents;
+			std::vector<uint8_t> playerContents = File::LoadFileToBuffer(i_JSONFilename);
 			{
-				ScopeLock Lock(ActorCreatorMutex);
-				playerContents = File::LoadFileToBuffer(i_JSONFilename);
+				//ScopeLock Lock(ActorCreatorMutex);
+				//playerContents = File::LoadFileToBuffer(i_JSONFilename);
 			}
 
 			SmartPtr<Actor> newActor;
 
 			if (!playerContents.empty())
 			{
-				json playerJSON;
+				json playerJSON = json::parse(playerContents);
 				{
-					ScopeLock Lock(ActorCreatorMutex);
-					playerJSON = json::parse(playerContents);
+					//ScopeLock Lock(ActorCreatorMutex);
+					//playerJSON = json::parse(playerContents);
 				}
 
 				std::string playerName = playerJSON["name"];
@@ -82,10 +82,10 @@ namespace Engine
 
 				}
 
-				{
-					ScopeLock Lock(ActorCreatorMutex);
-					playerJSON.empty();
-				}
+				//{
+				//	ScopeLock Lock(ActorCreatorMutex);
+				//	playerJSON.empty();
+				//}
 			}
 
 			return newActor;
@@ -93,7 +93,11 @@ namespace Engine
 
 		void CreateGameObjectEvent(const std::string & i_JSONFilename, std::function<void(SmartPtr<Actor>&)> i_CreateCallBack, Engine::Event * i_FinishEvent)
 		{
-			SmartPtr<Actor> actor = CreateGameObject(i_JSONFilename);
+			SmartPtr<Actor> actor;
+			{
+				ScopeLock Lock(ActorCreatorMutex);
+				actor = CreateGameObject(i_JSONFilename);
+			}
 			if (i_CreateCallBack)
 			{
 				i_CreateCallBack(actor);

@@ -1,19 +1,22 @@
 {
-  "name": "Samus",
+  "name": "Samus1",
   "initial_position": [ -180.0, -100.0, 0.0 ],
   "components": {
     "rigidbody": {
       "mass": 50.0,
-      "kd": 0.002,
+      "kd": 0.02,
       "movement_forces": [ 30.0, 30.0, 0.0 ],
       "max_velocity": [ 5.0, 5.0, 0.0 ]
     },
     "collideable": {
-      "center": [ 16.0, 46.0 ],
-      "extents": [ 16.0, 46.0 ]
+      "center": [ 22.0, 40.0 ],
+      "extents": [ 22.0, 40.0 ]
     },
     "renderable": {
-      "sprite": "data\\SamusNeutral0.dds"
+      "sprite": "..\\data\\SamusNeutral0Copy.dds"
+    },
+    "playermovement": {
+      "player_speed" : [1.0, 1.0, 0.0]
     }
   }
 }

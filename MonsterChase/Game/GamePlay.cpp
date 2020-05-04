@@ -10,102 +10,110 @@
 #include "PhysicsSystem.h"
 #include "Timer.h"
 
+#include "PlayerMovement.h"
+
 #include <cmath> 
 
-// does the main gameplay loop
-void GamePlay::GameLoop()
+namespace GamePlay
 {
-	using namespace Engine;
-
-	Engine::JobSystem::CreateQueue("Default", 2);
-
-	Physics::Init();
-	Collision::Init();
-	Renderer::Init();
-
-	// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
-	GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
-
+	void GameLoop()
 	{
-		Timer * timer = new Timer();
-		bool bQuit = false;
+		using namespace Engine;
 
-		Engine::AutoResetEvent createActorEvent;
+		Engine::JobSystem::CreateQueue("Default", 2);
 
-		SmartPtr<Actor> smartPtrActor;
-		ActorCreator::CreateGameObjectAsync("..\\data\\Samus.json", [&smartPtrActor](SmartPtr<Actor>& i_Actor)
+		// Engine Components
+		Physics::Init();
+		Collision::Init();
+		Renderer::Init();
+
+		// Gameplay Components
+		PlayerMovement::Init();
+
+		// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
+		GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
+
 		{
-			smartPtrActor = i_Actor;
-			//DEBUG_PRINT("Actor loaded");
-		}
-		, &createActorEvent);
+			Timer * timer = new Timer();
+			bool bQuit = false;
 
-		createActorEvent.Wait();
+			Engine::AutoResetEvent createPlayerActorEvent;
+			Engine::AutoResetEvent createBlockingActorEvent;
 
-		float deltaTime = timer->DeltaTime();
-
-		// TODO: maybe should be begin event instead of tick
-		// first tick 
-		Physics::Tick(deltaTime);
-		Collision::Tick(deltaTime);
-		Renderer::Tick(deltaTime);
-
-		Physics::RigidBody * playerRigidBodyComp = dynamic_cast<Physics::RigidBody*>(smartPtrActor->GetComponent("rigidbody"));
-
-		do
-		{
-			deltaTime = timer->DeltaTime();
-
-			Physics::Tick(deltaTime);
-			Collision::Tick(deltaTime);
-			Renderer::Tick(deltaTime);
-
-			// IMPORTANT: We need to let GLib do it's thing. 
-			GLib::Service(bQuit);
-
-			if (!bQuit)
+			SmartPtr<Actor> playerActor;
+			ActorCreator::CreateGameObjectAsync("..\\data\\Samus.json", [&playerActor](SmartPtr<Actor>& i_Actor)
 			{
-				if (GLibHelper::KeyStates['Q'])
-				{
-					bQuit = true;
-
-					continue;
-				}
-
-				if (playerRigidBodyComp)
-				{
-					// TODO move to player input component
-					// player input
-
-					// moving left
-					if (GLibHelper::KeyStates['A'] && !GLibHelper::KeyStates['D'])
-						playerRigidBodyComp->SetForces(Vector3(-1, 0, 0));
-					// moving right
-					else if (!GLibHelper::KeyStates['A'] && GLibHelper::KeyStates['D'])
-						playerRigidBodyComp->SetForces(Vector3(1, 0, 0));
-
-					// moving down
-					if (GLibHelper::KeyStates['S'] && !GLibHelper::KeyStates['W'])
-						playerRigidBodyComp->SetForces(Vector3(0, -1, 0));
-					// moving up
-					else if (!GLibHelper::KeyStates['S'] && GLibHelper::KeyStates['W'])
-						playerRigidBodyComp->SetForces(Vector3(0, 1, 0));
-				}
-
-				// TODO: put all actors in a world reference
-				smartPtrActor->BeginUpdate(deltaTime);
-				smartPtrActor->Update(deltaTime);
-				smartPtrActor->EndUpdate(deltaTime);
+				playerActor = i_Actor;
+				DEBUG_PRINT("Player actor loaded");
 			}
-		} while (bQuit == false);
+			, &createPlayerActorEvent);
+
+			createPlayerActorEvent.Wait();
+
+			SmartPtr<Actor> blockingActor;
+			ActorCreator::CreateGameObjectAsync("..\\data\\Samus2.json", [&blockingActor](SmartPtr<Actor>& i_Actor)
+			{
+				blockingActor = i_Actor;
+				DEBUG_PRINT("Blocking actor loaded");
+			}
+			, &createBlockingActorEvent);
+
+			createBlockingActorEvent.Wait();
+
+			do
+			{
+				float deltaTime = timer->DeltaTime();
+
+				Physics::Tick(deltaTime);
+				Collision::Tick(deltaTime);
+				Renderer::Tick(deltaTime);
+
+				// IMPORTANT: We need to let GLib do it's thing. 
+				GLib::Service(bQuit);
+
+				if (!bQuit)
+				{
+					if (GLibHelper::KeyStates['Q'])
+					{
+						bQuit = true;
+
+						continue;
+					}
+
+					// TODO: put all actors in a world reference
+					playerActor->BeginUpdate(deltaTime);
+					blockingActor->BeginUpdate(deltaTime);
+
+					playerActor->Update(deltaTime);
+					blockingActor->Update(deltaTime);
+
+					// IMPORTANT: Tell GLib that we want to start rendering
+					GLib::BeginRendering();
+					// Tell GLib that we want to render some sprites
+					GLib::Sprites::BeginRendering();
+
+					playerActor->EndUpdate(deltaTime);
+					blockingActor->EndUpdate(deltaTime);
+
+					// Tell GLib we're done rendering sprites
+					GLib::Sprites::EndRendering();
+					// IMPORTANT: Tell GLib we're done rendering
+					GLib::EndRendering();
+				}
+			} while (bQuit == false);
+		}
+
+		// Engine Components
+		Physics::ShutDown();
+		Collision::ShutDown();
+		Renderer::ShutDown();
+
+		// Gameplay Components
+		PlayerMovement::Init();
+
+		Engine::JobSystem::RequestShutdown();
+
+		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
+		GLib::Shutdown();
 	}
-
-	Physics::ShutDown();
-	Collision::ShutDown();
-	Renderer::ShutDown();
-
-	Engine::JobSystem::RequestShutdown();
-
-	// IMPORTANT:  Tell GLib to shutdown, releasing resources.
-	GLib::Shutdown();
 }

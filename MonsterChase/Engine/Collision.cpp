@@ -190,7 +190,6 @@ namespace Engine
 
 			// Actor2 vs Actor1 relative travel
 			Vector3 actor2Travel = (actor2->GetVelocity() - actor1->GetVelocity()) * i_DeltaTime;
-			Vector3 Obj2Travel = actor2Travel;
 
 			// Actor1 X Axis
 			{
@@ -212,33 +211,7 @@ namespace Engine
 				float axisEntered = 0.0f;
 				float axisExited = 1.0f;
 
-				// Debug these values and compare to above
-				Vector3 Obj1XAxisInWorld = checkDataActor1.m_OrientationInWorld.GetCol(0).Normalized();
-				float Obj1BBCenterOnAxis = checkDataActor1.m_BBCenterInWorld.Dot(Obj1XAxisInWorld);
-				float Obj2BBCenterOnAxis = checkDataActor2.m_BBCenterInWorld.Dot(Obj1XAxisInWorld);
-
-				float Obj2ProjectedExtents =
-					fabs(Obj1XAxisInWorld.Dot(checkDataActor2.m_OrientationInWorld.GetCol(0).Normalized() * i_Collideable2.GetBoundingBox().m_Extents.GetX())) +
-					fabs(Obj1XAxisInWorld.Dot(checkDataActor2.m_OrientationInWorld.GetCol(1).Normalized() * i_Collideable2.GetBoundingBox().m_Extents.GetY())) +
-					fabs(Obj1XAxisInWorld.Dot(checkDataActor2.m_OrientationInWorld.GetCol(2).Normalized() * i_Collideable2.GetBoundingBox().m_Extents.GetZ()));
-
-				float Obj1ExpandedExtents = i_Collideable1.GetBoundingBox().m_Extents.GetX() + Obj2ProjectedExtents;
-
-				float Obj2TravelAlongAxis = Obj2Travel.Dot(Obj1XAxisInWorld);
-
-				// notes on his compared to mine
-
-				// fabs of first chunk = Obj1BBCenterOnAxis maybe?
-
-				// Obj1ExpandedExtents = i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x
 				float actor1ExpandedExtents_x = i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x;
-
-				float joesDiffCenter = fabs(Obj1BBCenterOnAxis - Obj2BBCenterOnAxis);
-				float myDiffCenter = fabs(actor2CenterInActor1.GetX() - i_Collideable1.GetBoundingBox().m_Center.GetX());
-
-				float joesExtententsX = Obj1ExpandedExtents;
-				float myExtententsX = i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x;
-
 				float actor1Center_x = i_Collideable1.GetBoundingBox().m_Center.GetX();
 				if (!DetectCrossTimes(actor1Center_x, actor1ExpandedExtents_x, actor2CenterInActor1.GetX(), actor2TravelAlongXAxis, axisEntered, axisExited))
 					return false;
@@ -247,11 +220,6 @@ namespace Engine
 					timeEntered = axisEntered;
 				if (axisExited < timeExited)
 					timeExited = axisExited;
-
-				//bool isSeperated = fabs(actor2CenterInActor1.GetX() - i_Collideable1.GetBoundingBox().m_Center.GetX())
-				//> i_Collideable1.GetBoundingBox().m_Extents.GetX() + actor2ProjectionOntoActor1_x;
-				//if (isSeperated)
-				//	return false;
 			}
 
 			// Actor1 Y Axis
@@ -281,12 +249,9 @@ namespace Engine
 					timeEntered = axisEntered;
 				if (axisExited < timeExited)
 					timeExited = axisExited;
-
-				//	bool isSeperated = fabs(actor2CenterInActor1.GetY() - i_Collideable1.GetBoundingBox().m_Center.GetY())
-				//> i_Collideable1.GetBoundingBox().m_Extents.GetY() + actor2ProjectionOntoActor1_y;
-				//	if (isSeperated)
-				//		return false;
 			}
+
+			// check Actor1 against actor2's coordinate system
 
 			// Actor1 vs Actor2 relative velocity
 			Vector3 actor1Travel = (actor1->GetVelocity() - actor2->GetVelocity()) * i_DeltaTime;
@@ -318,11 +283,6 @@ namespace Engine
 					timeEntered = axisEntered;
 				if (axisExited < timeExited)
 					timeExited = axisExited;
-
-				//bool isSeperated = fabs(actor1CenterInActor2.GetX() - i_Collideable2.GetBoundingBox().m_Center.GetX())
-				//			> i_Collideable2.GetBoundingBox().m_Extents.GetX() + actor1ProjectionOntoActor2_x;
-				//if (isSeperated)
-				//	return false;
 			}
 
 			// Actor2 Y Axis
@@ -352,11 +312,6 @@ namespace Engine
 					timeEntered = axisEntered;
 				if (axisExited < timeExited)
 					timeExited = axisExited;
-
-				//bool isSeperated = fabs(actor1CenterInActor2.GetY() - i_Collideable2.GetBoundingBox().m_Center.GetY())
-				//> i_Collideable2.GetBoundingBox().m_Extents.GetY() + actor1ProjectionOntoActor2_y;
-				//if (isSeperated)
-				//	return false;
 			}
 
 			//return true;

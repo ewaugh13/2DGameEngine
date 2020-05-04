@@ -3,6 +3,8 @@
 #include "LoadFile.h"
 #include "RigidBody.h"
 
+#include "GLib.h"
+
 #include <assert.h>
 #include <vector>
 #include <stdlib.h>
