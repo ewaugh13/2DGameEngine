@@ -13,7 +13,7 @@ namespace Engine
 			SmartPtr<Actor> actor = i_Actor.AcquireSmartPtr();
 			if (actor)
 			{
-				DEBUG_PRINT("hit actor");
+				DEBUG_PRINT("hit actor: %s\n", actor->GetName());
 			}
 		}
 

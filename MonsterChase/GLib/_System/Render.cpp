@@ -5,13 +5,13 @@
 
 namespace GLib
 {
-bool BeginRendering( void )
+bool BeginRendering(float * i_ClearColor)
 {
 	assert( g_pImmediateContext );
 	assert( g_pSwapChain );
 
 	// Just clear the backbuffer
-	g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, DirectX::Colors::MidnightBlue );
+	g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, i_ClearColor);
 
 	if( g_pDepthStencilView )
 		g_pImmediateContext->ClearDepthStencilView( g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );

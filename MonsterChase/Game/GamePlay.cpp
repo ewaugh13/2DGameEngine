@@ -13,6 +13,7 @@
 #include "PlayerMovement.h"
 
 #include <cmath> 
+#include <DirectXColors.h>
 
 namespace GamePlay
 {
@@ -88,7 +89,16 @@ namespace GamePlay
 					blockingActor->Update(deltaTime);
 
 					// IMPORTANT: Tell GLib that we want to start rendering
-					GLib::BeginRendering();
+					float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+					if (Collision::FoundCollisionLastTick())
+					{
+						memcpy(&clearColor, DirectX::Colors::Red, sizeof(float[4]));
+					}
+					else
+					{
+						memcpy(&clearColor, DirectX::Colors::MidnightBlue, sizeof(float[4]));
+					}
+					GLib::BeginRendering(clearColor);
 					// Tell GLib that we want to render some sprites
 					GLib::Sprites::BeginRendering();
 
