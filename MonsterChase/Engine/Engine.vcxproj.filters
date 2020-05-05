@@ -114,33 +114,6 @@
     <ClInclude Include="Allocators.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\MemoryManager\BlockDescriptorUtil.h">
-      <Filter>Header Files\Memory\HeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\HeapManager.h">
-      <Filter>Header Files\Memory\HeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\HeapManager-inl.h">
-      <Filter>Header Files\Memory\HeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\HeapManagerProxy.h">
-      <Filter>Header Files\Memory\HeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\BitArray.h">
-      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\BitArray-inl.h">
-      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\FixedSizeAllocator.h">
-      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\MemoryManagerGlobals.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MemoryManager\MemorySystem.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files\Timing</Filter>
     </ClInclude>
@@ -252,27 +225,36 @@
     <ClInclude Include="Collideable.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="BitArray.h">
+      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="BitArray-inl.h">
+      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedSizeAllocator.h">
+      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockDescriptorUtil.h">
+      <Filter>Header Files\Memory\HeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="HeapManager.h">
+      <Filter>Header Files\Memory\HeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="HeapManager-inl.h">
+      <Filter>Header Files\Memory\HeapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagerGlobals.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySystem.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Allocators.cpp">
-      <Filter>Source Files\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\MemoryManager\HeapManager.cpp">
-      <Filter>Source Files\Memory\HeapManager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\MemoryManager\HeapManagerProxy.cpp">
-      <Filter>Source Files\Memory\HeapManager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\MemoryManager\BitArray.cpp">
-      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\MemoryManager\FixedSizeAllocator.cpp">
-      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\MemoryManager\MemorySystem.cpp">
       <Filter>Source Files\Memory</Filter>
     </ClCompile>
     <ClCompile Include="Actor.cpp">
@@ -346,6 +328,18 @@
     </ClCompile>
     <ClCompile Include="Collideable.cpp">
       <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySystem.cpp">
+      <Filter>Source Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="BitArray.cpp">
+      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedSizeAllocator.cpp">
+      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
+    </ClCompile>
+    <ClCompile Include="HeapManager.cpp">
+      <Filter>Source Files\Memory\HeapManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

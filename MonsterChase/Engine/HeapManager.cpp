@@ -1,5 +1,5 @@
 #include "HeapManager.h"
-#include "../Engine/ScopeLock.h"
+#include "ScopeLock.h"
 
 #include <stdio.h>
 #include <assert.h>
