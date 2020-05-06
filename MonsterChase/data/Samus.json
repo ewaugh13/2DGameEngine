@@ -4,7 +4,7 @@
   "components": {
     "rigidbody": {
       "mass": 50.0,
-      "kd": 0.02,
+      "kd": 0.000000002,
       "movement_forces": [ 30.0, 30.0, 0.0 ],
       "max_velocity": [ 5.0, 5.0, 0.0 ]
     },

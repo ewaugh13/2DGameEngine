@@ -40,6 +40,7 @@ namespace GamePlay
 
 			Engine::AutoResetEvent createPlayerActorEvent;
 			Engine::AutoResetEvent createBlockingActorEvent;
+			Engine::AutoResetEvent createMovingActorEvent;
 
 			SmartPtr<Actor> playerActor;
 			ActorCreator::CreateGameObjectAsync("..\\data\\Samus.json", [&playerActor](SmartPtr<Actor>& i_Actor)

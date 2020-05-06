@@ -78,7 +78,7 @@ namespace Engine
 						earliestCollisionTime = foundCollisionPair.m_CollisionTime;
 						earliestCollisions.insert({ i, foundCollisionPair });
 					}
-					else if (FloatFunctionLibrary::AlmostEqualRelativeAndAbs(earliestCollisionTime, foundCollisionPair.m_CollisionTime, 0.00001f))
+					else if (FloatFunctionLibrary::AlmostEqualRelativeAndAbs(earliestCollisionTime, foundCollisionPair.m_CollisionTime, 0.000000001f))
 						earliestCollisions.insert({ i, foundCollisionPair });
 				}
 
@@ -88,13 +88,12 @@ namespace Engine
 				{
 					CollisionPair collisionPair = iter->second;
 					// if we found a collison that needs the response resolved
-					if (collisionPair.m_CollisionTime != i_DeltaTime)
+					if (collisionPair.m_CollisionTime != i_DeltaTime && earliestCollisions.begin() != earliestCollisions.end())
 					{
 						FoundCollisions.erase(FoundCollisions.begin() + iter->first - i);
 						i++;
 
 						SmartPtr<Actor> actor = collisionPair.m_pCollideables[0]->GetActor().AcquireSmartPtr();
-						SmartPtr<Actor> actor2 = collisionPair.m_pCollideables[1]->GetActor().AcquireSmartPtr();
 
 						// if the actors are valid get the rigid bodies and relfect their velocites by the normal
 						if (actor)
@@ -125,39 +124,56 @@ namespace Engine
 					}
 				}
 			
-				std::vector<CollisionPair> remainingCollision = FoundCollisions;
+				std::vector<CollisionPair> remainingCollisions = FoundCollisions;
+				FoundCollisions.shrink_to_fit();
 				FoundCollisions.clear();
 
-				//if (remainingCollision.size() > 0)
-				//{
-				//	// recompute the collision check data
-				//	CacheCollisionCheckData();
+				if (remainingCollisions.size() > 0)
+				{
+					// tick all remaining collision pairs to the point in time when the earliest collision occured
+					for (std::vector<CollisionPair>::iterator iter = remainingCollisions.begin(); iter != remainingCollisions.end(); iter++)
+					{
+						CollisionPair remainCollision = *iter;
 
-				//	for (std::vector<CollisionPair>::iterator iter = remainingCollision.begin(); iter != remainingCollision.end(); iter++)
-				//	{
-				//		CollisionPair remainCollision = *iter;
+						bool bFoundCollision = false;
 
-				//		bool bFoundCollision = false;
+						CollisionPair foundCollision;
 
-				//		if (!Collision::GetCachedCheckCalledThisTick())
-				//			Collision::CacheCollisionCheckData();
+						FindCollision(remainCollision.m_pCollideables[0], earliestCollisionTime, foundCollision);
+					}
 
-				//		CollisionPair foundCollision;
+					// recompute the collision check data
+					CacheCollisionCheckData();
 
-				//		if (FindCollision(this, i_DeltaTime, foundCollision))
-				//		{
-				//			assert(foundCollision.m_pCollideables[0]);
-				//			assert(foundCollision.m_pCollideables[1]);
+					// do the remaining tick while actually tracking collisions now
+					for (std::vector<CollisionPair>::iterator iter = remainingCollisions.begin(); iter != remainingCollisions.end(); iter++)
+					{
+						CollisionPair remainCollision = *iter;
 
-				//			bFoundCollision = true;
-				//		}
+						bool bFoundCollision = false;
 
-				//		if (bFoundCollision)
-				//		{
+						CollisionPair foundCollision;
 
-				//		}
-				//	}
-				//}
+						if (FindCollision(remainCollision.m_pCollideables[0], i_DeltaTime - earliestCollisionTime, foundCollision))
+						{
+							assert(foundCollision.m_pCollideables[0]);
+							assert(foundCollision.m_pCollideables[1]);
+
+							bFoundCollision = true;
+						}
+
+						if (bFoundCollision)
+						{
+							FoundCollisions.push_back(foundCollision);
+						}
+					}
+
+					// process newly found collisions
+					if (FoundCollisions.size() > 0)
+					{
+						ProcessFoundCollisions(i_DeltaTime - earliestCollisionTime);
+					}
+				}
 			}
 		}
 
