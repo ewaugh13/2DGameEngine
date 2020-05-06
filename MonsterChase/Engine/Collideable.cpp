@@ -13,7 +13,7 @@ namespace Engine
 			SmartPtr<Actor> actor = i_Actor.AcquireSmartPtr();
 			if (actor)
 			{
-				DEBUG_PRINT("hit actor: %s\n", actor->GetName());
+				//DEBUG_PRINT("hit actor: %s\n", actor->GetName());
 			}
 		}
 
@@ -36,7 +36,6 @@ namespace Engine
 
 			if (FindCollision(this, i_DeltaTime, foundCollision))
 			{
-				foundCollision.m_pCollideables;
 				assert(foundCollision.m_pCollideables[0]);
 				assert(foundCollision.m_pCollideables[1]);
 
@@ -49,8 +48,11 @@ namespace Engine
 				bFoundCollision = true;
 			}
 
-			if(bFoundCollision)
+			if (bFoundCollision)
+			{
+				Collision::AddFoundCollision(foundCollision);
 				Collision::SetCollisionLastTick(bFoundCollision);
+			}
 		}
 	}
 }

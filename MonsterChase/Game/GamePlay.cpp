@@ -45,6 +45,7 @@ namespace GamePlay
 			ActorCreator::CreateGameObjectAsync("..\\data\\Samus.json", [&playerActor](SmartPtr<Actor>& i_Actor)
 			{
 				playerActor = i_Actor;
+				//playerActor->SetZRotation(315.0f);
 				DEBUG_PRINT("Player actor loaded");
 			}
 			, &createPlayerActorEvent);
@@ -61,6 +62,8 @@ namespace GamePlay
 
 			createBlockingActorEvent.Wait();
 
+			bool setOnce = true;
+
 			do
 			{
 				float deltaTime = timer->DeltaTime();
@@ -68,6 +71,14 @@ namespace GamePlay
 				Physics::Tick(deltaTime);
 				Collision::Tick(deltaTime);
 				Renderer::Tick(deltaTime);
+
+				if (setOnce)
+				{
+					Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(blockingActor->GetComponent("rigidbody"));
+					actorRigidBody->SetVelocity(Vector3(-2.0f, 0.0f, 0.0f));
+
+					setOnce = false;
+				}
 
 				// IMPORTANT: We need to let GLib do it's thing. 
 				GLib::Service(bQuit);
@@ -87,6 +98,8 @@ namespace GamePlay
 
 					playerActor->Update(deltaTime);
 					blockingActor->Update(deltaTime);
+
+					Collision::ProcessFoundCollisions(deltaTime);
 
 					// IMPORTANT: Tell GLib that we want to start rendering
 					float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };

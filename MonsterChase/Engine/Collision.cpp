@@ -2,6 +2,7 @@
 
 #include "ActorCreator.h"
 #include "LoadFile.h"
+#include "RigidBody.h"
 #include "ScopeLock.h"
 
 #include <assert.h>
@@ -29,6 +30,8 @@ namespace Engine
 		std::vector<SmartPtr<Collideable, CollideableDestructor>> NewCollideables;
 		Engine::Mutex NewCollideablesMutex;
 
+		std::vector<CollisionPair> FoundCollisions;
+
 		void AddCollidable(SmartPtr<Actor> & i_Actor, nlohmann::json & i_CollideableJSON)
 		{
 			if (!bShutdown)
@@ -52,6 +55,109 @@ namespace Engine
 					ScopeLock Lock(NewCollideablesMutex);
 					NewCollideables.push_back(newCollideableActor);
 				}
+			}
+		}
+
+		void AddFoundCollision(CollisionPair & i_FoundCollision)
+		{
+			FoundCollisions.push_back(i_FoundCollision);
+		}
+
+		void ProcessFoundCollisions(float i_DeltaTime)
+		{
+			if (FoundCollisions.size() > 0 && i_DeltaTime > 0)
+			{
+				std::map<unsigned int, CollisionPair> earliestCollisions;
+				float earliestCollisionTime = i_DeltaTime;
+				for (unsigned int i = 0; i < FoundCollisions.size(); i++)
+				{
+					CollisionPair foundCollisionPair = FoundCollisions[i];
+					if (foundCollisionPair.m_CollisionTime < earliestCollisionTime)
+					{
+						earliestCollisions.clear();
+						earliestCollisionTime = foundCollisionPair.m_CollisionTime;
+						earliestCollisions.insert({ i, foundCollisionPair });
+					}
+					else if (FloatFunctionLibrary::AlmostEqualRelativeAndAbs(earliestCollisionTime, foundCollisionPair.m_CollisionTime, 0.00001f))
+						earliestCollisions.insert({ i, foundCollisionPair });
+				}
+
+				int i = 0;
+				// iterate through all earliest collisions at this time step
+				for (std::map<unsigned int, CollisionPair>::iterator iter = earliestCollisions.begin(); iter != earliestCollisions.end(); iter++)
+				{
+					CollisionPair collisionPair = iter->second;
+					// if we found a collison that needs the response resolved
+					if (collisionPair.m_CollisionTime != i_DeltaTime)
+					{
+						FoundCollisions.erase(FoundCollisions.begin() + iter->first - i);
+						i++;
+
+						SmartPtr<Actor> actor = collisionPair.m_pCollideables[0]->GetActor().AcquireSmartPtr();
+						SmartPtr<Actor> actor2 = collisionPair.m_pCollideables[1]->GetActor().AcquireSmartPtr();
+
+						// if the actors are valid get the rigid bodies and relfect their velocites by the normal
+						if (actor)
+						{
+							// used to cancel out an existing forces on the rigid body
+							Vector3 zero = Vector3::Zero;
+
+							Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(actor->GetComponent("rigidbody"));
+
+							Vector3 actorVel = actorRigidBody->GetVelocity();
+							Vector3 actorReflectVel = Vector3::Zero;
+
+							// based on the normal direction find the reflected velocity
+							float normalDirection = Vector3(1, 1, 0).Dot(collisionPair.m_CollisionNormal);
+							if (normalDirection < 0)
+							{
+								actorReflectVel = actorVel -
+									(collisionPair.m_CollisionNormal * actorVel.Dot(collisionPair.m_CollisionNormal)) * 2;
+							}
+							else
+							{
+								actorReflectVel = actorVel +
+									(collisionPair.m_CollisionNormal * actorVel.Dot(collisionPair.m_CollisionNormal)) * 2;
+							}
+							actorRigidBody->SetVelocity(actorReflectVel);
+							actorRigidBody->SetForces(zero);
+						}
+					}
+				}
+			
+				std::vector<CollisionPair> remainingCollision = FoundCollisions;
+				FoundCollisions.clear();
+
+				//if (remainingCollision.size() > 0)
+				//{
+				//	// recompute the collision check data
+				//	CacheCollisionCheckData();
+
+				//	for (std::vector<CollisionPair>::iterator iter = remainingCollision.begin(); iter != remainingCollision.end(); iter++)
+				//	{
+				//		CollisionPair remainCollision = *iter;
+
+				//		bool bFoundCollision = false;
+
+				//		if (!Collision::GetCachedCheckCalledThisTick())
+				//			Collision::CacheCollisionCheckData();
+
+				//		CollisionPair foundCollision;
+
+				//		if (FindCollision(this, i_DeltaTime, foundCollision))
+				//		{
+				//			assert(foundCollision.m_pCollideables[0]);
+				//			assert(foundCollision.m_pCollideables[1]);
+
+				//			bFoundCollision = true;
+				//		}
+
+				//		if (bFoundCollision)
+				//		{
+
+				//		}
+				//	}
+				//}
 			}
 		}
 
@@ -98,11 +204,13 @@ namespace Engine
 		{
 			CheckForNewCollideables();
 
+			FoundCollisions.clear();
+
 			bFoundCollisionThisTick = false;
 			bCachedCheckCalledThisTick = false;
 		}
 
-		bool CheckCollision2D(const Collideable & i_Collideable1, const Collideable & i_Collideable2, float i_DeltaTime, float & o_TimeCollision);
+		bool CheckCollision2D(const Collideable & i_Collideable1, const Collideable & i_Collideable2, float i_DeltaTime, float & o_TimeCollision, Vector3 & o_CollisionNormal);
 		bool DetectCrossTimes(float i_Center, float i_Extent, float i_Point, float i_TravelAlongAxis, float& o_TimeEntered, float & o_TimeExited);
 
 		bool FindCollision(Collideable * i_CurrentCollideable, float i_DeltaTime, CollisionPair & o_FoundCollisionPair)
@@ -118,7 +226,8 @@ namespace Engine
 					if (i_CurrentCollideable != AllCollideables[i].operator->())
 					{
 						float timeCollision = 0.0f;
-						if (CheckCollision2D(*i_CurrentCollideable, *AllCollideables[i], i_DeltaTime, timeCollision))
+						Vector3 collisionNormal = Vector3::Zero;
+						if (CheckCollision2D(*i_CurrentCollideable, *AllCollideables[i], i_DeltaTime, timeCollision, collisionNormal))
 						{
 							// if we find any earlier collisions we want to use that as the relevant one
 							if (!bFoundCollision || (bFoundCollision && (timeCollision < o_FoundCollisionPair.m_CollisionTime)))
@@ -126,6 +235,7 @@ namespace Engine
 								o_FoundCollisionPair.m_pCollideables[0] = i_CurrentCollideable;
 								o_FoundCollisionPair.m_pCollideables[1] = AllCollideables[i].operator->();
 								o_FoundCollisionPair.m_CollisionTime = timeCollision;
+								o_FoundCollisionPair.m_CollisionNormal = collisionNormal;
 
 								bFoundCollision = true;
 							}
@@ -150,8 +260,8 @@ namespace Engine
 
 				if (collisionData.m_Actor)
 				{
-					collisionData.m_OrientationInWorld = Matrix3::CreateZRotationColVec(collisionData.m_Actor->GetZRotation());
-					Matrix4 objectRot = Matrix4::CreateZRotationColVec(collisionData.m_Actor->GetZRotation());
+					collisionData.m_OrientationInWorld = Matrix3::CreateZRotationColVecFromDegrees(collisionData.m_Actor->GetZRotation());
+					Matrix4 objectRot = Matrix4::CreateZRotationColVecFromDegrees(collisionData.m_Actor->GetZRotation());
 					Matrix4 objectTrans = Matrix4::CreateTranslationColVec(collisionData.m_Actor->GetPosition());
 					collisionData.m_ActorToWorld = objectTrans * objectRot;
 					collisionData.m_BBCenterInWorld = collisionData.m_ActorToWorld.TransformPointColVec(currCollideable->GetBoundingBox().m_Center);
@@ -173,7 +283,7 @@ namespace Engine
 			assert(collideableCount == AllCollideables.size());
 		}
 
-		bool CheckCollision2D(const Collideable & i_Collideable1, const Collideable & i_Collideable2, float i_DeltaTime, float & o_TimeCollision)
+		bool CheckCollision2D(const Collideable & i_Collideable1, const Collideable & i_Collideable2, float i_DeltaTime, float & o_TimeCollision, Vector3 & o_CollisionNormal)
 		{
 			SmartPtr<Actor> actor1 = i_Collideable1.GetCachedCheckData().m_Actor;
 			SmartPtr<Actor> actor2 = i_Collideable2.GetCachedCheckData().m_Actor;
@@ -184,7 +294,7 @@ namespace Engine
 			float timeEntered = 0.0f;
 			float timeExited = 1.0f;
 
-			// check all axes
+			// check both axes
 
 			// check Actor2 against actor1's coordinate system
 
@@ -216,8 +326,33 @@ namespace Engine
 				if (!DetectCrossTimes(actor1Center_x, actor1ExpandedExtents_x, actor2CenterInActor1.GetX(), actor2TravelAlongXAxis, axisEntered, axisExited))
 					return false;
 
+				Vector3 actor1Vel = actor1->GetVelocity();
+				Vector3 actor2Vel = actor2->GetVelocity();
+
 				if (axisEntered > timeEntered)
+				{
 					timeEntered = axisEntered;
+					// if actor1 is to the left
+					if (checkDataActor1.m_BBCenterInWorld.GetX() < checkDataActor2.m_BBCenterInWorld.GetX())
+					{
+						// heading right colliding into actor2 
+						if (actor1->GetVelocity().GetX() > 0)
+							o_CollisionNormal = actor1XAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+						// heading left colliding into actor2 
+						else
+							o_CollisionNormal = actor1XAxisInWorld;
+					}
+					// if actor1 is to the right
+					else
+					{
+						// heading right colliding into actor2 
+						if (actor1->GetVelocity().GetX() > 0)
+							o_CollisionNormal = actor1XAxisInWorld;
+						// heading left colliding into actor2 
+						else
+							o_CollisionNormal = actor1XAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+					}
+				}
 				if (axisExited < timeExited)
 					timeExited = axisExited;
 			}
@@ -246,7 +381,29 @@ namespace Engine
 					return false;
 
 				if (axisEntered > timeEntered)
+				{
 					timeEntered = axisEntered;
+					// if actor1 is to the left
+					if (checkDataActor1.m_BBCenterInWorld.GetY() < checkDataActor2.m_BBCenterInWorld.GetY())
+					{
+						// heading right colliding into actor2 
+						if (actor1->GetVelocity().GetY() > 0)
+							o_CollisionNormal = actor1YAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+						// heading left colliding into actor2 
+						else
+							o_CollisionNormal = actor1YAxisInWorld;
+					}
+					// if actor1 is to the right
+					else
+					{
+						// heading right colliding into actor2 
+						if (actor1->GetVelocity().GetY() > 0)
+							o_CollisionNormal = actor1YAxisInWorld;
+						// heading left colliding into actor2 
+						else
+							o_CollisionNormal = actor1YAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+					}
+				}
 				if (axisExited < timeExited)
 					timeExited = axisExited;
 			}
@@ -280,7 +437,29 @@ namespace Engine
 					return false;
 
 				if (axisEntered > timeEntered)
+				{
 					timeEntered = axisEntered;
+					// if actor2 is to the left
+					if (checkDataActor2.m_BBCenterInWorld.GetX() < checkDataActor1.m_BBCenterInWorld.GetX())
+					{
+						// heading right colliding into actor1
+						if (actor2->GetVelocity().GetX() > 0)
+							o_CollisionNormal = actor2XAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+						// heading left colliding into actor1 
+						else
+							o_CollisionNormal = actor2XAxisInWorld;
+					}
+					// if actor2 is to the right
+					else
+					{
+						// heading right colliding into actor1 
+						if (actor2->GetVelocity().GetX() > 0)
+							o_CollisionNormal = actor2XAxisInWorld;
+						// heading left colliding into actor1 
+						else
+							o_CollisionNormal = actor2XAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+					}
+				}
 				if (axisExited < timeExited)
 					timeExited = axisExited;
 			}
@@ -309,13 +488,39 @@ namespace Engine
 					return false;
 
 				if (axisEntered > timeEntered)
+				{
 					timeEntered = axisEntered;
+					// if actor2 is to the left
+					if (checkDataActor2.m_BBCenterInWorld.GetY() < checkDataActor1.m_BBCenterInWorld.GetY())
+					{
+						// heading right colliding into actor1 
+						if (actor2->GetVelocity().GetY() > 0)
+							o_CollisionNormal = actor2YAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+						// heading left colliding into actor1
+						else
+							o_CollisionNormal = actor2YAxisInWorld;
+					}
+					// if actor2 is to the right
+					else
+					{
+						// heading right colliding into actor1 
+						if (actor2->GetVelocity().GetY() > 0)
+							o_CollisionNormal = actor2YAxisInWorld;
+						// heading left colliding into actor1 
+						else
+							o_CollisionNormal = actor2YAxisInWorld * Matrix3::CreateZRotationColVecFromDegrees(180.0f);
+					}
+				}
 				if (axisExited < timeExited)
 					timeExited = axisExited;
 			}
 
-			//return true;
-			o_TimeCollision = timeEntered;
+			if (timeEntered == 0.0f && timeExited != 1.0f)
+				o_TimeCollision = (1.0f - timeExited) * i_DeltaTime;
+			else if (timeExited == 1.0f && timeEntered != 0.0f)
+				o_TimeCollision = timeEntered * i_DeltaTime;
+			else
+				o_TimeCollision = fabs(timeEntered - timeExited) * i_DeltaTime;
 			return timeEntered < timeExited;
 		}
 
@@ -348,7 +553,6 @@ namespace Engine
 			}
 
 			return !((o_TimeEntered >= 1.0f) || (o_TimeExited <= 0.0f));
-
 		}
 
 		void Init()

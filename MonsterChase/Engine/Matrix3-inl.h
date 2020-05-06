@@ -14,6 +14,58 @@ namespace Engine
 		return i_Mat.MultiplyLeft(i_Vec);
 	}
 
+#pragma region Rotation Vectors
+
+	inline Matrix3 Matrix3::CreateXRotationRowVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateXRotationRowVec(rotationRadians);
+	}
+
+	inline Matrix3 Matrix3::CreateYRotationRowVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateYRotationRowVec(rotationRadians);
+	}
+
+	inline Matrix3 Matrix3::CreateZRotationRowVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateZRotationRowVec(rotationRadians);
+	}
+
+	inline Matrix3 Matrix3::CreateXRotationColVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateXRotationColVec(rotationRadians);
+	}
+
+	inline Matrix3 Matrix3::CreateYRotationColVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateYRotationColVec(rotationRadians);
+	}
+
+	inline Matrix3 Matrix3::CreateZRotationColVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateZRotationColVec(rotationRadians);
+	}
+
+#pragma endregion
+
 	inline Matrix3 Matrix3::GetTranspose() const
 	{
 		return Matrix3(

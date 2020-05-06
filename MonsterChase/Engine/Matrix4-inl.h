@@ -44,7 +44,55 @@ namespace Engine
 
 #pragma endregion
 
-#pragma region Rotation Vector
+#pragma region Rotation and Translation Vector
+
+	inline Matrix4 Matrix4::CreateXRotationRowVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateXRotationRowVec(rotationRadians);
+	}
+
+	inline Matrix4 Matrix4::CreateYRotationRowVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateYRotationRowVec(rotationRadians);
+	}
+
+	inline Matrix4 Matrix4::CreateZRotationRowVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateZRotationRowVec(rotationRadians);
+	}
+
+	inline Matrix4 Matrix4::CreateXRotationColVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateXRotationColVec(rotationRadians);
+	}
+
+	inline Matrix4 Matrix4::CreateYRotationColVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateYRotationColVec(rotationRadians);
+	}
+
+	inline Matrix4 Matrix4::CreateZRotationColVecFromDegrees(float i_RotationDegrees)
+	{
+		const float Pi = 3.14159265358979323846f;
+		float rotationRadians = (i_RotationDegrees * Pi) / 180.0f;
+
+		return CreateZRotationColVec(rotationRadians);
+	}
 
 	inline Matrix4 Matrix4::CreateTranslationRowVec(const Vector3 & i_Trans)
 	{

@@ -60,6 +60,10 @@ namespace Engine
 		static Matrix4 CreateYRotationRowVec(float i_RotationRadians);
 		static Matrix4 CreateZRotationRowVec(float i_RotationRadians);
 
+		static Matrix4 CreateXRotationRowVecFromDegrees(float i_RotationDegrees);
+		static Matrix4 CreateYRotationRowVecFromDegrees(float i_RotationDegrees);
+		static Matrix4 CreateZRotationRowVecFromDegrees(float i_RotationDegrees);
+
 		static Matrix4 CreateTranslationRowVec(float i_TransX, float i_TransY, float i_TransZ);
 		static Matrix4 CreateTranslationRowVec(const Vector3 & i_Trans);
 
@@ -72,6 +76,10 @@ namespace Engine
 		static Matrix4 CreateXRotationColVec(float i_RotationRadians);
 		static Matrix4 CreateYRotationColVec(float i_RotationRadians);
 		static Matrix4 CreateZRotationColVec(float i_RotationRadians);
+
+		static Matrix4 CreateXRotationColVecFromDegrees(float i_RotationDegrees);
+		static Matrix4 CreateYRotationColVecFromDegrees(float i_RotationDegrees);
+		static Matrix4 CreateZRotationColVecFromDegrees(float i_RotationDegrees);
 
 		static Matrix4 CreateTranslationColVec(float i_TransX, float i_TransY, float i_TransZ);
 		static Matrix4 CreateTranslationColVec(const Vector3 & i_Trans);

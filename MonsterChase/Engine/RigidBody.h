@@ -26,6 +26,8 @@ namespace Engine
 			WeakPtr<Actor> GetActor() const { return m_Actor; }
 
 			Vector3 GetVelocity() const { return m_Velocity; }
+			void SetVelocity(Vector3 & i_Velocity) { m_Velocity = i_Velocity; }
+			void SetVelocity(Vector3 && i_Velocity) { m_Velocity = i_Velocity; }
 
 			void SetMaxVelocity(Vector3 & i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }
 			void SetMaxVelocity(Vector3 && i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }

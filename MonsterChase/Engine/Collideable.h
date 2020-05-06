@@ -32,6 +32,7 @@ namespace Engine
 		{
 			Collideable * m_pCollideables[2];
 			float m_CollisionTime;
+			Vector3 m_CollisionNormal;
 		} CollisionPair;
 
 		typedef std::function<void(WeakPtr<Actor>&)> CollisionCallback_t;

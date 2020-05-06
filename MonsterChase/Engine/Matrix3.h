@@ -51,6 +51,10 @@ namespace Engine
 		static Matrix3 CreateYRotationRowVec(float i_RotationRadians);
 		static Matrix3 CreateZRotationRowVec(float i_RotationRadians);
 
+		static Matrix3 CreateXRotationRowVecFromDegrees(float i_RotationDegrees);
+		static Matrix3 CreateYRotationRowVecFromDegrees(float i_RotationDegrees);
+		static Matrix3 CreateZRotationRowVecFromDegrees(float i_RotationDegrees);
+
 #pragma endregion
 
 #pragma region Rotation Column Vector
@@ -60,6 +64,10 @@ namespace Engine
 		static Matrix3 CreateXRotationColVec(float i_RotationRadians);
 		static Matrix3 CreateYRotationColVec(float i_RotationRadians);
 		static Matrix3 CreateZRotationColVec(float i_RotationRadians);
+
+		static Matrix3 CreateXRotationColVecFromDegrees(float i_RotationDegrees);
+		static Matrix3 CreateYRotationColVecFromDegrees(float i_RotationDegrees);
+		static Matrix3 CreateZRotationColVecFromDegrees(float i_RotationDegrees);
 
 #pragma endregion
 
