@@ -27,10 +27,7 @@
     <ClInclude Include="PlayerMovement.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterMovement.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TeleportMonster.h">
+    <ClInclude Include="PadleMovement.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,10 +38,7 @@
     <ClCompile Include="PlayerMovement.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterMovement.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TeleportMonster.cpp">
+    <ClCompile Include="PadleMovement.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>

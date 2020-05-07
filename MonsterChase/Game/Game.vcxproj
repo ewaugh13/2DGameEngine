@@ -20,15 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GamePlay.h" />
-    <ClInclude Include="MonsterMovement.h" />
+    <ClInclude Include="PadleMovement.h" />
     <ClInclude Include="PlayerMovement.h" />
-    <ClInclude Include="TeleportMonster.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GamePlay.cpp" />
-    <ClCompile Include="MonsterMovement.cpp" />
+    <ClCompile Include="PadleMovement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
-    <ClCompile Include="TeleportMonster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

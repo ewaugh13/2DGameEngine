@@ -1,0 +1,24 @@
+{
+  "name": "Samus1",
+  "initial_position": [ -340.0, -100.0, 0.0 ],
+  "components": {
+    "rigidbody": {
+      "mass": 50.0,
+      "kd": 0.02,
+      "movement_forces": [ 0.0, 30.0, 0.0 ],
+      "max_velocity": [ 0.0, 10.0, 0.0 ]
+    },
+    "collideable": {
+      "center": [ 6.0, 48.0 ],
+      "extents": [ 6.0, 48.0 ]
+    },
+    "renderable": {
+      "sprite": "..\\data\\PongPadle.dds"
+    },
+    "padlemovement": {
+      "padle_speed" : 1.0,
+      "up_key" : "W",
+      "down_key" : "S"
+    }
+  }
+}

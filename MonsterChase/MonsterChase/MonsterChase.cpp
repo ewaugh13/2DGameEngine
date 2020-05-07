@@ -3,8 +3,6 @@
 #include "GamePlay.h"
 #include "GLib.h"
 #include "GLibHelpers.h"
-#include "MonsterMovement.h"
-#include "PlayerMovement.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -23,7 +21,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	if (bSuccess)
 	{
 		GLibHelper::InitalizeKeyStates();
-		GamePlay::TestGameLoop();
+		GamePlay::Pong();
 	}
 
 	// need to free key states info

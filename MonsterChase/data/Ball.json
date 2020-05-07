@@ -1,0 +1,19 @@
+{
+  "name": "Samus1",
+  "initial_position": [ 200.0, 0.0, 0.0 ],
+  "components": {
+    "rigidbody": {
+      "mass": 50.0,
+      "kd": 0.00000000000002,
+      "movement_forces": [ 30.0, 30.0, 0.0 ],
+      "max_velocity": [ 5.0, 5.0, 0.0 ]
+    },
+    "collideable": {
+      "center": [ 6.0, 6.0 ],
+      "extents": [ 6.0, 6.0 ]
+    },
+    "renderable": {
+      "sprite": "..\\data\\PongBall.dds"
+    }
+  }
+}

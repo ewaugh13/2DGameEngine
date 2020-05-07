@@ -58,7 +58,7 @@ namespace Engine
 			Collision::ProcessFoundCollisions(i_DeltaTime);
 
 			float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-			memcpy(&clearColor, DirectX::Colors::Red, sizeof(float[4]));
+			memcpy(&clearColor, DirectX::Colors::Black, sizeof(float[4]));
 			GLib::BeginRendering(clearColor);
 			// Tell GLib that we want to render some sprites
 			GLib::Sprites::BeginRendering();
