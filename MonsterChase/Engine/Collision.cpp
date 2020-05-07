@@ -12,7 +12,6 @@ namespace Engine
 {
 	namespace Collision
 	{
-		// TODO: make more universal
 		void operator<<(Vector3 & vec, nlohmann::json & json_obj)
 		{
 			assert(json_obj.is_array() && json_obj.size() == 2);
@@ -46,7 +45,6 @@ namespace Engine
 
 				AABB collisionBox = AABB({ center, extents });
 
-				// TODO figure out setting callback
 				CollisionCheckData checkData = CollisionCheckData();
 				checkData.m_Actor = i_Actor;
 				SmartPtr<Collideable, CollideableDestructor> newCollideableActor(new Collideable(i_Actor, collisionBox, checkData));
@@ -547,6 +545,7 @@ namespace Engine
 			float i_Start = i_Center - i_Extent;
 			float i_End = i_Center + i_Extent;
 
+			// if we aren't moving at all do standard calculation of point vs start and end
 			if (FloatFunctionLibrary::AlmostEqualZeroCertain(i_TravelAlongAxis))
 			{
 				if ((i_Point < i_Start) || (i_Point > i_End))
@@ -558,6 +557,8 @@ namespace Engine
 					return true;
 				}
 			}
+
+			// calculate when we will enter and when we will leave
 			o_TimeEntered = (i_Start - i_Point) / i_TravelAlongAxis;
 			o_TimeExited = (i_End - i_Point) / i_TravelAlongAxis;
 

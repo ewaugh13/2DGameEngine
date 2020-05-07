@@ -9,7 +9,7 @@ namespace Engine
 	namespace World
 	{
 		void AddActorToWorld(SmartPtr<Actor> & i_NewActor);
-		bool RemoveAcotrFromWorld(WeakPtr<Actor> & i_Actor);
+		bool RemoveActorFromWorld(WeakPtr<Actor> & i_Actor);
 		void Tick(float i_DeltaTime);
 		void ShutDown();
 	}

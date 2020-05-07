@@ -12,7 +12,6 @@ namespace Engine
 {
 	namespace Physics
 	{
-		// TODO: make more universal
 		void operator<<(Vector3 & vec, nlohmann::json & json_obj)
 		{
 			assert(json_obj.is_array() && json_obj.size() == 3);
