@@ -27,10 +27,8 @@ namespace Engine
 
 			Vector3 GetVelocity() const { return m_Velocity; }
 			void SetVelocity(Vector3 & i_Velocity) { m_Velocity = i_Velocity; }
-			void SetVelocity(Vector3 && i_Velocity) { m_Velocity = i_Velocity; }
 
 			void SetMaxVelocity(Vector3 & i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }
-			void SetMaxVelocity(Vector3 && i_NewMaxVelocity) { m_MaxVelocity = i_NewMaxVelocity; }
 
 			Vector3 GetForces() const { return m_Forces; }
 
@@ -38,7 +36,6 @@ namespace Engine
 			void SetYForce(float i_NewYForce) { m_Forces.SetY(i_NewYForce); }
 
 			void SetForces(Vector3 & i_NewForce) { m_Forces = i_NewForce; }
-			void SetForces(Vector3 && i_NewForce) { m_Forces = i_NewForce; }
 
 		private:
 

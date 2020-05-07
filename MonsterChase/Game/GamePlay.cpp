@@ -10,6 +10,7 @@
 #include "Timer.h"
 #include "World.h"
 
+#include "Ball.h" 
 #include "PadleMovement.h"
 #include "PlayerMovement.h"
 
@@ -62,7 +63,7 @@ namespace GamePlay
 			createBlockingActorEvent.Wait();
 			World::AddActorToWorld(blockingActor);
 
-			bool setOnce = true;
+			//bool setOnce = true;
 
 			do
 			{
@@ -84,13 +85,13 @@ namespace GamePlay
 					Collision::Tick(deltaTime);
 					Renderer::Tick(deltaTime);
 
-					if (setOnce)
-					{
-						Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(blockingActor->GetComponent("rigidbody"));
-						actorRigidBody->SetVelocity(Vector3(-2.0f, 0.0f, 0.0f));
+					//if (setOnce)
+					//{
+					//	Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(blockingActor->GetComponent("rigidbody"));
+					//	actorRigidBody->SetVelocity(Vector3(-2.0f, 0.0f, 0.0f));
 
-						setOnce = false;
-					}
+					//	setOnce = false;
+					//}
 
 					World::Tick(deltaTime);
 				}
@@ -114,137 +115,115 @@ namespace GamePlay
 		GLib::Shutdown();
 	}
 
-	void Pong()
+	namespace Pong
 	{
-		using namespace Engine;
 
-		Engine::JobSystem::CreateQueue("Default", 2);
+		unsigned int Player1Score = 0;
+		unsigned int Player2Score = 0;
 
-		// Engine Components
-		Physics::Init();
-		Collision::Init();
-		Renderer::Init();
-
-		// Gameplay Components
-		PadleMovement::Init();
-
-		// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
-		GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
-
+		void IncrementPlayerScore(bool i_Player1Scored)
 		{
-			Timer * timer = new Timer();
-			bool bQuit = false;
-
-			Engine::AutoResetEvent createActorEvent;
-			//Engine::AutoResetEvent createRightPadleEvent;
-			//Engine::AutoResetEvent createBallEvent;
-			//Engine::AutoResetEvent createBottomWallEvent;
-			//Engine::AutoResetEvent createTopWallEvent;
-
-			SmartPtr<Actor> rightPadleActor;
-			ActorCreator::CreateGameObjectAsync("..\\data\\RightPadle.json", [&rightPadleActor](SmartPtr<Actor>& i_Actor)
-			{
-				rightPadleActor = i_Actor;
-				DEBUG_PRINT("Right padle loaded");
-			}
-			, &createActorEvent);
-
-			createActorEvent.Wait();
-			World::AddActorToWorld(rightPadleActor);
-
-			SmartPtr<Actor> ballActor;
-			ActorCreator::CreateGameObjectAsync("..\\data\\Ball.json", [&ballActor](SmartPtr<Actor>& i_Actor)
-			{
-				ballActor = i_Actor;
-				DEBUG_PRINT("Ball actor loaded");
-			}
-			, &createActorEvent);
-
-			createActorEvent.Wait();
-			World::AddActorToWorld(ballActor);
-
-			SmartPtr<Actor> leftPadleActor;
-			ActorCreator::CreateGameObjectAsync("..\\data\\LeftPadle.json", [&leftPadleActor](SmartPtr<Actor>& i_Actor)
-			{
-				leftPadleActor = i_Actor;
-				DEBUG_PRINT("Left padle loaded");
-			}
-			, &createActorEvent);
-
-			createActorEvent.Wait();
-			World::AddActorToWorld(leftPadleActor);
-
-			SmartPtr<Actor> bottomWallActor;
-			ActorCreator::CreateGameObjectAsync("..\\data\\BottomWall.json", [&bottomWallActor](SmartPtr<Actor>& i_Actor)
-			{
-				bottomWallActor = i_Actor;
-				DEBUG_PRINT("Bottom wall loaded");
-			}
-			, &createActorEvent);
-
-			createActorEvent.Wait();
-			World::AddActorToWorld(bottomWallActor);
-
-			SmartPtr<Actor> topWallActor;
-			ActorCreator::CreateGameObjectAsync("..\\data\\TopWall.json", [&topWallActor](SmartPtr<Actor>& i_Actor)
-			{
-				topWallActor = i_Actor;
-				DEBUG_PRINT("Top wall loaded");
-			}
-			, &createActorEvent);
-
-			createActorEvent.Wait();
-			World::AddActorToWorld(topWallActor);
-
-			bool setOnce = true;
-
-			do
-			{
-				// IMPORTANT: We need to let GLib do it's thing. 
-				GLib::Service(bQuit);
-
-				if (!bQuit)
-				{
-					if (GLibHelper::KeyStates['Q'])
-					{
-						bQuit = true;
-
-						continue;
-					}
-
-					float deltaTime = timer->DeltaTime();
-
-					Physics::Tick(deltaTime);
-					Collision::Tick(deltaTime);
-					Renderer::Tick(deltaTime);
-
-					if (setOnce)
-					{
-						Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(ballActor->GetComponent("rigidbody"));
-						actorRigidBody->SetVelocity(Vector3(-4.0f, -1.0f, 0.0f));
-
-						setOnce = false;
-					}
-
-					World::Tick(deltaTime);
-				}
-			} while (bQuit == false);
+			if (i_Player1Scored)
+				Player1Score++;
+			else
+				Player2Score++;
 		}
 
-		// Engine Components
-		Physics::ShutDown();
-		Collision::ShutDown();
-		Renderer::ShutDown();
+		void PongGameLoop()
+		{
+			using namespace Engine;
 
-		// World shutdown
-		World::ShutDown();
+			Engine::JobSystem::CreateQueue("Default", 2);
 
-		// Gameplay Components
-		PadleMovement::ShutDown();
+			// Engine Components
+			Physics::Init();
+			Collision::Init();
+			Renderer::Init();
 
-		Engine::JobSystem::RequestShutdown();
+			// Gameplay Components
+			Ball::Init();
+			PadleMovement::Init();
 
-		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
-		GLib::Shutdown();
+			// IMPORTANT (if we want keypress info from GLib): Set a callback for notification of key presses
+			GLib::SetKeyStateChangeCallback(GLibHelper::KeyCallback);
+
+			{
+				Timer * timer = new Timer();
+				bool bQuit = false;
+
+				SmartPtr<Actor> rightPadleActor = ActorCreator::CreateGameObject("..\\data\\RightPadle.json");
+				World::AddActorToWorld(rightPadleActor);
+
+				SmartPtr<Actor> leftPadleActor = ActorCreator::CreateGameObject("..\\data\\LeftPadle.json");
+				World::AddActorToWorld(leftPadleActor);
+
+				SmartPtr<Actor> ballActor = ActorCreator::CreateGameObject("..\\data\\Ball.json");
+				World::AddActorToWorld(ballActor);
+
+				SmartPtr<Actor> topWallActor = ActorCreator::CreateGameObject("..\\data\\TopWall.json");
+				World::AddActorToWorld(topWallActor);
+
+				SmartPtr<Actor> bottomWallActor = ActorCreator::CreateGameObject("..\\data\\BottomWall.json");
+				World::AddActorToWorld(bottomWallActor);
+
+				bool setOnce = true;
+
+				do
+				{
+					// IMPORTANT: We need to let GLib do it's thing. 
+					GLib::Service(bQuit);
+
+					if (!bQuit)
+					{
+						if (GLibHelper::KeyStates['Q'] || Player1Score > 9 || Player2Score > 9)
+						{
+							bQuit = true;
+
+							continue;
+						}
+
+						float deltaTime = timer->DeltaTime();
+
+						Physics::Tick(deltaTime);
+						Collision::Tick(deltaTime);
+						Renderer::Tick(deltaTime);
+
+						if (setOnce)
+						{
+							Ball::BallComp * ballComp = dynamic_cast<Ball::BallComp*>(ballActor->GetComponent("ball"));
+							// add job to set velocity of ball
+							if (!Engine::JobSystem::ShutdownRequested())
+							{
+								Engine::JobSystem::RunJob("ActivateBall", [ballComp]()
+								{
+									ballComp->ActivateBall(ballComp->GetSleepTimeSec(), rand() % 2);
+								}, "Default");
+							}
+
+							setOnce = false;
+						}
+
+						World::Tick(deltaTime);
+					}
+				} while (bQuit == false);
+			}
+
+			// Engine Components
+			Physics::ShutDown();
+			Collision::ShutDown();
+			Renderer::ShutDown();
+
+			// World shutdown
+			World::ShutDown();
+
+			// Gameplay Components
+			Ball::ShutDown();
+			PadleMovement::ShutDown();
+
+			Engine::JobSystem::RequestShutdown();
+
+			// IMPORTANT:  Tell GLib to shutdown, releasing resources.
+			GLib::Shutdown();
+		}
 	}
 }

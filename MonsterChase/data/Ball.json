@@ -1,6 +1,6 @@
 {
   "name": "Ball",
-  "initial_position": [ 200.0, 0.0, 0.0 ],
+  "initial_position": [ 0.0, 0.0, 0.0 ],
   "components": {
     "rigidbody": {
       "mass": 50.0,
@@ -14,6 +14,13 @@
     },
     "renderable": {
       "sprite": "..\\data\\PongBall.dds"
+    },
+    "ball" : {
+      "ball_x_speed": 5.0,
+      "ball_y_speed": 1.0,
+      "sleep_time_sec": 1.0, 
+      "left_border": -410.0,
+      "right_border": 410.0
     }
   }
 }

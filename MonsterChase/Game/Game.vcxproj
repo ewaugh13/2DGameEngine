@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="PadleMovement.h" />
     <ClInclude Include="PlayerMovement.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="PadleMovement.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />

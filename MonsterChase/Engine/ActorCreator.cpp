@@ -43,20 +43,12 @@ namespace Engine
 			using json = nlohmann::json;
 
 			std::vector<uint8_t> playerContents = File::LoadFileToBuffer(i_JSONFilename);
-			{
-				//ScopeLock Lock(ActorCreatorMutex);
-				//playerContents = File::LoadFileToBuffer(i_JSONFilename);
-			}
 
 			SmartPtr<Actor> newActor;
 
 			if (!playerContents.empty())
 			{
 				json playerJSON = json::parse(playerContents);
-				{
-					//ScopeLock Lock(ActorCreatorMutex);
-					//playerJSON = json::parse(playerContents);
-				}
 
 				std::string playerName = playerJSON["name"];
 
@@ -81,11 +73,6 @@ namespace Engine
 					}
 
 				}
-
-				//{
-				//	ScopeLock Lock(ActorCreatorMutex);
-				//	playerJSON.empty();
-				//}
 			}
 
 			return newActor;

@@ -58,15 +58,15 @@ namespace GamePlay
 			SmartPtr<Actor> actor = m_Actor.AcquireSmartPtr();
 			if (actor)
 			{
-				Engine::Physics::RigidBody * PadleRigidBodyComp = dynamic_cast<Physics::RigidBody*>(actor->GetComponent("rigidbody"));
-				if (PadleRigidBodyComp)
+				Physics::RigidBody * padleRigidBodyComp = dynamic_cast<Physics::RigidBody*>(actor->GetComponent("rigidbody"));
+				if (padleRigidBodyComp)
 				{
 					// moving down
 					if (GLibHelper::KeyStates[m_DownKey] && !GLibHelper::KeyStates[m_UpKey])
-						PadleRigidBodyComp->SetYForce(m_PadleSpeed * -1);
+						padleRigidBodyComp->SetYForce(m_PadleSpeed * -1);
 					// moving up
 					else if (!GLibHelper::KeyStates[m_DownKey] && GLibHelper::KeyStates[m_UpKey])
-						PadleRigidBodyComp->SetYForce(m_PadleSpeed);
+						padleRigidBodyComp->SetYForce(m_PadleSpeed);
 				}
 			}
 		}

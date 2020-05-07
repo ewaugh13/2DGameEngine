@@ -35,7 +35,7 @@ namespace Engine
 			free(m_name);
 		}
 
-		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
+		for (auto& componentPair : m_Components)
 		{
 			assert(componentPair.second);
 			if (componentPair.second != nullptr)
@@ -63,7 +63,7 @@ namespace Engine
 
 	void Actor::BeginUpdate(float i_DeltaTime)
 	{
-		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
+		for (auto& componentPair : m_Components)
 		{
 			assert(componentPair.second);
 			if (componentPair.second != nullptr)
@@ -73,7 +73,7 @@ namespace Engine
 
 	void Actor::Update(float i_DeltaTime)
 	{
-		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
+		for (auto& componentPair : m_Components)
 		{
 			assert(componentPair.second);
 			if (componentPair.second != nullptr)
@@ -83,7 +83,7 @@ namespace Engine
 
 	void Actor::EndUpdate(float i_DeltaTime)
 	{
-		for (std::pair<std::string, IActorComponent*> componentPair : m_Components)
+		for (auto& componentPair : m_Components)
 		{
 			assert(componentPair.second);
 			if (componentPair.second != nullptr)
