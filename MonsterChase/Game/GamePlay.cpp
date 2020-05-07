@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "PhysicsSystem.h"
 #include "Timer.h"
+#include "World.h"
 
 #include "PlayerMovement.h"
 
@@ -17,7 +18,7 @@
 
 namespace GamePlay
 {
-	void GameLoop()
+	void TestGameLoop()
 	{
 		using namespace Engine;
 
@@ -40,7 +41,6 @@ namespace GamePlay
 
 			Engine::AutoResetEvent createPlayerActorEvent;
 			Engine::AutoResetEvent createBlockingActorEvent;
-			Engine::AutoResetEvent createMovingActorEvent;
 
 			SmartPtr<Actor> playerActor;
 			ActorCreator::CreateGameObjectAsync("..\\data\\Samus.json", [&playerActor](SmartPtr<Actor>& i_Actor)
@@ -52,6 +52,7 @@ namespace GamePlay
 			, &createPlayerActorEvent);
 
 			createPlayerActorEvent.Wait();
+			World::AddActorToWorld(playerActor);
 
 			SmartPtr<Actor> blockingActor;
 			ActorCreator::CreateGameObjectAsync("..\\data\\Samus2.json", [&blockingActor](SmartPtr<Actor>& i_Actor)
@@ -62,25 +63,12 @@ namespace GamePlay
 			, &createBlockingActorEvent);
 
 			createBlockingActorEvent.Wait();
+			World::AddActorToWorld(blockingActor);
 
 			bool setOnce = true;
 
 			do
 			{
-				float deltaTime = timer->DeltaTime();
-
-				Physics::Tick(deltaTime);
-				Collision::Tick(deltaTime);
-				Renderer::Tick(deltaTime);
-
-				if (setOnce)
-				{
-					Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(blockingActor->GetComponent("rigidbody"));
-					actorRigidBody->SetVelocity(Vector3(-2.0f, 0.0f, 0.0f));
-
-					setOnce = false;
-				}
-
 				// IMPORTANT: We need to let GLib do it's thing. 
 				GLib::Service(bQuit);
 
@@ -93,36 +81,21 @@ namespace GamePlay
 						continue;
 					}
 
-					// TODO: put all actors in a world reference
-					playerActor->BeginUpdate(deltaTime);
-					blockingActor->BeginUpdate(deltaTime);
+					float deltaTime = timer->DeltaTime();
 
-					playerActor->Update(deltaTime);
-					blockingActor->Update(deltaTime);
+					Physics::Tick(deltaTime);
+					Collision::Tick(deltaTime);
+					Renderer::Tick(deltaTime);
 
-					Collision::ProcessFoundCollisions(deltaTime);
-
-					// IMPORTANT: Tell GLib that we want to start rendering
-					float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-					if (Collision::FoundCollisionLastTick())
+					if (setOnce)
 					{
-						memcpy(&clearColor, DirectX::Colors::Red, sizeof(float[4]));
-					}
-					else
-					{
-						memcpy(&clearColor, DirectX::Colors::MidnightBlue, sizeof(float[4]));
-					}
-					GLib::BeginRendering(clearColor);
-					// Tell GLib that we want to render some sprites
-					GLib::Sprites::BeginRendering();
+						Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(blockingActor->GetComponent("rigidbody"));
+						actorRigidBody->SetVelocity(Vector3(-2.0f, 0.0f, 0.0f));
 
-					playerActor->EndUpdate(deltaTime);
-					blockingActor->EndUpdate(deltaTime);
+						setOnce = false;
+					}
 
-					// Tell GLib we're done rendering sprites
-					GLib::Sprites::EndRendering();
-					// IMPORTANT: Tell GLib we're done rendering
-					GLib::EndRendering();
+					World::Tick(deltaTime);
 				}
 			} while (bQuit == false);
 		}
@@ -132,12 +105,20 @@ namespace GamePlay
 		Collision::ShutDown();
 		Renderer::ShutDown();
 
+		// World shutdown
+		World::ShutDown();
+
 		// Gameplay Components
-		PlayerMovement::Init();
+		PlayerMovement::ShutDown();
 
 		Engine::JobSystem::RequestShutdown();
 
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();
+	}
+
+	void Pong()
+	{
+
 	}
 }

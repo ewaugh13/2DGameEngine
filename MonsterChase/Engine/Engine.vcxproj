@@ -66,6 +66,7 @@
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="WaitableObject.h" />
     <ClInclude Include="WeakPtr.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -98,6 +99,7 @@
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GLib\GLib.vcxproj">

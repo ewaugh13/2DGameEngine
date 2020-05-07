@@ -5,6 +5,8 @@
 
 namespace GamePlay
 {
-	void GameLoop();
+	void TestGameLoop();
+
+	void Pong();
 }
 

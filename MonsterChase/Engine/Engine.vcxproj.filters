@@ -249,6 +249,9 @@
     <ClInclude Include="MemorySystem.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -340,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="HeapManager.cpp">
       <Filter>Source Files\Memory\HeapManager</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
