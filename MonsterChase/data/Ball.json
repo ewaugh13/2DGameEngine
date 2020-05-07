@@ -1,5 +1,5 @@
 {
-  "name": "Samus1",
+  "name": "Ball",
   "initial_position": [ 200.0, 0.0, 0.0 ],
   "components": {
     "rigidbody": {

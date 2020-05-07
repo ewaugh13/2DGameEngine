@@ -1,0 +1,10 @@
+{
+  "name": "TopWall",
+  "initial_position": [ 0, 400.0, 0.0 ],
+  "components": {
+    "collideable": {
+      "center": [ 0.0, 20.0 ],
+      "extents": [ 680.0, 20.0 ]
+    }
+  }
+}

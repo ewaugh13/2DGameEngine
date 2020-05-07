@@ -1,5 +1,5 @@
 {
-  "name": "Samus1",
+  "name": "LeftPadle",
   "initial_position": [ -340.0, -100.0, 0.0 ],
   "components": {
     "rigidbody": {

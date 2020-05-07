@@ -100,24 +100,26 @@ namespace Engine
 							Vector3 zero = Vector3::Zero;
 
 							Physics::RigidBody * actorRigidBody = dynamic_cast<Physics::RigidBody*>(actor->GetComponent("rigidbody"));
-
-							Vector3 actorVel = actorRigidBody->GetVelocity();
-							Vector3 actorReflectVel = Vector3::Zero;
-
-							// based on the normal direction find the reflected velocity
-							float normalDirection = Vector3(1, 1, 0).Dot(collisionPair.m_CollisionNormal);
-							if (normalDirection < 0)
+							if (actorRigidBody)
 							{
-								actorReflectVel = actorVel -
-									(collisionPair.m_CollisionNormal * actorVel.Dot(collisionPair.m_CollisionNormal)) * 2;
+								Vector3 actorVel = actorRigidBody->GetVelocity();
+								Vector3 actorReflectVel = Vector3::Zero;
+
+								// based on the normal direction find the reflected velocity
+								float normalDirection = Vector3(1, 1, 0).Dot(collisionPair.m_CollisionNormal);
+								if (normalDirection < 0)
+								{
+									actorReflectVel = actorVel -
+										(collisionPair.m_CollisionNormal * actorVel.Dot(collisionPair.m_CollisionNormal)) * 2;
+								}
+								else
+								{
+									actorReflectVel = actorVel +
+										(collisionPair.m_CollisionNormal * actorVel.Dot(collisionPair.m_CollisionNormal)) * 2;
+								}
+								actorRigidBody->SetVelocity(actorReflectVel);
+								actorRigidBody->SetForces(zero);
 							}
-							else
-							{
-								actorReflectVel = actorVel +
-									(collisionPair.m_CollisionNormal * actorVel.Dot(collisionPair.m_CollisionNormal)) * 2;
-							}
-							actorRigidBody->SetVelocity(actorReflectVel);
-							actorRigidBody->SetForces(zero);
 						}
 					}
 				}

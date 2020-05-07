@@ -135,9 +135,11 @@ namespace GamePlay
 			Timer * timer = new Timer();
 			bool bQuit = false;
 
-			Engine::AutoResetEvent createLeftPadleEvent;
-			Engine::AutoResetEvent createRightPadleEvent;
-			Engine::AutoResetEvent createBallEvent;
+			Engine::AutoResetEvent createActorEvent;
+			//Engine::AutoResetEvent createRightPadleEvent;
+			//Engine::AutoResetEvent createBallEvent;
+			//Engine::AutoResetEvent createBottomWallEvent;
+			//Engine::AutoResetEvent createTopWallEvent;
 
 			SmartPtr<Actor> rightPadleActor;
 			ActorCreator::CreateGameObjectAsync("..\\data\\RightPadle.json", [&rightPadleActor](SmartPtr<Actor>& i_Actor)
@@ -145,9 +147,9 @@ namespace GamePlay
 				rightPadleActor = i_Actor;
 				DEBUG_PRINT("Right padle loaded");
 			}
-			, &createRightPadleEvent);
+			, &createActorEvent);
 
-			createRightPadleEvent.Wait();
+			createActorEvent.Wait();
 			World::AddActorToWorld(rightPadleActor);
 
 			SmartPtr<Actor> ballActor;
@@ -156,9 +158,9 @@ namespace GamePlay
 				ballActor = i_Actor;
 				DEBUG_PRINT("Ball actor loaded");
 			}
-			, &createBallEvent);
+			, &createActorEvent);
 
-			createBallEvent.Wait();
+			createActorEvent.Wait();
 			World::AddActorToWorld(ballActor);
 
 			SmartPtr<Actor> leftPadleActor;
@@ -167,10 +169,32 @@ namespace GamePlay
 				leftPadleActor = i_Actor;
 				DEBUG_PRINT("Left padle loaded");
 			}
-			, &createLeftPadleEvent);
+			, &createActorEvent);
 
-			createLeftPadleEvent.Wait();
+			createActorEvent.Wait();
 			World::AddActorToWorld(leftPadleActor);
+
+			SmartPtr<Actor> bottomWallActor;
+			ActorCreator::CreateGameObjectAsync("..\\data\\BottomWall.json", [&bottomWallActor](SmartPtr<Actor>& i_Actor)
+			{
+				bottomWallActor = i_Actor;
+				DEBUG_PRINT("Bottom wall loaded");
+			}
+			, &createActorEvent);
+
+			createActorEvent.Wait();
+			World::AddActorToWorld(bottomWallActor);
+
+			SmartPtr<Actor> topWallActor;
+			ActorCreator::CreateGameObjectAsync("..\\data\\TopWall.json", [&topWallActor](SmartPtr<Actor>& i_Actor)
+			{
+				topWallActor = i_Actor;
+				DEBUG_PRINT("Top wall loaded");
+			}
+			, &createActorEvent);
+
+			createActorEvent.Wait();
+			World::AddActorToWorld(topWallActor);
 
 			bool setOnce = true;
 

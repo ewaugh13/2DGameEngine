@@ -1,0 +1,10 @@
+{
+  "name": "BottomWall",
+  "initial_position": [ 0, -440.0, 0.0 ],
+  "components": {
+    "collideable": {
+      "center": [ 0.0, 20.0 ],
+      "extents": [ 680.0, 20.0 ]
+    }
+  }
+}
