@@ -101,25 +101,28 @@ namespace GamePlay
 			{
 				Physics::RigidBody * ballRigidBodyComp = dynamic_cast<Physics::RigidBody*>(actor->GetComponent("rigidbody"));
 
-				Vector3 newBallVelocity = Vector3::Zero;
-
-				int yDirection = rand() % 2;
-				if (i_Player1Scored)
+				if (ballRigidBodyComp)
 				{
-					if(yDirection == 0)
-						newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed * -1, 0.0f);
-					else
-						newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed, 0.0f);
-				}
-				else
-				{
-					if (yDirection == 0)
-						newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed * -1, 0.0f);
-					else
-						newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed, 0.0f);
-				}
+					Vector3 newBallVelocity = Vector3::Zero;
 
-				ballRigidBodyComp->SetVelocity(newBallVelocity);
+					int yDirection = rand() % 2;
+					if (i_Player1Scored)
+					{
+						if (yDirection == 0)
+							newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed * -1, 0.0f);
+						else
+							newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed, 0.0f);
+					}
+					else
+					{
+						if (yDirection == 0)
+							newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed * -1, 0.0f);
+						else
+							newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed, 0.0f);
+					}
+
+					ballRigidBodyComp->SetVelocity(newBallVelocity);
+				}
 			}
 		}
 	}

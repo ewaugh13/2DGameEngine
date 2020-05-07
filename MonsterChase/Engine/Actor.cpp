@@ -7,6 +7,7 @@
 
 #include <assert.h>
 #include <vector>
+#include <iostream>
 #include <stdlib.h>
 
 #include "../External/nlohmann/json.hpp"
@@ -37,9 +38,9 @@ namespace Engine
 
 		for (auto& componentPair : m_Components)
 		{
-			assert(componentPair.second);
-			if (componentPair.second != nullptr)
-				delete componentPair.second;
+			//assert(componentPair.second);
+			//if (componentPair.second != nullptr)
+				//delete componentPair.second;
 		}
 	}
 
