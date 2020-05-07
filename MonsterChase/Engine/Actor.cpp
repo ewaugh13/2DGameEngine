@@ -35,13 +35,6 @@ namespace Engine
 		{
 			free(m_name);
 		}
-
-		for (auto& componentPair : m_Components)
-		{
-			//assert(componentPair.second);
-			//if (componentPair.second != nullptr)
-				//delete componentPair.second;
-		}
 	}
 
 	Vector3 Actor::GetVelocity() const
