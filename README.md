@@ -12,3 +12,5 @@ Controls:
 - I was happy with how I used the job system to wait for a second before the ball starts moving.
 - I was also happy with how I was able to add components easily to the actors that had gameplay features
   and how they connected with all of my other systems.
+- Unfortunately I had to remove my memory system due to some problems that with the JSON library that I didn't find
+  until working on this game.
