@@ -35,6 +35,13 @@ namespace Engine
 		{
 			free(m_name);
 		}
+
+		for (auto& componentPair : m_Components)
+		{
+			assert(componentPair.second);
+			if (componentPair.second != nullptr && componentPair.second)
+				delete componentPair.second;
+		}
 	}
 
 	Vector3 Actor::GetVelocity() const
@@ -53,6 +60,11 @@ namespace Engine
 	void Actor::AddComponent(std::string i_ComponentName, IActorComponent * i_NewComponent)
 	{
 		m_Components.insert({ i_ComponentName, i_NewComponent });
+	}
+
+	void Actor::RemoveComponent(std::string i_ComponentName)
+	{
+		m_Components.erase(i_ComponentName);
 	}
 
 	void Actor::BeginUpdate(float i_DeltaTime)

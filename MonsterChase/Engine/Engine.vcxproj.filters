@@ -19,24 +19,6 @@
     <Filter Include="Header Files\Rendering">
       <UniqueIdentifier>{e91d86cc-308c-449e-b6d1-a3f2fbef3b4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Memory">
-      <UniqueIdentifier>{d930cad6-da03-4d41-924b-0f8548523d4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Memory\HeapManager">
-      <UniqueIdentifier>{76380d6e-b31a-45dc-a1a6-3be2acd0f8d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Memory\FixedSizeAllocator">
-      <UniqueIdentifier>{91459e6e-e2ae-4682-9e1f-feae23db22f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Memory">
-      <UniqueIdentifier>{3b4142f7-ec75-461e-a721-004d895863e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Memory\HeapManager">
-      <UniqueIdentifier>{0e3bb57b-cb21-4643-bf2f-d5c948817d86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Memory\FixedSizeAllocator">
-      <UniqueIdentifier>{7fc77d77-810e-40e7-8072-e7f72edac5a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{ffebcb92-27b6-43f4-ad8f-45a867562f5f}</UniqueIdentifier>
     </Filter>
@@ -108,9 +90,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Allocators.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files\Timing</Filter>
     </ClInclude>
@@ -152,9 +131,6 @@
     </ClInclude>
     <ClInclude Include="PhysicsSystem.h">
       <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LoadFile.h">
       <Filter>Header Files\File</Filter>
@@ -222,30 +198,6 @@
     <ClInclude Include="Collideable.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="BitArray.h">
-      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
-    </ClInclude>
-    <ClInclude Include="BitArray-inl.h">
-      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
-    </ClInclude>
-    <ClInclude Include="FixedSizeAllocator.h">
-      <Filter>Header Files\Memory\FixedSizeAllocator</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockDescriptorUtil.h">
-      <Filter>Header Files\Memory\HeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="HeapManager.h">
-      <Filter>Header Files\Memory\HeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="HeapManager-inl.h">
-      <Filter>Header Files\Memory\HeapManager</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagerGlobals.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="MemorySystem.h">
-      <Filter>Header Files\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Header Files\GameObject</Filter>
     </ClInclude>
@@ -254,12 +206,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Allocators.cpp">
-      <Filter>Source Files\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>Source Files\GameObject</Filter>
     </ClCompile>
@@ -328,18 +274,6 @@
     </ClCompile>
     <ClCompile Include="Collideable.cpp">
       <Filter>Source Files\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="MemorySystem.cpp">
-      <Filter>Source Files\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="BitArray.cpp">
-      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
-    </ClCompile>
-    <ClCompile Include="FixedSizeAllocator.cpp">
-      <Filter>Source Files\Memory\FixedSizeAllocator</Filter>
-    </ClCompile>
-    <ClCompile Include="HeapManager.cpp">
-      <Filter>Source Files\Memory\HeapManager</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files\GameObject</Filter>

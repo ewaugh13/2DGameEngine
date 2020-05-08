@@ -48,7 +48,14 @@ namespace Engine
 		class RenderableDestructor : public ComponentDestructor
 		{
 		public:
-			static void release(Renderable * i_ptr) { delete i_ptr; }
+			static void release(Renderable * i_ptr)
+			{
+				SmartPtr<Actor> actor = i_ptr->GetActor().AcquireSmartPtr();
+				if (actor)
+					actor->RemoveComponent("renderable");
+
+				delete i_ptr;
+			}
 		};
 	}
 }

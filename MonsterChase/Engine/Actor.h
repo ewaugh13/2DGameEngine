@@ -57,6 +57,8 @@ namespace Engine
 
 		// add component
 		void AddComponent(std::string i_ComponentName, IActorComponent * i_NewComponent);
+		// remove component
+		void RemoveComponent(std::string i_ComponentName);
 		// get component
 		IActorComponent * GetComponent (const std::string & i_ComponentName) const;
 

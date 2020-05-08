@@ -54,7 +54,14 @@ namespace Engine
 		class RigidBodyDestructor : public ComponentDestructor
 		{
 		public:
-			static void release(RigidBody * i_ptr) { delete i_ptr; }
+			static void release(RigidBody * i_ptr)
+			{
+				SmartPtr<Actor> actor = i_ptr->GetActor().AcquireSmartPtr();
+				if (actor)
+					actor->RemoveComponent("rigidbody");
+
+				delete i_ptr;
+			}
 		};
 	}
 }

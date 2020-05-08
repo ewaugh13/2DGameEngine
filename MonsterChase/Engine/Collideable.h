@@ -71,7 +71,14 @@ namespace Engine
 		class CollideableDestructor : public ComponentDestructor
 		{
 		public:
-			static void release(Collideable * i_ptr) { delete i_ptr; }
+			static void release(Collideable * i_ptr) 
+			{ 
+				SmartPtr<Actor> actor = i_ptr->GetActor().AcquireSmartPtr();
+				if (actor)
+					actor->RemoveComponent("collideable");
+
+				delete i_ptr; 
+			}
 		};
 	}
 }

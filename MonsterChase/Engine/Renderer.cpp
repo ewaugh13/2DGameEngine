@@ -77,6 +77,7 @@ namespace Engine
 
 			AllRenderables.clear();
 			AllRenderables.shrink_to_fit();
+			AllRenderables.~vector();
 
 			ActorCreator::DeregisterComponentCreator("renderable");
 
@@ -84,6 +85,7 @@ namespace Engine
 				ScopeLock Lock(NewRenderablesMutex);
 				NewRenderables.clear();
 				NewRenderables.shrink_to_fit();
+				NewRenderables.~vector();
 			}
 		}
 	}

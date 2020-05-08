@@ -21,6 +21,12 @@ namespace Engine
 			WorldActors.push_back(i_NewActor);
 		}
 
+		void AddActorToWorld(SmartPtr<Actor>&& i_NewActor)
+		{
+			ScopeLock Lock(WorldActorsLock);
+			WorldActors.push_back(i_NewActor);
+		}
+
 		bool RemoveActorFromWorld(WeakPtr<Actor> & i_Actor)
 		{
 			SmartPtr<Actor> actor = i_Actor.AcquireSmartPtr();
@@ -78,6 +84,7 @@ namespace Engine
 		{
 			WorldActors.clear();
 			WorldActors.shrink_to_fit();
+			WorldActors.~vector();
 		}
 	}
 }

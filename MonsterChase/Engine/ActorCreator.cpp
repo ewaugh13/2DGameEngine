@@ -4,6 +4,8 @@
 #include "LoadFile.h"
 #include "ScopeLock.h"
 
+#include <map>
+
 namespace Engine
 {
 	namespace ActorCreator
@@ -11,7 +13,6 @@ namespace Engine
 
 		Engine::Mutex ActorCreatorMutex;
 
-		// TODO: make more universal
 		void operator<<(Vector3 & vec, nlohmann::json & json_obj)
 		{
 			assert(json_obj.is_array() && json_obj.size() == 3);
@@ -21,20 +22,19 @@ namespace Engine
 			vec.SetZ(json_obj[2]);
 		}
 
-		// TODO: turn into hashmap
-		static std::map<std::string, std::function<void(SmartPtr<Actor>&, nlohmann::json&)>> ComponentCreators;
+		ComponentCreators * componentCreators = new ComponentCreators();
 
 		void RegisterComponentCreator(const std::string & i_ControllerName, std::function<void(SmartPtr<Actor>&, nlohmann::json&)> i_ControllerCreator)
 		{
-			ComponentCreators.insert({ i_ControllerName, i_ControllerCreator });
+			componentCreators->m_ComponentCreators.insert({ i_ControllerName, i_ControllerCreator });
 		}
 
 		void DeregisterComponentCreator(const std::string & i_ControllerName)
 		{
-			auto creator = ComponentCreators.find(i_ControllerName);
-			if (creator != ComponentCreators.end())
+			auto creator = componentCreators->m_ComponentCreators.find(i_ControllerName);
+			if (creator != componentCreators->m_ComponentCreators.end())
 			{
-				ComponentCreators.erase(i_ControllerName);
+				componentCreators->m_ComponentCreators.erase(i_ControllerName);
 			}
 		}
 
@@ -65,8 +65,8 @@ namespace Engine
 					{
 						const std::string & componentName = it.key();
 
-						auto componentCreator = ComponentCreators.find(componentName);
-						if (componentCreator != ComponentCreators.end())
+						auto componentCreator = componentCreators->m_ComponentCreators.find(componentName);
+						if (componentCreator != componentCreators->m_ComponentCreators.end())
 						{
 							componentCreator->second(newActor, it.value());
 						}
@@ -104,6 +104,11 @@ namespace Engine
 					CreateGameObjectEvent(i_JSONFilename, i_CreateCallBack, i_FinishEvent);
 				}, "Default");
 			}
+		}
+
+		void ShutDown()
+		{
+			delete componentCreators;
 		}
 	}
 }

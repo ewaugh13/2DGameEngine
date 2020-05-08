@@ -59,9 +59,11 @@ namespace Engine
 			}
 
 			DEBUG_PRINT("Job System: Waiting for Queue runner threads to shut down.\n");
-
-			DWORD result = WaitForMultipleObjects(static_cast<DWORD>(AllThreads.size()), &AllThreads[0], TRUE, INFINITE);
-			assert(result == WAIT_OBJECT_0);
+			if (AllThreads.size() != 0)
+			{
+				DWORD result = WaitForMultipleObjects(static_cast<DWORD>(AllThreads.size()), &AllThreads[0], TRUE, INFINITE);
+				assert(result == WAIT_OBJECT_0);
+			}
 
 			iter = Queues.begin();
 			while (iter != Queues.end())

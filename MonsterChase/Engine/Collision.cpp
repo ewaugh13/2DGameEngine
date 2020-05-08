@@ -1,7 +1,6 @@
 #include "Collision.h"
 
 #include "ActorCreator.h"
-#include "LoadFile.h"
 #include "RigidBody.h"
 #include "ScopeLock.h"
 
@@ -33,27 +32,27 @@ namespace Engine
 
 		void AddCollidable(SmartPtr<Actor> & i_Actor, nlohmann::json & i_CollideableJSON)
 		{
-			if (!bShutdown)
-			{
-				using json = nlohmann::json;
+			//if (!bShutdown)
+			//{
+			//	using json = nlohmann::json;
 
-				Vector3 center = Vector3::Zero;
-				center << i_CollideableJSON["center"];
+			//	Vector3 center = Vector3::Zero;
+			//	center << i_CollideableJSON["center"];
 
-				Vector3 extents = Vector3::Zero;
-				extents << i_CollideableJSON["extents"];
+			//	Vector3 extents = Vector3::Zero;
+			//	extents << i_CollideableJSON["extents"];
 
-				AABB collisionBox = AABB({ center, extents });
+			//	AABB collisionBox = AABB({ center, extents });
 
-				CollisionCheckData checkData = CollisionCheckData();
-				checkData.m_Actor = i_Actor;
-				SmartPtr<Collideable, CollideableDestructor> newCollideableActor(new Collideable(i_Actor, collisionBox, checkData));
+			//	CollisionCheckData checkData = CollisionCheckData();
+			//	checkData.m_Actor = i_Actor;
+			//	SmartPtr<Collideable, CollideableDestructor> newCollideableActor(new Collideable(i_Actor, collisionBox, checkData));
 
-				{
-					ScopeLock Lock(NewCollideablesMutex);
-					NewCollideables.push_back(newCollideableActor);
-				}
-			}
+			//	{
+			//		ScopeLock Lock(NewCollideablesMutex);
+			//		NewCollideables.push_back(newCollideableActor);
+			//	}
+			//}
 		}
 
 		void AddFoundCollision(CollisionPair & i_FoundCollision)
@@ -125,8 +124,8 @@ namespace Engine
 				}
 			
 				std::vector<CollisionPair> remainingCollisions = FoundCollisions;
-				FoundCollisions.shrink_to_fit();
 				FoundCollisions.clear();
+				FoundCollisions.shrink_to_fit();
 
 				if (remainingCollisions.size() > 0)
 				{
@@ -160,10 +159,7 @@ namespace Engine
 							assert(foundCollision.m_pCollideables[1]);
 
 							bFoundCollision = true;
-						}
 
-						if (bFoundCollision)
-						{
 							FoundCollisions.push_back(foundCollision);
 						}
 					}
@@ -587,13 +583,19 @@ namespace Engine
 
 			AllCollideables.clear();
 			AllCollideables.shrink_to_fit();
+			AllCollideables.~vector();
+
+			FoundCollisions.clear();
+			FoundCollisions.shrink_to_fit();
+			FoundCollisions.~vector();
 
 			ActorCreator::DeregisterComponentCreator("collideable");
 
 			{
 				ScopeLock Lock(NewCollideablesMutex);
-				AllCollideables.clear();
-				AllCollideables.shrink_to_fit();
+				NewCollideables.clear();
+				NewCollideables.shrink_to_fit();
+				NewCollideables.~vector();
 			}
 		}
 	}

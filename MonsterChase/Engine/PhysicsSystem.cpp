@@ -92,6 +92,7 @@ namespace Engine
 
 			AllRigidBodies.clear();
 			AllRigidBodies.shrink_to_fit();
+			AllRigidBodies.~vector();
 
 			ActorCreator::DeregisterComponentCreator("rigidbody");
 
@@ -99,6 +100,7 @@ namespace Engine
 				ScopeLock Lock(NewRigidBodiesMutex);
 				NewRigidBodies.clear();
 				NewRigidBodies.shrink_to_fit();
+				NewRigidBodies.~vector();
 			}
 		}
 	}
