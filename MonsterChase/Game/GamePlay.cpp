@@ -12,7 +12,7 @@
 
 #include "Ball.h" 
 #include "PadleMovement.h"
-//#include "PlayerMovement.h"
+#include "PlayerMovement.h"
 
 namespace GamePlay
 {
@@ -41,7 +41,7 @@ namespace GamePlay
 		{
 			using namespace Engine;
 
-			JobSystem::CreateQueue("Default", 2);
+			Engine::JobSystem::CreateQueue("Default", 2);
 
 			// Engine Components
 			Physics::Init();
@@ -123,7 +123,7 @@ namespace GamePlay
 
 			ActorCreator::ShutDown();
 
-			JobSystem::RequestShutdown();
+			Engine::JobSystem::RequestShutdown();
 		}
 	}
 }

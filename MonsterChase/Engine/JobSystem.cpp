@@ -1,13 +1,9 @@
 #include "JobSystem.h"
 
 #include <Windows.h>
-#include <map>
 
 #include "ConsolePrint.h"
 #include "HashedString.h"
-
-#include "JobRunner.h"
-#include "SharedJobQueue.h"
 
 namespace Engine
 {
@@ -17,21 +13,8 @@ namespace Engine
 		NULL);             // unnamed mutex
 	namespace JobSystem
 	{
-		struct JobRunnerData
-		{
-			HANDLE				m_ThreadHandle;
-			DWORD				m_ThreadID;
-			JobRunnerInput		m_Input;
-		};
-
-		struct JobQueueData
-		{
-			SharedJobQueue		m_SharedQueue;
-			std::vector<JobRunnerData*>	m_Runners;
-		};
-
 		bool bShutdownRequested = false;
-		std::map<HashedString, JobQueueData*>	Queues;
+		AllQueues * CurrentQueues = new AllQueues();;
 
 		void RequestShutdown()
 		{
@@ -41,8 +24,8 @@ namespace Engine
 
 			std::vector<HANDLE>	AllThreads;
 
-			std::map<HashedString, JobQueueData*>::iterator iter = Queues.begin();
-			while (iter != Queues.end())
+			std::map<HashedString, JobQueueData*>::iterator iter = CurrentQueues->m_Queues.begin();
+			while (iter != CurrentQueues->m_Queues.end())
 			{
 				if (iter->second)
 				{
@@ -65,8 +48,8 @@ namespace Engine
 				assert(result == WAIT_OBJECT_0);
 			}
 
-			iter = Queues.begin();
-			while (iter != Queues.end())
+			iter = CurrentQueues->m_Queues.begin();
+			while (iter != CurrentQueues->m_Queues.end())
 			{
 				if (iter->second)
 				{
@@ -84,8 +67,7 @@ namespace Engine
 				++iter;
 			}
 
-			Queues.clear();
-
+			delete CurrentQueues;
 		}
 
 		bool ShutdownRequested()
@@ -116,8 +98,8 @@ namespace Engine
 
 		void AddRunner(const HashedString& i_QueueName)
 		{
-			std::map<HashedString, JobQueueData*>::iterator existing = Queues.find(i_QueueName);
-			assert(existing != Queues.end());
+			std::map<HashedString, JobQueueData*>::iterator existing = CurrentQueues->m_Queues.find(i_QueueName);
+			assert(existing != CurrentQueues->m_Queues.end());
 			assert(existing->second);
 
 			AddRunner(*existing->second);
@@ -129,14 +111,14 @@ namespace Engine
 
 			HashedString	HashedName(i_pName);
 
-			assert(Queues.find(HashedName) == Queues.end());
+			assert(CurrentQueues->m_Queues.find(HashedName) == CurrentQueues->m_Queues.end());
 
 			JobQueueData* pNewJobQueueData = new JobQueueData;
 #ifdef _DEBUG
 			pNewJobQueueData->m_SharedQueue.SetName(i_pName);
 #endif
 
-			Queues[HashedName] = pNewJobQueueData;
+			CurrentQueues->m_Queues[HashedName] = pNewJobQueueData;
 
 			for (unsigned int i = 0; i < i_numRunners; i++)
 				AddRunner(*pNewJobQueueData);
@@ -144,8 +126,8 @@ namespace Engine
 
 		bool HasJobs(const HashedString& i_QueueName)
 		{
-			std::map<HashedString, JobQueueData*>::iterator existing = Queues.find(i_QueueName);
-			if (existing != Queues.end())
+			std::map<HashedString, JobQueueData*>::iterator existing = CurrentQueues->m_Queues.find(i_QueueName);
+			if (existing != CurrentQueues->m_Queues.end())
 			{
 				if (existing->second)
 					return existing->second->m_SharedQueue.HasJobs();
@@ -156,8 +138,8 @@ namespace Engine
 
 		void RunJob(const std::string& i_JobName, std::function<void()> i_JobFunction, const HashedString& i_QueueName)
 		{
-			std::map<HashedString, JobQueueData*>::iterator existing = Queues.find(i_QueueName);
-			assert(existing != Queues.end());
+			std::map<HashedString, JobQueueData*>::iterator existing = CurrentQueues->m_Queues.find(i_QueueName);
+			assert(existing != CurrentQueues->m_Queues.end());
 			assert(existing->second);
 
 			DEBUG_PRINT("Job System: Adding Job to Queue \"%s\".\n", existing->second->m_SharedQueue.GetName());
