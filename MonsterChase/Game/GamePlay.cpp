@@ -22,12 +22,19 @@ namespace GamePlay
 		unsigned int Player1Score = 0;
 		unsigned int Player2Score = 0;
 
+		bool bQuit = false;
+
 		void IncrementPlayerScore(bool i_Player1Scored)
 		{
 			if (i_Player1Scored)
 				Player1Score++;
 			else
 				Player2Score++;
+		}
+
+		bool GameActive()
+		{
+			return !bQuit;
 		}
 
 		void PongGameLoop()
@@ -50,7 +57,6 @@ namespace GamePlay
 
 			{
 				SmartPtr<Timer> timer = SmartPtr<Timer>(new Timer());
-				bool bQuit = false;
 
 				World::AddActorToWorld(ActorCreator::CreateGameObject("..\\data\\RightPadle.json"));
 				World::AddActorToWorld(ActorCreator::CreateGameObject("..\\data\\LeftPadle.json"));

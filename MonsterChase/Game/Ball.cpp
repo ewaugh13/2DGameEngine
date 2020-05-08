@@ -96,32 +96,35 @@ namespace GamePlay
 		void BallComp::ActivateBall(unsigned int i_IntervalMilliseconds, bool i_Player1Scored)
 		{
 			Sleep(i_IntervalMilliseconds * 1000);
-			SmartPtr<Actor> actor = m_Actor.AcquireSmartPtr();
-			if (actor)
+			if (GamePlay::Pong::GameActive())
 			{
-				Physics::RigidBody * ballRigidBodyComp = dynamic_cast<Physics::RigidBody*>(actor->GetComponent("rigidbody"));
-
-				if (ballRigidBodyComp)
+				SmartPtr<Actor> actor = m_Actor.AcquireSmartPtr();
+				if (actor)
 				{
-					Vector3 newBallVelocity = Vector3::Zero;
+					Physics::RigidBody * ballRigidBodyComp = dynamic_cast<Physics::RigidBody*>(actor->GetComponent("rigidbody"));
 
-					int yDirection = rand() % 2;
-					if (i_Player1Scored)
+					if (ballRigidBodyComp)
 					{
-						if (yDirection == 0)
-							newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed * -1, 0.0f);
-						else
-							newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed, 0.0f);
-					}
-					else
-					{
-						if (yDirection == 0)
-							newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed * -1, 0.0f);
-						else
-							newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed, 0.0f);
-					}
+						Vector3 newBallVelocity = Vector3::Zero;
 
-					ballRigidBodyComp->SetVelocity(newBallVelocity);
+						int yDirection = rand() % 2;
+						if (i_Player1Scored)
+						{
+							if (yDirection == 0)
+								newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed * -1, 0.0f);
+							else
+								newBallVelocity = Vector3(m_BallXSpeed * -1, m_BallYSpeed, 0.0f);
+						}
+						else
+						{
+							if (yDirection == 0)
+								newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed * -1, 0.0f);
+							else
+								newBallVelocity = Vector3(m_BallXSpeed, m_BallYSpeed, 0.0f);
+						}
+
+						ballRigidBodyComp->SetVelocity(newBallVelocity);
+					}
 				}
 			}
 		}

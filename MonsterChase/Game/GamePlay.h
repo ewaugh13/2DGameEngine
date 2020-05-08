@@ -7,6 +7,7 @@ namespace GamePlay
 	namespace Pong
 	{
 		void IncrementPlayerScore(bool i_Player1Scored);
+		bool GameActive();
 		void PongGameLoop();
 	}
 }

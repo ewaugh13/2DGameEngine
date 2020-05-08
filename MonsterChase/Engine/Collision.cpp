@@ -32,27 +32,27 @@ namespace Engine
 
 		void AddCollidable(SmartPtr<Actor> & i_Actor, nlohmann::json & i_CollideableJSON)
 		{
-			//if (!bShutdown)
-			//{
-			//	using json = nlohmann::json;
+			if (!bShutdown)
+			{
+				using json = nlohmann::json;
 
-			//	Vector3 center = Vector3::Zero;
-			//	center << i_CollideableJSON["center"];
+				Vector3 center = Vector3::Zero;
+				center << i_CollideableJSON["center"];
 
-			//	Vector3 extents = Vector3::Zero;
-			//	extents << i_CollideableJSON["extents"];
+				Vector3 extents = Vector3::Zero;
+				extents << i_CollideableJSON["extents"];
 
-			//	AABB collisionBox = AABB({ center, extents });
+				AABB collisionBox = AABB({ center, extents });
 
-			//	CollisionCheckData checkData = CollisionCheckData();
-			//	checkData.m_Actor = i_Actor;
-			//	SmartPtr<Collideable, CollideableDestructor> newCollideableActor(new Collideable(i_Actor, collisionBox, checkData));
+				CollisionCheckData checkData = CollisionCheckData();
+				checkData.m_Actor = i_Actor;
+				SmartPtr<Collideable, CollideableDestructor> newCollideableActor(new Collideable(i_Actor, collisionBox, checkData));
 
-			//	{
-			//		ScopeLock Lock(NewCollideablesMutex);
-			//		NewCollideables.push_back(newCollideableActor);
-			//	}
-			//}
+				{
+					ScopeLock Lock(NewCollideablesMutex);
+					NewCollideables.push_back(newCollideableActor);
+				}
+			}
 		}
 
 		void AddFoundCollision(CollisionPair & i_FoundCollision)
