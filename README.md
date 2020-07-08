@@ -7,8 +7,8 @@ A 2D game engine developed over two semesters. Created custom physics, collision
 Simple game of pong. First player to reach 10 points wins.
 
 Controls:
-    - W : move left padle up
-    - S : move left padle down
-    - O : move right padle up
-    - L : move right padle down
-    - Q : Quit game
+- W : move left padle up
+- S : move left padle down
+- O : move right padle up
+- L : move right padle down
+- Q : Quit game
