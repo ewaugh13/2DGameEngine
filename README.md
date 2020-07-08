@@ -1,6 +1,10 @@
-# u0947296
+# 2D game engine and pong game
 
-Game Rules: Simple game of pong. First player to reach 10 points wins.
+A 2D game engine developed over two semesters. Created custom physics, collision and memory management systems. Integrated an existing graphics library (GLib) for rendering.
+
+# Game Rules:
+
+Simple game of pong. First player to reach 10 points wins.
 
 Controls:
     - W : move left padle up
@@ -8,9 +12,3 @@ Controls:
     - O : move right padle up
     - L : move right padle down
     - Q : Quit game
-
-- I was happy with how I used the job system to wait for a second before the ball starts moving.
-- I was also happy with how I was able to add components easily to the actors that had gameplay features
-  and how they connected with all of my other systems.
-- Unfortunately I had to remove my memory system due to some problems that with the JSON library that I didn't find
-  until working on this game.
